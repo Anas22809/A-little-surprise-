@@ -28,7 +28,6 @@
             position: relative;
         }
 
-        /* تعديل الحاوية لتكون خلف كل شيء */
         .falling-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; pointer-events: none; z-index: 1; overflow: hidden; }
         .falling-item { position: absolute; font-size: 18px; animation: floatUp 10s linear infinite; bottom: -50px; opacity: 0.3; }
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-110vh) rotate(360deg); } }
@@ -87,6 +86,66 @@
 
         .confetti { position: absolute; width: 7px; height: 7px; border-radius: 2px; animation: confettiFall 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite; pointer-events: none; z-index: 10; }
         @keyframes confettiFall { 100% { transform: translateY(380px) translateX(80px) rotate(540deg); opacity: 0; } }
+
+        /* --- أنماط ماكينة الحقيقة والإطراءات --- */
+        .compliment-box {
+            background: rgba(138, 43, 226, 0.05);
+            border: 1px dashed rgba(0, 255, 204, 0.3);
+            padding: 25px;
+            border-radius: 20px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 500;
+            color: #fff;
+            margin-top: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .compliment-anim {
+            animation: truthReveal 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes truthReveal {
+            0% { opacity: 0; filter: blur(10px); transform: scale(0.9); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
+
+        .magic-btn {
+            background: linear-gradient(45deg, #8a2be2, #4b0082);
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+            font-size: 14px;
+        }
+
+        .magic-btn:active {
+            transform: scale(0.95) !important;
+            box-shadow: 0 0 20px var(--neon-cyan) !important;
+        }
+
+        .magic-btn-pulse {
+            animation: btnClickPulse 0.4s ease-out;
+        }
+
+        @keyframes btnClickPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7); }
+            100% { box-shadow: 0 0 0 20px rgba(0, 255, 204, 0); }
+        }
     </style>
 </head>
 <body>
@@ -97,7 +156,7 @@
     <div class="slide active" id="firstGateSlide" style="text-align: center;">
         <div class="badge">Strictly Confidential</div>
         <div class="lock-emoji" id="gateLock">🔒✨</div>
-        <p style="margin-top: 15px; font-size: 15px;">Du hast heute Geburtstag, also wartet hier eine ganz exklusive digitale Überraschung auf dich.</p>
+        <p style="margin-top: 15px; font-size: 15px;">Du hast heute Geburtstag, also wartet hier eine ganz exklusive digitale Überraschung auf dich. </p>
         <p class="highlight" style="font-size: 14px; margin-bottom: 5px;">Bist du bereit zu sehen, was drin ist? 😉</p>
         <button class="blast-btn" id="openGateBtn" onclick="animateFirstGateOpen()" style="margin-top: 15px; padding: 14px 20px; font-size: 15px;">Überraschung öffnen 🎁</button>
     </div>
@@ -105,14 +164,14 @@
     <div class="slide" style="text-align: center;">
         <div class="badge">Specially Crafted</div>
         <div class="neon-name">Hai Thu ✨</div>
-        <p style="margin-top: 15px;">Weil du heute Geburtstag hast, dachte ich mir, normale Textnachrichten sind viel zu langweilig für dich.</p>
-        <p>Deshalb gibt’s hier eine kleine, exklusive Überraschung. <span class="highlight">Klick mal auf Weiter 😉</span></p>
+        <p style="margin-top: 15px;">Weil eine normale Nachricht zu deinem Geburtstag irgendwie zu langweilig wäre... </p>
+        <p>Dachte ich mir, ich muss dieses Jahr mal was Besonderes machen. <br>  <span class="highlight">Klick mal auf Weiter 😉</span></p>
     </div>
 
     <div class="slide" id="realTalkSlide">
         <h2>Real Talk... 👀</h2>
         <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in der Klasse, bevor ich wieder nach Syrien zurückgegangen bin.</p>
-        <p>Und ehrlich gesagt waren wir damals nicht mal besonders eng oder beste Freunde ??</p>
+        <p>Und ehrlich gesagt waren wir damals nicht mal besonders eng oder beste Freunde 😄</p>
         <p>Mit der Zeit verliert man viele Menschen aus den Augen… aber irgendwie hatte ich bei dir nie das Gefühl, dich komplett vergessen zu haben 😌</p>
         <p>Und vielleicht war genau das der Grund, warum ich mich nach all den Jahren irgendwann wieder bei dir gemeldet habe ✨</p>
     </div>
@@ -142,6 +201,18 @@
         </div>
     </div>
 
+    <div class="slide" id="complimentSlide" style="text-align: center;">
+        <div class="badge">Experimental Tool</div>
+        <h2>Truth Machine 👀</h2>
+        <p>Warning: This machine only speaks facts about you.</p>
+        
+        <div class="compliment-box" id="complimentText">
+            Ready to hear the truth? ✨
+        </div>
+        
+        <button class="magic-btn" id="truthBtn" onclick="generateCompliment()">Generate Compliment ✨</button>
+    </div>
+
     <div class="slide" style="text-align: center;">
         <h2>Genieße deinen Tag! 🎉</h2>
         <p>Das war mein kleiner Geburtstagsbericht für dich. Ich hoffe, es hat dir ein Lächeln ins Gesicht gezaubert.</p>
@@ -151,7 +222,7 @@
 
     <div class="controls" id="controlsContainer" style="display: none;">
         <button id="prevBtn" onclick="changeSlide(-1)" disabled>Zurück</button>
-        <div class="progress" id="progressTxt">1 / 5</div>
+        <div class="progress" id="progressTxt">1 / 6</div>
         <button id="nextBtn" onclick="changeSlide(1)">Weiter</button>
     </div>
 </div>
@@ -170,7 +241,6 @@
         fallingContainer.appendChild(item);
     }
 
-    // الدوال الأصلية
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     const prevBtn = document.getElementById('prevBtn');
@@ -187,7 +257,6 @@
         btn.innerText = "Öffnen... ⏳";
         btn.disabled = true;
         
-        // تأثير الانفجار الأصلي
         const gateEmojis = ['🎈', '✨', '🎉', '🔓', '💖'];
         for (let i = 0; i < 25; i++) {
             const particle = document.createElement('div');
@@ -284,6 +353,64 @@
             document.body.appendChild(particle);
             setTimeout(() => particle.remove(), 2500);
         }
+    }
+
+    // --- منطق ماكينة الحقيقة والإطراءات ---
+    const compliments = [
+        "certified cutie 😌",
+        "too pretty to be real ✨",
+        "main character energy 🎬",
+        "illegal amount of charm detected 🚨",
+        "actually unfair how cute you are 😭",
+        "professionally adorable 🫶",
+        "dangerously pretty 😵‍💫",
+        "straight out of pinterest ✨",
+        "your vibe is literally unmatched 😌",
+        "the definition of pretty fr",
+        "cute level: impossible 📈",
+        "you make aesthetic look easy 🌤️",
+        "lowkey mesmerizing 👀",
+        "you were definitely someone’s favorite person in every class 😌",
+        "smile probably causes traffic accidents 🚗",
+        "too much aura for one person ✨",
+        "human sunshine fr 🌤️",
+        "built different honestly 😌",
+        "your existence is kinda unfair 😂",
+        "0 flaws detected ✅",
+        "you look like a happy song 🎶",
+        "you have that calm pretty vibe 😮‍💨"
+    ];
+
+    let lastIndex = -1;
+
+    function generateCompliment() {
+        const box = document.getElementById('complimentText');
+        const btn = document.getElementById('truthBtn');
+        
+        // تغيير نص الزر بعد أول ضغطة
+        if(btn.innerText !== "Another one 🪄") {
+            btn.innerText = "Another one 🪄";
+        }
+        
+        // تأثير النبض للزر
+        btn.classList.remove('magic-btn-pulse');
+        void btn.offsetWidth; // إعادة تهيئة الـ DOM لتشغيل الأنيميشن مجدداً
+        btn.classList.add('magic-btn-pulse');
+
+        // تأثير النص
+        box.classList.remove('compliment-anim');
+        void box.offsetWidth; 
+
+        // اختيار إطراء مختلف عن السابق
+        let newIdx;
+        do { 
+            newIdx = Math.floor(Math.random() * compliments.length); 
+        } while (newIdx === lastIndex);
+        
+        lastIndex = newIdx;
+
+        box.innerHTML = compliments[newIdx];
+        box.classList.add('compliment-anim');
     }
 </script>
 </body>
