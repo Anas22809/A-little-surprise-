@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Für dich... ✨</title>
+    <style>
+        :root {
+            --bg-color: #060609;
+            --card-bg: #111118;
+            --accent-color: #8a2be2;
+            --accent-glow: rgba(138, 43, 226, 0.4);
+            --neon-cyan: #00ffcc;
+            --text-color: #ffffff;
+            --muted-text: #9a9aaf;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            overflow: hidden; 
+            padding: 20px;
+            position: relative;
+        }
+
+        /* تعديل الحاوية لتكون خلف كل شيء */
+        .falling-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+        .falling-item { position: absolute; font-size: 18px; animation: floatUp 10s linear infinite; bottom: -50px; opacity: 0.3; }
+        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-110vh) rotate(360deg); } }
+
+        .container { 
+            width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 24px; padding: 35px; 
+            box-shadow: 0 0 30px var(--accent-glow); border: 1px solid #252538; position: relative; 
+            z-index: 2; min-height: 520px; display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .slide { display: none; }
+        .slide.active { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; animation: slideIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .slide.fade-out-blast { animation: slideBlastOut 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards; }
+        @keyframes slideBlastOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.8); display: none; } }
+
+        h2 { font-size: 26px; color: var(--text-color); margin-bottom: 15px; font-weight: 700; }
+        p { font-size: 16px; color: var(--muted-text); line-height: 1.6; margin-bottom: 15px; }
+        .highlight { color: var(--neon-cyan); font-weight: bold; }
+        
+        .neon-name { font-size: 38px; font-weight: 800; color: #fff; text-align: center; margin-bottom: 20px; text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2; animation: pulseGlow 2s infinite ease-in-out; }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); text-shadow: 0 0 15px var(--neon-cyan); } }
+
+        .badge { background: rgba(0, 255, 204, 0.1); color: var(--neon-cyan); font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; margin: 0 auto 20px auto; border: 1px solid rgba(0, 255, 204, 0.3); display: inline-block; }
+
+        .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
+        button { background: var(--accent-color); color: white; border: none; padding: 12px 24px; border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; }
+        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-glow); }
+        button:disabled { background: #1f1f2e; color: #525266; cursor: not-allowed; }
+        
+        .progress { font-size: 13px; color: var(--muted-text); font-weight: bold; }
+
+        .blast-btn { background: linear-gradient(135deg, var(--accent-color), var(--neon-cyan)); color: #fff; border: none; padding: 16px 30px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); transition: all 0.3s ease; }
+        .blast-btn-active { background: rgba(0, 255, 204, 0.1) !important; border: 1px solid var(--neon-cyan) !important; color: #fff !important; cursor: default !important; box-shadow: none !important; transform: none !important; }
+
+        .signature { font-size: 13px; color: var(--muted-text); margin-top: 20px; font-style: italic; opacity: 0.8; }
+        .lock-emoji { font-size: 65px; margin-bottom: 15px; animation: pulseLock 2s infinite ease-in-out; }
+        @keyframes pulseLock { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--accent-color)); } }
+
+        .gift-box-container { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin: 20px 0; perspective: 800px; }
+        .gift-emoji { font-size: 95px; animation: giftFloat 2s infinite ease-in-out; filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.3)); }
+        @keyframes giftFloat { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(-3deg); } }
+        .gift-emoji.unwrap-blast { animation: giftUnwrap 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards !important; }
+        @keyframes giftUnwrap { 0% { transform: scale(1) rotate(0); } 100% { transform: scale(0) rotate(360deg); opacity: 0; } }
+
+        .gift-hint { font-size: 14px; color: var(--neon-cyan); font-weight: bold; margin-top: 15px; animation: pulseText 1.5s infinite; }
+        @keyframes pulseText { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        .hidden-content { display: none; }
+        .hidden-content.show { display: block; animation: textPopIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        @keyframes textPopIn { 0% { opacity: 0; transform: translateY(40px) scale(0.85); filter: blur(5px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+
+        .blast-particle { position: absolute; font-size: 24px; pointer-events: none; z-index: 99; animation: particleBlast 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
+        @keyframes particleBlast { 100% { transform: translate(var(--x), var(--y)) rotate(var(--r)); opacity: 0; scale: 1.3; } }
+
+        .confetti { position: absolute; width: 7px; height: 7px; border-radius: 2px; animation: confettiFall 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite; pointer-events: none; z-index: 10; }
+        @keyframes confettiFall { 100% { transform: translateY(380px) translateX(80px) rotate(540deg); opacity: 0; } }
+    </style>
+</head>
+<body>
+
+<div class="falling-container" id="fallingContainer"></div>
+
+<div class="container" id="mainCardContainer">
+    <div class="slide active" id="firstGateSlide" style="text-align: center;">
+        <div class="badge">Strictly Confidential</div>
+        <div class="lock-emoji" id="gateLock">🔒✨</div>
+        <p style="margin-top: 15px; font-size: 15px;">Du hast heute Geburtstag, also wartet hier eine ganz exklusive digitale Überraschung auf dich.</p>
+        <p class="highlight" style="font-size: 14px; margin-bottom: 5px;">Bist du bereit zu sehen, was drin ist? 😉</p>
+        <button class="blast-btn" id="openGateBtn" onclick="animateFirstGateOpen()" style="margin-top: 15px; padding: 14px 20px; font-size: 15px;">Überraschung öffnen 🎁</button>
+    </div>
+
+    <div class="slide" style="text-align: center;">
+        <div class="badge">Specially Crafted</div>
+        <div class="neon-name">Hai Thu ✨</div>
+        <p style="margin-top: 15px;">Weil du heute Geburtstag hast, dachte ich mir, normale Textnachrichten sind viel zu langweilig für dich.</p>
+        <p>Deshalb gibt’s hier eine kleine, exklusive Überraschung. <span class="highlight">Klick mal auf Weiter 😉</span></p>
+    </div>
+
+    <div class="slide" id="realTalkSlide">
+        <h2>Real Talk... 👀</h2>
+        <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in der Klasse, bevor ich wieder nach Syrien zurückgegangen bin.</p>
+        <p>Und ehrlich gesagt waren wir damals nicht mal besonders eng oder beste Freunde ??</p>
+        <p>Mit der Zeit verliert man viele Menschen aus den Augen… aber irgendwie hatte ich bei dir nie das Gefühl, dich komplett vergessen zu haben 😌</p>
+        <p>Und vielleicht war genau das der Grund, warum ich mich nach all den Jahren irgendwann wieder bei dir gemeldet habe ✨</p>
+    </div>
+
+    <div class="slide" id="vibeCheckSlide">
+        <h2>Ehrlicher Vibe Check ⚡</h2>
+        <p>Ich habe kurz nachgerechnet und die Daten lügen nicht:</p>
+        <p>• Ausstrahlung & Schönheit: <span class="highlight">Einfach elegant ✨</span><br>
+           • Style & Geschmack: <span class="highlight">Premium-Level 💯</span><br>
+           • Dein Wesen: <span class="highlight">Einzigartig und unvergesslich 📈</span></p>
+    </div>
+
+    <div class="slide" id="giftSlide">
+        <div class="gift-box-container" id="giftBoxContainer" onclick="revealSurprise()">
+            <div class="gift-emoji" id="giftEmoji">🎁</div>
+            <div class="gift-hint" id="giftHint">Klick mich an! ✨</div>
+        </div>
+        <div class="hidden-content" id="surpriseContent">
+            <h2 style="text-align: center;">Happiest of birthdays! 🎂✨</h2>
+            <p style="font-size: 15px; color: #fff; line-height: 1.6; margin-bottom: 15px; font-style: italic; text-align: center;">
+                Auch wenn Kilometer uns trennen und ich dir heute nichts persönlich überreichen kann... Wollte ich dir etwas schenken, das nur für dich gemacht ist. ❤️
+            </p>
+            <p style="font-size: 22px; color: #00ffcc; font-weight: 700; line-height: 1.5; margin-bottom: 10px; text-align: center; text-shadow: 0 0 10px rgba(0,255,204,0.3);">
+                Alles Guteee, Cutie! 😘
+            </p>
+            <p style="font-size: 14px; text-align: center;">Bleib genau so echt und besonders, wie du bist.</p>
+        </div>
+    </div>
+
+    <div class="slide" style="text-align: center;">
+        <h2>Genieße deinen Tag! 🎉</h2>
+        <p>Das war mein kleiner Geburtstagsbericht für dich. Ich hoffe, es hat dir ein Lächeln ins Gesicht gezaubert.</p>
+        <button class="blast-btn" id="celebrateBtn" onclick="triggerMassiveBlast()">Lass uns feiern! 🥳</button>
+        <div class="signature">Mit Liebe gemacht von <span style="color: #00ffcc; font-weight: 600;">Anas</span> ❤️</div>
+    </div>
+
+    <div class="controls" id="controlsContainer" style="display: none;">
+        <button id="prevBtn" onclick="changeSlide(-1)" disabled>Zurück</button>
+        <div class="progress" id="progressTxt">1 / 5</div>
+        <button id="nextBtn" onclick="changeSlide(1)">Weiter</button>
+    </div>
+</div>
+
+<script>
+    // إنشاء القلوب المتساقطة في الخلفية
+    const fallingContainer = document.getElementById('fallingContainer');
+    const symbols = ['❤️', '✨', '🎈', '🎉', '💜', '🌟', '💖'];
+    for (let i = 0; i < 20; i++) {
+        const item = document.createElement('div');
+        item.classList.add('falling-item');
+        item.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        item.style.left = Math.random() * 100 + 'vw';
+        item.style.animationDelay = Math.random() * 8 + 's';
+        item.style.fontSize = (Math.random() * 10 + 15) + 'px';
+        fallingContainer.appendChild(item);
+    }
+
+    // الدوال الأصلية
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressTxt = document.getElementById('progressTxt');
+    const controlsContainer = document.getElementById('controlsContainer');
+
+    function animateFirstGateOpen() {
+        const lock = document.getElementById('gateLock');
+        const btn = document.getElementById('openGateBtn');
+        const firstSlide = document.getElementById('firstGateSlide');
+        lock.innerText = "🔓✨";
+        lock.style.transform = "scale(1.3) rotate(-10deg)";
+        btn.innerText = "Öffnen... ⏳";
+        btn.disabled = true;
+        
+        // تأثير الانفجار الأصلي
+        const gateEmojis = ['🎈', '✨', '🎉', '🔓', '💖'];
+        for (let i = 0; i < 25; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('blast-particle');
+            particle.innerText = gateEmojis[Math.floor(Math.random() * gateEmojis.length)];
+            particle.style.left = '50%'; particle.style.top = '40%';
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 200 + 80;
+            particle.style.setProperty('--x', Math.cos(angle) * distance + 'px');
+            particle.style.setProperty('--y', Math.sin(angle) * distance + 'px');
+            particle.style.setProperty('--r', Math.random() * 360 + 'deg');
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 2000);
+        }
+
+        setTimeout(() => {
+            firstSlide.classList.add('fade-out-blast');
+            setTimeout(() => { changeSlide(1); }, 400);
+        }, 300);
+    }
+
+    function changeSlide(direction) {
+        slides[currentSlide].classList.remove('active');
+        currentSlide += direction;
+        slides[currentSlide].classList.add('active');
+        updateUI();
+    }
+
+    function updateUI() {
+        controlsContainer.style.display = currentSlide === 0 ? 'none' : 'flex';
+        prevBtn.disabled = currentSlide === 1; 
+        if (currentSlide === 4 && !giftOpened) { nextBtn.style.visibility = 'hidden'; } else { nextBtn.style.visibility = 'visible'; }
+        if (currentSlide === slides.length - 1) { nextBtn.style.display = 'none'; } else { nextBtn.style.display = 'block'; nextBtn.innerHTML = "Weiter"; }
+        progressTxt.innerHTML = `${currentSlide} / ${slides.length - 1}`;
+    }
+
+    let giftOpened = false;
+    function revealSurprise() {
+        if (giftOpened) return;
+        giftOpened = true;
+        const giftEmoji = document.getElementById('giftEmoji');
+        const giftHint = document.getElementById('giftHint');
+        const surpriseContent = document.getElementById('surpriseContent');
+        const giftContainer = document.getElementById('giftBoxContainer');
+        giftHint.style.opacity = '0';
+        giftEmoji.classList.add('unwrap-blast');
+        const colors = ['#00ffcc', '#8a2be2', '#ff007f', '#ffcc00', '#00ffff'];
+        const giftRect = giftEmoji.getBoundingClientRect();
+        const startX = giftRect.left + (giftRect.width / 2);
+        const startY = giftRect.top + (giftRect.height / 2);
+        for (let i = 0; i < 35; i++) {
+            const p = document.createElement('div');
+            p.classList.add('blast-particle');
+            p.innerText = ['✨', '💖', '🎉', '🌟'][Math.floor(Math.random() * 4)];
+            p.style.left = startX + 'px';
+            p.style.top = startY + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const dist = Math.random() * 220 + 60;
+            p.style.setProperty('--x', Math.cos(angle) * dist + 'px');
+            p.style.setProperty('--y', Math.sin(angle) * dist + 'px');
+            p.style.setProperty('--r', Math.random() * 360 + 'deg');
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 2000);
+        }
+        for (let i = 0; i < 35; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 0.4 + 's';
+            confetti.style.width = confetti.style.height = Math.random() * 5 + 6 + 'px';
+            document.getElementById('mainCardContainer').appendChild(confetti);
+            setTimeout(() => confetti.remove(), 3500);
+        }
+        setTimeout(() => { giftContainer.style.display = 'none'; surpriseContent.classList.add('show'); nextBtn.style.visibility = 'visible'; }, 500);
+    }
+
+    function triggerMassiveBlast() {
+        const btn = document.getElementById('celebrateBtn');
+        btn.innerText = "Pass gut auf dich auf und genieße deinen Tag! ✨";
+        btn.classList.add('blast-btn-active');
+        btn.disabled = true;
+        const emojis = ['❤️', '✨', '🎈', '🎉', '💜', '🎂', '💖'];
+        for (let i = 0; i < 60; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('blast-particle');
+            particle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            particle.style.left = '50%'; particle.style.top = '50%';
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 320 + 100;
+            particle.style.setProperty('--x', Math.cos(angle) * distance + 'px');
+            particle.style.setProperty('--y', Math.sin(angle) * distance + 'px');
+            particle.style.setProperty('--r', Math.random() * 360 + 'deg');
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 2500);
+        }
+    }
+</script>
+</body>
+</html>
