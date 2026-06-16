@@ -5,18 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A little surprise 🎁👀 </title>
     <meta property="og:title" content="A little surprise 🎁👀 ">
-<meta property="og:description" content="ㅤ">
-<meta name="description" content="ㅤ">
+    <meta property="og:description" content="ㅤ">
+    <meta name="description" content="ㅤ">
     <style>
         :root {
-            --bg-color: #060609;
-            --card-bg: #111118;
-            --accent-color: #8a2be2;
-            --accent-glow: rgba(138, 43, 226, 0.4);
-            --neon-cyan: #00ffcc;
+            --bg-color: #0b0712;
+            --card-bg: #160f24;
+            --accent-color: #bd4ca7;
+            --accent-glow: rgba(189, 76, 167, 0.35);
+            --neon-pink: #ff7ebb;
+            --neon-purple: #9d4edd;
             --text-color: #ffffff;
-            --muted-text: #9a9aaf;
+            --muted-text: #bfaec9;
+            --premium-gradient: linear-gradient(135deg, #9d4edd, #ff7ebb);
         }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
         body { 
@@ -32,68 +35,149 @@
         }
 
         .falling-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; pointer-events: none; z-index: 1; overflow: hidden; }
-        .falling-item { position: absolute; font-size: 18px; animation: floatUp 10s linear infinite; bottom: -50px; opacity: 0.3; }
+        .falling-item { position: absolute; font-size: 18px; animation: floatUp 10s linear infinite; bottom: -50px; opacity: 0.25; }
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-110vh) rotate(360deg); } }
 
         .container { 
-            width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 24px; padding: 35px; 
-            box-shadow: 0 0 30px var(--accent-glow); border: 1px solid #252538; position: relative; 
-            z-index: 2; min-height: 520px; display: flex; flex-direction: column; justify-content: space-between;
+            width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 28px; padding: 35px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow); border: 1px solid rgba(255, 126, 187, 0.15); 
+            position: relative; z-index: 2; min-height: 550px; display: flex; flex-direction: column; justify-content: space-between;
+            backdrop-filter: blur(10px);
+            overflow: hidden;
         }
 
-        .slide { display: none; }
-        .slide.active { display: flex; flex-direction: column; flex-grow: 1; justify-content: center; animation: slideIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(15px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        /* ===== SLIDE TRANSITIONS - سلسة واحترافية ===== */
+        .slide-wrapper {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+        }
 
-        .slide.fade-out-blast { animation: slideBlastOut 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards; }
-        @keyframes slideBlastOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.8); display: none; } }
+        .slide { 
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            opacity: 0; 
+            transform: translateX(40px);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
 
-        h2 { font-size: 26px; color: var(--text-color); margin-bottom: 15px; font-weight: 700; }
-        p { font-size: 16px; color: var(--muted-text); line-height: 1.6; margin-bottom: 15px; }
-        .highlight { color: var(--neon-cyan); font-weight: bold; }
+        .slide.active { 
+            opacity: 1; 
+            transform: translateX(0);
+            pointer-events: all;
+        }
+
+        .slide.exit-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            pointer-events: none;
+        }
+
+        .slide.exit-right {
+            opacity: 0;
+            transform: translateX(40px);
+            pointer-events: none;
+        }
+
+        .slide.fade-out-blast { 
+            animation: slideBlastOut 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards; 
+        }
+        @keyframes slideBlastOut { 
+            0% { opacity: 1; transform: scale(1); } 
+            100% { opacity: 0; transform: scale(0.85); } 
+        }
+
+        h2 { font-size: 26px; color: var(--text-color); margin-bottom: 18px; font-weight: 700; text-shadow: 0 0 10px rgba(255, 126, 187, 0.2); }
+        p { font-size: 15px; color: var(--muted-text); line-height: 1.6; margin-bottom: 15px; }
+        .highlight { color: var(--neon-pink); font-weight: bold; text-shadow: 0 0 8px rgba(255, 126, 187, 0.3); }
         
-        .neon-name { font-size: 38px; font-weight: 800; color: #fff; text-align: center; margin-bottom: 20px; text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2; animation: pulseGlow 2s infinite ease-in-out; }
-        @keyframes pulseGlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); text-shadow: 0 0 15px var(--neon-cyan); } }
+        .neon-name { font-size: 38px; font-weight: 800; color: #fff; text-align: center; margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-purple), 0 0 25px var(--neon-pink); animation: pulseGlow 2s infinite ease-in-out; }
+        @keyframes pulseGlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); text-shadow: 0 0 20px var(--neon-pink); } }
 
-        .badge { background: rgba(0, 255, 204, 0.1); color: var(--neon-cyan); font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; margin: 0 auto 20px auto; border: 1px solid rgba(0, 255, 204, 0.3); display: inline-block; }
+        .badge { background: rgba(255, 126, 187, 0.1); color: var(--neon-pink); font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; margin: 0 auto 20px auto; border: 1px solid rgba(255, 126, 187, 0.3); display: inline-block; letter-spacing: 1px; }
 
-        .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
+        .controls { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 126, 187, 0.08);
+            margin-top: 15px;
+            flex-shrink: 0;
+        }
         button { background: var(--accent-color); color: white; border: none; padding: 12px 24px; border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; }
-        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-glow); }
-        button:disabled { background: #1f1f2e; color: #525266; cursor: not-allowed; }
+        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-glow); background: var(--neon-pink); }
+        button:disabled { background: #251b35; color: #524266; cursor: not-allowed; border: 1px solid transparent; }
         
         .progress { font-size: 13px; color: var(--muted-text); font-weight: bold; }
 
-        .blast-btn { background: linear-gradient(135deg, var(--accent-color), var(--neon-cyan)); color: #fff; border: none; padding: 16px 30px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); transition: all 0.3s ease; }
-        .blast-btn-active { background: rgba(0, 255, 204, 0.1) !important; border: 1px solid var(--neon-cyan) !important; color: #fff !important; cursor: default !important; box-shadow: none !important; transform: none !important; }
+        .blast-btn { background: var(--premium-gradient); color: #fff; border: none; padding: 16px 30px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 5px 20px rgba(157, 78, 221, 0.4); transition: all 0.3s ease; }
+        .blast-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 126, 187, 0.5); }
+        .blast-btn-active { background: rgba(255, 126, 187, 0.1) !important; border: 1px solid var(--neon-pink) !important; color: #fff !important; cursor: default !important; box-shadow: none !important; transform: none !important; }
 
         .signature { font-size: 13px; color: var(--muted-text); margin-top: 20px; font-style: italic; opacity: 0.8; }
         .lock-emoji { font-size: 65px; margin-bottom: 15px; animation: pulseLock 2s infinite ease-in-out; }
         @keyframes pulseLock { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--accent-color)); } }
 
         .gift-box-container { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin: 20px 0; perspective: 800px; }
-        .gift-emoji { font-size: 95px; animation: giftFloat 2s infinite ease-in-out; filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.3)); }
+        .gift-emoji { font-size: 95px; animation: giftFloat 2s infinite ease-in-out; filter: drop-shadow(0 0 15px rgba(255, 126, 187, 0.4)); }
         @keyframes giftFloat { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(-3deg); } }
         .gift-emoji.unwrap-blast { animation: giftUnwrap 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards !important; }
         @keyframes giftUnwrap { 0% { transform: scale(1) rotate(0); } 100% { transform: scale(0) rotate(360deg); opacity: 0; } }
 
-        .gift-hint { font-size: 14px; color: var(--neon-cyan); font-weight: bold; margin-top: 15px; animation: pulseText 1.5s infinite; }
+        .gift-hint { font-size: 14px; color: var(--neon-pink); font-weight: bold; margin-top: 15px; animation: pulseText 1.5s infinite; }
         @keyframes pulseText { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
         .hidden-content { display: none; }
-        .hidden-content.show { display: block; animation: textPopIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        @keyframes textPopIn { 0% { opacity: 0; transform: translateY(40px) scale(0.85); filter: blur(5px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+        .hidden-content.show { display: block; animation: textPopIn 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; }
+        @keyframes textPopIn { 0% { opacity: 0; transform: translateY(30px) scale(0.92); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .blast-particle { position: absolute; font-size: 24px; pointer-events: none; z-index: 99; animation: particleBlast 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
+        .blast-particle { position: fixed; font-size: 24px; pointer-events: none; z-index: 999; animation: particleBlast 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
         @keyframes particleBlast { 100% { transform: translate(var(--x), var(--y)) rotate(var(--r)); opacity: 0; scale: 1.3; } }
 
         .confetti { position: absolute; width: 7px; height: 7px; border-radius: 2px; animation: confettiFall 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite; pointer-events: none; z-index: 10; }
         @keyframes confettiFall { 100% { transform: translateY(380px) translateX(80px) rotate(540deg); opacity: 0; } }
 
-        /* --- أنماط ماكينة الحقيقة والإطراءات --- */
+        .vibe-card {
+            background: rgba(22, 15, 36, 0.6);
+            border: 1px solid rgba(255, 126, 187, 0.15);
+            border-radius: 16px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            text-align: left;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .vibe-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        .vibe-bar-bg {
+            background: #251b35;
+            height: 6px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .vibe-bar-fill {
+            background: var(--premium-gradient);
+            height: 100%;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         .compliment-box {
-            background: rgba(138, 43, 226, 0.05);
-            border: 1px dashed rgba(0, 255, 204, 0.3);
+            background: rgba(157, 78, 221, 0.08);
+            border: 1px dashed rgba(255, 126, 187, 0.4);
             padding: 25px;
             border-radius: 20px;
             min-height: 120px;
@@ -107,20 +191,14 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
         }
 
-        .compliment-anim {
-            animation: truthReveal 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes truthReveal {
-            0% { opacity: 0; filter: blur(10px); transform: scale(0.9); }
-            100% { opacity: 1; filter: blur(0); transform: scale(1); }
-        }
+        .compliment-anim { animation: truthReveal 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes truthReveal { 0% { opacity: 0; filter: blur(10px); transform: scale(0.9); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
 
         .magic-btn {
-            background: linear-gradient(45deg, #8a2be2, #4b0082);
+            background: linear-gradient(45deg, #9d4edd, #bd4ca7);
             border: none;
             color: white;
             padding: 15px 25px;
@@ -132,97 +210,351 @@
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
             font-size: 14px;
         }
+        .magic-btn:active { transform: scale(0.95) !important; box-shadow: 0 0 20px var(--neon-pink) !important; }
+        .magic-btn-pulse { animation: btnClickPulse 0.4s ease-out; }
+        @keyframes btnClickPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 126, 187, 0.7); } 100% { box-shadow: 0 0 0 20px rgba(255, 126, 187, 0); } }
 
-        .magic-btn:active {
-            transform: scale(0.95) !important;
-            box-shadow: 0 0 20px var(--neon-cyan) !important;
+        /* ===== CAKE SLIDE - تصميم احترافي ومريح ===== */
+        #surpriseContent {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0;
+        }
+        #surpriseContent.show {
+            display: flex;
+            animation: textPopIn 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
         }
 
-        .magic-btn-pulse {
-            animation: btnClickPulse 0.4s ease-out;
+        .birthday-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 24px;
+            text-shadow: 0 0 10px rgba(255, 126, 187, 0.3);
         }
 
-        @keyframes btnClickPulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7); }
-            100% { box-shadow: 0 0 0 20px rgba(0, 255, 204, 0); }
+        /* الكيكة المحسّنة - أصغر وأنيقة */
+        .cake-scene {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: rgba(255, 126, 187, 0.04);
+            border: 1px solid rgba(255, 126, 187, 0.1);
+            border-radius: 20px;
+            width: 100%;
+        }
+
+        .cake-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        /* الشمعة فوق الكيكة */
+        .cake-candle-group {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2px;
+        }
+
+        .candle {
+            width: 9px;
+            height: 34px;
+            background: repeating-linear-gradient(
+                45deg,
+                #ff7ebb, #ff7ebb 4px,
+                #fff 4px, #fff 8px
+            );
+            border-radius: 4px 4px 2px 2px;
+            position: relative;
+            box-shadow: 1px 1px 4px rgba(0,0,0,0.25);
+        }
+
+        .flame {
+            width: 12px;
+            height: 20px;
+            background: radial-gradient(ellipse at 50% 80%, #fff 0%, #ffe066 30%, #ffaa00 65%, transparent 100%);
+            border-radius: 50% 50% 30% 30%;
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flicker 0.1s ease-in-out infinite alternate;
+            box-shadow: 0 0 10px rgba(255, 180, 0, 0.8), 0 0 20px rgba(255, 120, 0, 0.4);
+        }
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scaleX(1) scaleY(1); }
+            100% { transform: translateX(-50%) scaleX(1.08) scaleY(1.06) rotate(2deg); }
+        }
+        .flame.blown-out { display: none; }
+
+        .smoke {
+            position: absolute;
+            width: 3px; height: 0;
+            background: rgba(220,220,220,0.5);
+            top: -25px; left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            opacity: 0;
+        }
+        .smoke.active {
+            animation: smokeRise 2.5s ease-out forwards;
+        }
+        @keyframes smokeRise {
+            0%   { height: 0; opacity: 0.8; transform: translateX(-50%) translateY(0); filter: blur(1px); }
+            50%  { width: 10px; height: 22px; opacity: 0.5; transform: translateX(-40%) translateY(-18px); filter: blur(3px); }
+            100% { width: 18px; height: 45px; opacity: 0; transform: translateX(-60%) translateY(-40px); filter: blur(6px); }
+        }
+
+        /* الكيكة نفسها */
+        .cake-body {
+            width: 130px;
+            position: relative;
+        }
+
+        /* الطبقة العلوية (كريمة بيضاء) */
+        .cake-top {
+            height: 22px;
+            background: #fff;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            overflow: visible;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        /* قطرات الكريمة */
+        .cake-top::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0; right: 0;
+            height: 12px;
+            background: radial-gradient(ellipse 14px 12px at 13px 0, #fff 70%, transparent 71%),
+                        radial-gradient(ellipse 14px 12px at 37px 0, #fff 70%, transparent 71%),
+                        radial-gradient(ellipse 14px 12px at 61px 0, #fff 70%, transparent 71%),
+                        radial-gradient(ellipse 14px 12px at 85px 0, #fff 70%, transparent 71%),
+                        radial-gradient(ellipse 14px 12px at 109px 0, #fff 70%, transparent 71%);
+        }
+
+        /* الطبقة الوسطى (كيكة وردية) */
+        .cake-middle {
+            height: 36px;
+            background: linear-gradient(180deg, #f9b8f8 0%, #f07cee 100%);
+            position: relative;
+            margin-top: 4px;
+        }
+        /* خط الحشوة */
+        .cake-middle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0; right: 0;
+            height: 6px;
+            transform: translateY(-50%);
+            background: linear-gradient(90deg, #bd4ca7, #9d4edd);
+            opacity: 0.6;
+        }
+
+        /* الطبقة السفلية */
+        .cake-bottom {
+            height: 22px;
+            background: linear-gradient(180deg, #f07cee 0%, #d966cc 100%);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.35);
+        }
+
+        /* طبق الكيكة */
+        .cake-plate {
+            width: 150px;
+            height: 8px;
+            background: linear-gradient(180deg, #3a2556, #251840);
+            border-radius: 50%;
+            margin-top: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        /* زر إطفاء الشمعة */
+        .blow-btn {
+            background: rgba(255, 126, 187, 0.12);
+            border: 1px solid rgba(255, 126, 187, 0.35);
+            color: var(--neon-pink);
+            padding: 9px 22px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .blow-btn:hover:not(:disabled) {
+            background: rgba(255, 126, 187, 0.2);
+            box-shadow: 0 4px 14px rgba(255, 126, 187, 0.25);
+            transform: translateY(-1px);
+        }
+        .blow-btn:disabled {
+            background: transparent;
+            border-color: rgba(255,255,255,0.1);
+            color: var(--muted-text);
+            cursor: default;
+        }
+
+        /* نصوص داخل سلايد الكيكة */
+        .cake-message {
+            font-size: 14px;
+            color: var(--muted-text);
+            line-height: 1.7;
+            font-style: italic;
+            margin: 0;
+            padding: 0 4px;
+        }
+        .cake-greeting {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--neon-pink);
+            margin: 12px 0 6px;
+            text-shadow: 0 0 8px rgba(255,126,187,0.3);
+        }
+        .cake-sub {
+            font-size: 13px;
+            color: var(--muted-text);
+            margin: 0;
         }
     </style>
 </head>
 <body>
 
+<audio id="bgMusic" src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" loop preload="auto"></audio> 
+<audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" preload="auto"></audio>
+
 <div class="falling-container" id="fallingContainer"></div>
 
 <div class="container" id="mainCardContainer">
-    <div class="slide active" id="firstGateSlide" style="text-align: center;">
-        <div class="badge">Strictly Confidential</div>
-        <div class="lock-emoji" id="gateLock">🔒✨</div>
-        <p style="margin-top: 15px; font-size: 15px;">Du hast heute Geburtstag, also wartet hier eine ganz exklusive digitale Überraschung auf dich. </p>
-        <p class="highlight" style="font-size: 14px; margin-bottom: 5px;">Bist du bereit zu sehen, was drin ist? 😉</p>
-        <button class="blast-btn" id="openGateBtn" onclick="animateFirstGateOpen()" style="margin-top: 15px; padding: 14px 20px; font-size: 15px;">Überraschung öffnen 🎁</button>
-    </div>
 
-    <div class="slide" style="text-align: center;">
-        <div class="badge">Specially Crafted</div>
-        <div class="neon-name">Hai Thu ♡</div>
-        <p style="margin-top: 15px;">Weil eine normale Nachricht zu deinem Geburtstag irgendwie zu langweilig wäre... </p>
-        <p>Dachte ich mir, ich muss dieses Jahr mal was Besonderes machen. <br>  <span class="highlight">Klick mal auf Weiter 😉</span></p>
-    </div>
+    <!-- wrapper لكل السلايدات -->
+    <div class="slide-wrapper" id="slideWrapper">
 
-    <div class="slide" id="realTalkSlide">
-        <h2>Real Talk... 👀</h2>
-        <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in der Klasse, bevor ich wieder nach Syrien zurückgegangen bin.</p>
-        <p>Und ehrlich gesagt waren wir damals nicht mal besonders eng oder beste Freunde 😄</p>
-        <p>Mit der Zeit verliert man viele Menschen aus den Augen… aber irgendwie hatte ich bei dir nie das Gefühl, dich komplett vergessen zu haben 😌</p>
-        <p>Und vielleicht war genau das der Grund, warum ich mich nach all den Jahren irgendwann wieder bei dir gemeldet habe😉</p>
-    </div>
-
-    <div class="slide" id="vibeCheckSlide">
-        <h2>Ehrlicher Vibe Check ⚡</h2>
-        <p>Ich habe kurz nachgerechnet und die Daten lügen nicht:</p>
-        <p>• Ausstrahlung & Schönheit: <span class="highlight">Einfach elegant ✨</span><br>
-           • Style & Geschmack: <span class="highlight">Premium-Level 💯</span><br>
-           • Dein Wesen: <span class="highlight">Einzigartig und unvergesslich 📈</span></p>
-    </div>
-
-    <div class="slide" id="giftSlide">
-        <div class="gift-box-container" id="giftBoxContainer" onclick="revealSurprise()">
-            <div class="gift-emoji" id="giftEmoji">🎁</div>
-            <div class="gift-hint" id="giftHint">Klick mich an!</div>
+        <!-- Slide 0: Gate -->
+        <div class="slide active" id="firstGateSlide" style="text-align: center;">
+            <div class="badge">Strictly Confidential</div>
+            <div class="lock-emoji" id="gateLock">🔒✨</div>
+            <p style="margin-top: 15px; font-size: 15px;">Du hast heute Geburtstag, also wartet hier eine ganz exklusive digitale Überraschung auf dich.</p>
+            <p class="highlight" style="font-size: 14px; margin-bottom: 5px;">Bist du bereit zu sehen, was drin ist? 😉</p>
+            <button class="blast-btn" id="openGateBtn" onclick="animateFirstGateOpen()" style="margin-top: 15px; padding: 14px 20px; font-size: 15px;">Überraschung öffnen 🎁</button>
         </div>
-        <div class="hidden-content" id="surpriseContent">
-            <h2 style="text-align: center;">Happiest of birthdays! 🎂</h2>
-            <p style="font-size: 15px; color: #fff; line-height: 1.6; margin-bottom: 15px; font-style: italic; text-align: center;">
-                Auch wenn Kilometer uns trennen und ich dir heute nichts persönlich überreichen kann... Wollte ich dir etwas schenken, das nur für dich gemacht ist. ❤️
-            </p>
-            <p style="font-size: 22px; color: #00ffcc; font-weight: 700; line-height: 1.5; margin-bottom: 10px; text-align: center; text-shadow: 0 0 10px rgba(0,255,204,0.3);">
-                Alles Gute, Cutieee! 😘
-            </p>
-            <p style="font-size: 14px; text-align: center;">Bleib genau so echt und besonders, wie du bist.</p>
+
+        <!-- Slide 1 -->
+        <div class="slide" style="text-align: center;">
+            <div class="badge">Specially Crafted</div>
+            <div class="neon-name">Hai Thu ♡</div>
+            <p style="margin-top: 15px;">Weil eine normale Nachricht zu deinem Geburtstag irgendwie zu langweilig wäre...</p>
+            <p>Dachte ich mir, ich muss dieses Jahr mal was Besonderes machen.<br><span class="highlight">Klick mal auf Weiter 😉</span></p>
         </div>
-    </div>
 
-    <div class="slide" id="complimentSlide" style="text-align: center;">
-        <div class="badge">Experimental Tool</div>
-        <h2>Truth Machine 👀</h2>
-        <p>Warning: This machine only speaks facts about you.</p>
-        
-        <div class="compliment-box" id="complimentText">
-            Ready to hear the truth? ✨
+        <!-- Slide 2 -->
+        <div class="slide" id="realTalkSlide">
+            <h2>Real Talk... 👀</h2>
+            <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in der Klasse, bevor ich wieder nach Syrien zurückgegangen bin.</p>
+            <p>Und ehrlich gesagt waren wir damals nicht mal besonders eng oder beste Freunde 😄</p>
+            <p>Mit der Zeit verliert man viele Menschen aus den Augen… aber irgendwie hatte ich bei dir nie das Gefühl, dich komplett vergessen zu haben 😌</p>
+            <p>Und vielleicht war genau das der Grund, warum ich mich nach all den Jahren irgendwann wieder bei dir gemeldet habe 😉</p>
         </div>
-        
-        <button class="magic-btn" id="truthBtn" onclick="generateCompliment()">Generate Compliment ✨</button>
-    </div>
 
-    <div class="slide" style="text-align: center;">
-        <h2>Genieße deinen Tag! 🎉</h2>
-        <p>Das war mein kleiner Geburtstagsbericht für dich. Ich hoffe, es hat dir ein Lächeln ins Gesicht gezaubert.</p>
-        <button class="blast-btn" id="celebrateBtn" onclick="triggerMassiveBlast()">before you go...</button>
-        <div class="signature">Mit Liebe gemacht von <span style="color: #00ffcc; font-weight: 600;">Anas</span> 🫰🏻</div>
-    </div>
+        <!-- Slide 3: Vibe Check -->
+        <div class="slide" id="vibeCheckSlide">
+            <h2>Ehrlicher Vibe Check ⚡</h2>
+            <p style="margin-bottom: 20px;">Ich habe kurz nachgerechnet und die Daten lügen nicht:</p>
+            <div class="vibe-card">
+                <div class="vibe-card-title"><span>Ausstrahlung & Schönheit</span><span class="highlight">Einfach elegant ✨</span></div>
+                <div class="vibe-bar-bg"><div class="vibe-bar-fill" data-width="100%"></div></div>
+            </div>
+            <div class="vibe-card">
+                <div class="vibe-card-title"><span>Style & Geschmack</span><span class="highlight">Premium-Level 💯</span></div>
+                <div class="vibe-bar-bg"><div class="vibe-bar-fill" data-width="100%"></div></div>
+            </div>
+            <div class="vibe-card">
+                <div class="vibe-card-title"><span>Dein Wesen</span><span class="highlight">Einzigartig & unvergesslich 📈</span></div>
+                <div class="vibe-bar-bg"><div class="vibe-bar-fill" data-width="100%"></div></div>
+            </div>
+        </div>
 
+        <!-- Slide 4: Gift + Cake -->
+        <div class="slide" id="giftSlide">
+            <div class="gift-box-container" id="giftBoxContainer" onclick="revealSurprise()">
+                <div class="gift-emoji" id="giftEmoji">🎁</div>
+                <div class="gift-hint" id="giftHint">Klick mich an!</div>
+            </div>
+
+            <!-- محتوى الكيكة - مُعاد تصميمه بالكامل -->
+            <div class="hidden-content" id="surpriseContent">
+
+                <p class="birthday-title">Happiest of birthdays! 🎂</p>
+
+                <!-- مشهد الكيكة المحسّن -->
+                <div class="cake-scene">
+                    <div class="cake-wrapper">
+                        <!-- الشمعة واللهب -->
+                        <div class="cake-candle-group">
+                            <div class="candle">
+                                <div class="flame" id="cakeFlame"></div>
+                                <div class="smoke" id="cakeSmoke"></div>
+                            </div>
+                        </div>
+                        <!-- جسم الكيكة -->
+                        <div class="cake-body">
+                            <div class="cake-top"></div>
+                            <div class="cake-middle"></div>
+                            <div class="cake-bottom"></div>
+                        </div>
+                        <!-- الطبق -->
+                        <div class="cake-plate"></div>
+                    </div>
+
+                    <!-- زر إطفاء الشمعة -->
+                    <button class="blow-btn" id="blowCandleBtn" onclick="blowOutCandle()">
+                        Kerze auspusten 💨
+                    </button>
+                </div>
+
+                <!-- الرسالة تحت الكيكة مباشرة -->
+                <p class="cake-message">
+                    Auch wenn Kilometer uns trennen und ich dir heute nichts persönlich überreichen kann… wollte ich dir etwas schenken, das nur für dich gemacht ist. ❤️
+                </p>
+                <p class="cake-greeting">Alles Gute, Cutieee! 😘</p>
+                <p class="cake-sub">Bleib genau so echt und besonders, wie du bist.</p>
+
+            </div>
+        </div>
+
+        <!-- Slide 5: Truth Machine -->
+        <div class="slide" id="complimentSlide" style="text-align: center;">
+            <div class="badge">Experimental Tool</div>
+            <h2>Truth Machine 👀</h2>
+            <p>Warning: This machine only speaks facts about you.</p>
+            <div class="compliment-box" id="complimentText">Ready to hear the truth? ✨</div>
+            <button class="magic-btn" id="truthBtn" onclick="generateCompliment()">Generate Compliment ✨</button>
+        </div>
+
+        <!-- Slide 6: Finale -->
+        <div class="slide" style="text-align: center;">
+            <h2>Genieße deinen Tag! 🎉</h2>
+            <p>Das war mein kleiner Geburtstagsbericht für dich. Ich hoffe, es hat dir ein Lächeln ins Gesicht gezaubert.</p>
+            <button class="blast-btn" id="celebrateBtn" onclick="triggerMassiveBlast()">before you go...</button>
+            <div class="signature">Mit Liebe gemacht von <span style="color: var(--neon-pink); font-weight: 600;">Anas</span> 🫰🏻</div>
+        </div>
+
+    </div><!-- end slide-wrapper -->
+
+    <!-- Controls خارج الـ wrapper -->
     <div class="controls" id="controlsContainer" style="display: none;">
         <button id="prevBtn" onclick="changeSlide(-1)" disabled>Zurück</button>
         <div class="progress" id="progressTxt">1 / 6</div>
@@ -231,9 +563,9 @@
 </div>
 
 <script>
-    // إنشاء القلوب المتساقطة في الخلفية
+    // ===== Falling items =====
     const fallingContainer = document.getElementById('fallingContainer');
-    const symbols = ['❤️', '✨', '🎈', '🎉', '💜', '🌟', '💖'];
+    const symbols = ['❤️', '✨', '🎈', '🎉', '💜', '🌟', '💖', '🌸'];
     for (let i = 0; i < 20; i++) {
         const item = document.createElement('div');
         item.classList.add('falling-item');
@@ -244,174 +576,236 @@
         fallingContainer.appendChild(item);
     }
 
+    // ===== State =====
     let currentSlide = 0;
+    let isAnimating = false;
     const slides = document.querySelectorAll('.slide');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const progressTxt = document.getElementById('progressTxt');
     const controlsContainer = document.getElementById('controlsContainer');
+    const clickSound = document.getElementById('clickSound');
+    const bgMusic = document.getElementById('bgMusic');
 
+    // ===== Audio: صوت النقر عند اي زر =====
+    function playClick() {
+        try {
+            clickSound.currentTime = 0;
+            clickSound.volume = 0.6;
+            clickSound.play().catch(() => {});
+        } catch(e) {}
+    }
+
+    // أضف صوت النقر لكل الأزرار تلقائياً
+    document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+            playClick();
+        }
+    }, true);
+
+    // ===== Gate animation =====
     function animateFirstGateOpen() {
+        bgMusic.volume = 0.4;
+        bgMusic.play().catch(() => {});
+
         const lock = document.getElementById('gateLock');
         const btn = document.getElementById('openGateBtn');
         const firstSlide = document.getElementById('firstGateSlide');
+
         lock.innerText = "🔓✨";
+        lock.style.transition = "transform 0.3s ease";
         lock.style.transform = "scale(1.3) rotate(-10deg)";
         btn.innerText = "Öffnen... ⏳";
         btn.disabled = true;
-        
-        const gateEmojis = ['🎈', '✨', '🎉', '🔓', '💖'];
-        for (let i = 0; i < 25; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('blast-particle');
-            particle.innerText = gateEmojis[Math.floor(Math.random() * gateEmojis.length)];
-            particle.style.left = '50%'; particle.style.top = '40%';
-            const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * 200 + 80;
-            particle.style.setProperty('--x', Math.cos(angle) * distance + 'px');
-            particle.style.setProperty('--y', Math.sin(angle) * distance + 'px');
-            particle.style.setProperty('--r', Math.random() * 360 + 'deg');
-            document.body.appendChild(particle);
-            setTimeout(() => particle.remove(), 2000);
-        }
+
+        spawnParticles(['🎈', '✨', '🎉', '🔓', '💖', '🌸'], 25, '50%', '40%', 200);
 
         setTimeout(() => {
             firstSlide.classList.add('fade-out-blast');
-            setTimeout(() => { changeSlide(1); }, 400);
-        }, 300);
+            setTimeout(() => {
+                firstSlide.classList.remove('active', 'fade-out-blast');
+                currentSlide = 1;
+                slides[currentSlide].classList.add('active');
+                updateUI();
+            }, 500);
+        }, 350);
     }
 
+    // ===== Smooth slide transition =====
     function changeSlide(direction) {
-        slides[currentSlide].classList.remove('active');
-        currentSlide += direction;
-        slides[currentSlide].classList.add('active');
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const current = slides[currentSlide];
+        const nextIndex = currentSlide + direction;
+        const next = slides[nextIndex];
+
+        // اتجاه الخروج
+        const exitClass = direction > 0 ? 'exit-left' : 'exit-right';
+
+        // الشريحة الحالية تخرج
+        current.classList.remove('active');
+        current.classList.add(exitClass);
+
+        // الشريحة الجديدة تدخل من الاتجاه الصحيح
+        next.style.transform = direction > 0 ? 'translateX(40px)' : 'translateX(-40px)';
+        next.style.opacity = '0';
+        next.classList.add('active');
+
+        // force reflow
+        void next.offsetWidth;
+
+        next.style.transform = '';
+        next.style.opacity = '';
+
+        currentSlide = nextIndex;
+
+        setTimeout(() => {
+            current.classList.remove(exitClass);
+            isAnimating = false;
+        }, 650);
+
         updateUI();
+
+        if (slides[currentSlide].id === 'vibeCheckSlide') {
+            setTimeout(animateVibeBars, 400);
+        }
+    }
+
+    function animateVibeBars() {
+        document.querySelectorAll('.vibe-bar-fill').forEach(fill => {
+            fill.style.width = fill.getAttribute('data-width');
+        });
     }
 
     function updateUI() {
         controlsContainer.style.display = currentSlide === 0 ? 'none' : 'flex';
-        prevBtn.disabled = currentSlide === 1; 
-        if (currentSlide === 4 && !giftOpened) { nextBtn.style.visibility = 'hidden'; } else { nextBtn.style.visibility = 'visible'; }
-        if (currentSlide === slides.length - 1) { nextBtn.style.display = 'none'; } else { nextBtn.style.display = 'block'; nextBtn.innerHTML = "Weiter"; }
+        prevBtn.disabled = currentSlide === 1;
+
+        if (currentSlide === 4 && !giftOpened) {
+            nextBtn.style.visibility = 'hidden';
+        } else {
+            nextBtn.style.visibility = 'visible';
+        }
+
+        if (currentSlide === slides.length - 1) {
+            nextBtn.style.display = 'none';
+        } else {
+            nextBtn.style.display = 'block';
+            nextBtn.innerHTML = "Weiter";
+        }
+
         progressTxt.innerHTML = `${currentSlide} / ${slides.length - 1}`;
     }
 
+    // ===== Gift reveal =====
     let giftOpened = false;
     function revealSurprise() {
         if (giftOpened) return;
         giftOpened = true;
+        playClick();
+
         const giftEmoji = document.getElementById('giftEmoji');
         const giftHint = document.getElementById('giftHint');
         const surpriseContent = document.getElementById('surpriseContent');
         const giftContainer = document.getElementById('giftBoxContainer');
+
         giftHint.style.opacity = '0';
         giftEmoji.classList.add('unwrap-blast');
-        const colors = ['#00ffcc', '#8a2be2', '#ff007f', '#ffcc00', '#00ffff'];
-        const giftRect = giftEmoji.getBoundingClientRect();
-        const startX = giftRect.left + (giftRect.width / 2);
-        const startY = giftRect.top + (giftRect.height / 2);
-        for (let i = 0; i < 35; i++) {
-            const p = document.createElement('div');
-            p.classList.add('blast-particle');
-            p.innerText = ['✨', '💖', '🎉', '🌟'][Math.floor(Math.random() * 4)];
-            p.style.left = startX + 'px';
-            p.style.top = startY + 'px';
-            const angle = Math.random() * Math.PI * 2;
-            const dist = Math.random() * 220 + 60;
-            p.style.setProperty('--x', Math.cos(angle) * dist + 'px');
-            p.style.setProperty('--y', Math.sin(angle) * dist + 'px');
-            p.style.setProperty('--r', Math.random() * 360 + 'deg');
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), 2000);
+
+        const rect = giftEmoji.getBoundingClientRect();
+        spawnParticles(['✨', '💖', '🎉', '🌟', '🌸'], 35, rect.left + rect.width/2 + 'px', rect.top + rect.height/2 + 'px', 200, true);
+
+        const colors = ['#ff7ebb', '#9d4edd', '#bd4ca7', '#ffcc00', '#ff5e7e'];
+        for (let i = 0; i < 30; i++) {
+            const c = document.createElement('div');
+            c.classList.add('confetti');
+            c.style.left = Math.random() * 100 + '%';
+            c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            c.style.animationDelay = Math.random() * 0.4 + 's';
+            c.style.width = c.style.height = Math.random() * 5 + 6 + 'px';
+            document.getElementById('mainCardContainer').appendChild(c);
+            setTimeout(() => c.remove(), 3500);
         }
-        for (let i = 0; i < 35; i++) {
-            const confetti = document.createElement('div');
-            confetti.classList.add('confetti');
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 0.4 + 's';
-            confetti.style.width = confetti.style.height = Math.random() * 5 + 6 + 'px';
-            document.getElementById('mainCardContainer').appendChild(confetti);
-            setTimeout(() => confetti.remove(), 3500);
-        }
-        setTimeout(() => { giftContainer.style.display = 'none'; surpriseContent.classList.add('show'); nextBtn.style.visibility = 'visible'; }, 500);
+
+        setTimeout(() => {
+            giftContainer.style.display = 'none';
+            surpriseContent.classList.add('show');
+            nextBtn.style.visibility = 'hidden';
+        }, 500);
     }
 
+    // ===== Blow candle =====
+    function blowOutCandle() {
+        const flame = document.getElementById('cakeFlame');
+        const smoke = document.getElementById('cakeSmoke');
+        const btn = document.getElementById('blowCandleBtn');
+
+        flame.classList.add('blown-out');
+        smoke.classList.add('active');
+        btn.innerText = "Ausgepustet! 💨❤️";
+        btn.disabled = true;
+
+        spawnParticles(['✨', '🎉', '💖', '🧁'], 18, '50%', '45%', 130);
+
+        setTimeout(() => {
+            nextBtn.style.visibility = 'visible';
+        }, 1000);
+    }
+
+    // ===== Massive blast =====
     function triggerMassiveBlast() {
         const btn = document.getElementById('celebrateBtn');
         btn.innerText = "Take care of yourself and have the best day! ✨";
         btn.classList.add('blast-btn-active');
         btn.disabled = true;
-        const emojis = ['❤️', '✨', '🎈', '🎉', '💜', '🎂', '💖'];
-        for (let i = 0; i < 60; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('blast-particle');
-            particle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            particle.style.left = '50%'; particle.style.top = '50%';
+        spawnParticles(['❤️', '✨', '🎈', '🎉', '💜', '🎂', '💖', '🌸'], 60, '50%', '50%', 320);
+    }
+
+    // ===== Particle helper =====
+    function spawnParticles(emojiArr, count, startX, startY, maxDist, fixedPos = false) {
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.classList.add('blast-particle');
+            p.innerText = emojiArr[Math.floor(Math.random() * emojiArr.length)];
+            p.style.left = startX;
+            p.style.top = startY;
             const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * 320 + 100;
-            particle.style.setProperty('--x', Math.cos(angle) * distance + 'px');
-            particle.style.setProperty('--y', Math.sin(angle) * distance + 'px');
-            particle.style.setProperty('--r', Math.random() * 360 + 'deg');
-            document.body.appendChild(particle);
-            setTimeout(() => particle.remove(), 2500);
+            const dist = Math.random() * maxDist + 60;
+            p.style.setProperty('--x', Math.cos(angle) * dist + 'px');
+            p.style.setProperty('--y', Math.sin(angle) * dist + 'px');
+            p.style.setProperty('--r', Math.random() * 360 + 'deg');
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 2500);
         }
     }
 
-    // --- منطق ماكينة الحقيقة والإطراءات ---
+    // ===== Compliments =====
     const compliments = [
-        "certified cutie 😌",
-        "too pretty to be real ✨",
-        "main character energy 🎬",
-        "illegal amount of charm detected 🚨",
-        "actually unfair how cute you are 😭",
-        "professionally adorable 🫶",
-        "dangerously pretty 😵‍💫",
-        "straight out of pinterest ✨",
-        "your vibe is literally unmatched 😌",
-        "the definition of pretty fr",
-        "cute level: impossible 📈",
-        "you make aesthetic look easy 🌤️",
-        "lowkey mesmerizing 👀",
-        "you were definitely someone’s favorite person in every class 😌",
-        "your smile probably causes traffic accidents 🚗",
-        "too much aura for one person ✨",
-        "human sunshine fr 🌤️",
-        "built different honestly 😌",
-        "your existence is kinda unfair 😂",
-        "0 flaws detected ✅",
-        "you look like a happy song 🎶",
-        "you have that calm pretty vibe 😮‍💨"
+        "certified cutie 😌", "too pretty to be real ✨", "main character energy 🎬",
+        "illegal amount of charm detected 🚨", "actually unfair how cute you are 😭",
+        "professionally adorable 🫶", "dangerously pretty 😵‍💫", "straight out of pinterest ✨",
+        "your vibe is literally unmatched 😌", "the definition of pretty fr", "cute level: impossible 📈",
+        "you make aesthetic look easy 🌤️", "lowkey mesmerizing 👀",
+        "you were definitely someone's favorite person in every class 😌",
+        "your smile probably causes traffic accidents 🚗", "too much aura for one person ✨",
+        "human sunshine fr 🌤️", "built different honestly 😌", "your existence is kinda unfair 😂",
+        "0 flaws detected ✅", "you look like a happy song 🎶", "you have that calm pretty vibe 😮‍💨"
     ];
-
     let lastIndex = -1;
 
     function generateCompliment() {
         const box = document.getElementById('complimentText');
         const btn = document.getElementById('truthBtn');
-        
-        // تغيير نص الزر بعد أول ضغطة
-        if(btn.innerText !== "Another one 🪄") {
-            btn.innerText = "Another one 🪄";
-        }
-        
-        // تأثير النبض للزر
+        if (btn.innerText !== "Another one 🪄") btn.innerText = "Another one 🪄";
         btn.classList.remove('magic-btn-pulse');
-        void btn.offsetWidth; // إعادة تهيئة الـ DOM لتشغيل الأنيميشن مجدداً
+        void btn.offsetWidth;
         btn.classList.add('magic-btn-pulse');
-
-        // تأثير النص
         box.classList.remove('compliment-anim');
-        void box.offsetWidth; 
-
-        // اختيار إطراء مختلف عن السابق
+        void box.offsetWidth;
         let newIdx;
-        do { 
-            newIdx = Math.floor(Math.random() * compliments.length); 
-        } while (newIdx === lastIndex);
-        
+        do { newIdx = Math.floor(Math.random() * compliments.length); } while (newIdx === lastIndex);
         lastIndex = newIdx;
-
         box.innerHTML = compliments[newIdx];
         box.classList.add('compliment-anim');
     }
