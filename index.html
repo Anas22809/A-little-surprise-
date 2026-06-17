@@ -34,6 +34,59 @@
             position: relative;
         }
 
+        /* ===== LOADING SCREEN ===== */
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            gap: 20px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #loadingScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loader-emoji {
+            font-size: 52px;
+            animation: loaderBounce 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes loaderBounce {
+            0%   { transform: scale(1) translateY(0); filter: drop-shadow(0 0 8px rgba(255, 126, 187, 0.4)); }
+            100% { transform: scale(1.1) translateY(-10px); filter: drop-shadow(0 0 18px rgba(255, 126, 187, 0.8)); }
+        }
+        .loader-text {
+            font-size: 14px;
+            color: var(--muted-text);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .loader-bar-bg {
+            width: 180px;
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .loader-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--premium-gradient);
+            border-radius: 10px;
+            animation: loaderFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes loaderFill {
+            0%   { width: 0%; }
+            60%  { width: 75%; }
+            100% { width: 100%; }
+        }
+
         .falling-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; pointer-events: none; z-index: 1; overflow: hidden; }
         .falling-item { position: absolute; font-size: 18px; animation: floatUp 10s linear infinite; bottom: -50px; opacity: 0.25; }
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-110vh) rotate(360deg); } }
@@ -46,7 +99,6 @@
             overflow: hidden;
         }
 
-        /* ===== SLIDE TRANSITIONS - سلسة واحترافية ===== */
         .slide-wrapper {
             flex-grow: 1;
             position: relative;
@@ -217,7 +269,7 @@
         .magic-btn-pulse { animation: btnClickPulse 0.4s ease-out; }
         @keyframes btnClickPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 126, 187, 0.7); } 100% { box-shadow: 0 0 0 20px rgba(255, 126, 187, 0); } }
 
-        /* ===== CAKE SLIDE - تصميم احترافي ومريح ===== */
+        /* ===== CAKE SLIDE ===== */
         #surpriseContent {
             display: none;
             flex-direction: column;
@@ -231,21 +283,20 @@
         }
 
         .birthday-title {
-            font-size: 22px;
+            font-size: 17px;
             font-weight: 700;
             color: #fff;
-            margin-bottom: 24px;
+            margin-bottom: 14px;
             text-shadow: 0 0 10px rgba(255, 126, 187, 0.3);
         }
 
-        /* الكيكة المحسّنة - أصغر وأنيقة */
         .cake-scene {
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 24px;
-            padding: 20px;
+            margin-bottom: 14px;
+            padding: 14px 20px;
             background: rgba(255, 126, 187, 0.04);
             border: 1px solid rgba(255, 126, 187, 0.1);
             border-radius: 20px;
@@ -257,10 +308,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
         }
 
-        /* الشمعة فوق الكيكة */
         .cake-candle-group {
             position: relative;
             display: flex;
@@ -270,7 +320,7 @@
 
         .candle {
             width: 9px;
-            height: 34px;
+            height: 28px;
             background: repeating-linear-gradient(
                 45deg,
                 #ff7ebb, #ff7ebb 4px,
@@ -283,11 +333,11 @@
 
         .flame {
             width: 12px;
-            height: 20px;
+            height: 18px;
             background: radial-gradient(ellipse at 50% 80%, #fff 0%, #ffe066 30%, #ffaa00 65%, transparent 100%);
             border-radius: 50% 50% 30% 30%;
             position: absolute;
-            top: -22px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             animation: flicker 0.1s ease-in-out infinite alternate;
@@ -317,80 +367,72 @@
             100% { width: 18px; height: 45px; opacity: 0; transform: translateX(-60%) translateY(-40px); filter: blur(6px); }
         }
 
-        /* الكيكة نفسها */
         .cake-body {
-            width: 130px;
+            width: 120px;
             position: relative;
         }
 
-        /* الطبقة العلوية (كريمة بيضاء) */
         .cake-top {
-            height: 22px;
+            height: 18px;
             background: #fff;
             border-radius: 10px 10px 0 0;
             position: relative;
             overflow: visible;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
-        /* قطرات الكريمة */
         .cake-top::after {
             content: '';
             position: absolute;
             bottom: -8px;
             left: 0; right: 0;
             height: 12px;
-            background: radial-gradient(ellipse 14px 12px at 13px 0, #fff 70%, transparent 71%),
-                        radial-gradient(ellipse 14px 12px at 37px 0, #fff 70%, transparent 71%),
-                        radial-gradient(ellipse 14px 12px at 61px 0, #fff 70%, transparent 71%),
-                        radial-gradient(ellipse 14px 12px at 85px 0, #fff 70%, transparent 71%),
-                        radial-gradient(ellipse 14px 12px at 109px 0, #fff 70%, transparent 71%);
+            background: radial-gradient(ellipse 14px 12px at 12px 0, #fff 70%, transparent 71%),
+                        radial-gradient(ellipse 14px 12px at 36px 0, #fff 70%, transparent 71%),
+                        radial-gradient(ellipse 14px 12px at 60px 0, #fff 70%, transparent 71%),
+                        radial-gradient(ellipse 14px 12px at 84px 0, #fff 70%, transparent 71%),
+                        radial-gradient(ellipse 14px 12px at 108px 0, #fff 70%, transparent 71%);
         }
 
-        /* الطبقة الوسطى (كيكة وردية) */
         .cake-middle {
-            height: 36px;
+            height: 30px;
             background: linear-gradient(180deg, #f9b8f8 0%, #f07cee 100%);
             position: relative;
             margin-top: 4px;
         }
-        /* خط الحشوة */
         .cake-middle::after {
             content: '';
             position: absolute;
             top: 50%;
             left: 0; right: 0;
-            height: 6px;
+            height: 5px;
             transform: translateY(-50%);
             background: linear-gradient(90deg, #bd4ca7, #9d4edd);
             opacity: 0.6;
         }
 
-        /* الطبقة السفلية */
         .cake-bottom {
-            height: 22px;
+            height: 18px;
             background: linear-gradient(180deg, #f07cee 0%, #d966cc 100%);
             border-radius: 0 0 8px 8px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.35);
         }
 
-        /* طبق الكيكة */
         .cake-plate {
-            width: 150px;
-            height: 8px;
+            width: 140px;
+            height: 7px;
             background: linear-gradient(180deg, #3a2556, #251840);
             border-radius: 50%;
             margin-top: 4px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
-        /* زر إطفاء الشمعة */
         .blow-btn {
             background: rgba(255, 126, 187, 0.12);
             border: 1px solid rgba(255, 126, 187, 0.35);
             color: var(--neon-pink);
-            padding: 9px 22px;
+            padding: 8px 20px;
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             letter-spacing: 0.5px;
@@ -408,30 +450,38 @@
             cursor: default;
         }
 
-        /* نصوص داخل سلايد الكيكة */
         .cake-message {
-            font-size: 14px;
+            font-size: 12px;
             color: var(--muted-text);
-            line-height: 1.7;
+            line-height: 1.6;
             font-style: italic;
             margin: 0;
             padding: 0 4px;
         }
         .cake-greeting {
-            font-size: 20px;
+            font-size: 17px;
             font-weight: 700;
             color: var(--neon-pink);
-            margin: 12px 0 6px;
+            margin: 10px 0 4px;
             text-shadow: 0 0 8px rgba(255,126,187,0.3);
         }
         .cake-sub {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--muted-text);
             margin: 0;
         }
     </style>
 </head>
 <body>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loadingScreen">
+    <div class="loader-emoji">🎁</div>
+    <div class="loader-text">Loading your surprise...</div>
+    <div class="loader-bar-bg">
+        <div class="loader-bar-fill"></div>
+    </div>
+</div>
 
 <audio id="bgMusic" src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" loop preload="auto"></audio> 
 <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" preload="auto"></audio>
@@ -440,7 +490,6 @@
 
 <div class="container" id="mainCardContainer">
 
-    <!-- wrapper لكل السلايدات -->
     <div class="slide-wrapper" id="slideWrapper">
 
         <!-- Slide 0: Gate -->
@@ -494,44 +543,33 @@
                 <div class="gift-hint" id="giftHint">Klick mich an!</div>
             </div>
 
-            <!-- محتوى الكيكة - مُعاد تصميمه بالكامل -->
             <div class="hidden-content" id="surpriseContent">
-
                 <p class="birthday-title">Happiest of birthdays! 🎂</p>
-
-                <!-- مشهد الكيكة المحسّن -->
                 <div class="cake-scene">
                     <div class="cake-wrapper">
-                        <!-- الشمعة واللهب -->
                         <div class="cake-candle-group">
                             <div class="candle">
                                 <div class="flame" id="cakeFlame"></div>
                                 <div class="smoke" id="cakeSmoke"></div>
                             </div>
                         </div>
-                        <!-- جسم الكيكة -->
                         <div class="cake-body">
                             <div class="cake-top"></div>
                             <div class="cake-middle"></div>
                             <div class="cake-bottom"></div>
                         </div>
-                        <!-- الطبق -->
                         <div class="cake-plate"></div>
                     </div>
-
-                    <!-- زر إطفاء الشمعة -->
                     <button class="blow-btn" id="blowCandleBtn" onclick="blowOutCandle()">
                         Kerze auspusten 💨
                     </button>
                 </div>
 
-                <!-- الرسالة تحت الكيكة مباشرة -->
                 <p class="cake-message">
                     Auch wenn Kilometer uns trennen und ich dir heute nichts persönlich überreichen kann… wollte ich dir etwas schenken, das nur für dich gemacht ist. ❤️
                 </p>
                 <p class="cake-greeting">Alles Gute, Cutieee! 😘</p>
                 <p class="cake-sub">Bleib genau so echt und besonders, wie du bist.</p>
-
             </div>
         </div>
 
@@ -552,9 +590,8 @@
             <div class="signature">Mit Liebe gemacht von <span style="color: var(--neon-pink); font-weight: 600;">Anas</span> 🫰🏻</div>
         </div>
 
-    </div><!-- end slide-wrapper -->
+    </div>
 
-    <!-- Controls خارج الـ wrapper -->
     <div class="controls" id="controlsContainer" style="display: none;">
         <button id="prevBtn" onclick="changeSlide(-1)" disabled>Zurück</button>
         <div class="progress" id="progressTxt">1 / 6</div>
@@ -563,6 +600,13 @@
 </div>
 
 <script>
+    // ===== Loading screen =====
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.getElementById('loadingScreen').classList.add('hidden');
+        }, 2000);
+    });
+
     // ===== Falling items =====
     const fallingContainer = document.getElementById('fallingContainer');
     const symbols = ['❤️', '✨', '🎈', '🎉', '💜', '🌟', '💖', '🌸'];
@@ -587,7 +631,6 @@
     const clickSound = document.getElementById('clickSound');
     const bgMusic = document.getElementById('bgMusic');
 
-    // ===== Audio: صوت النقر عند اي زر =====
     function playClick() {
         try {
             clickSound.currentTime = 0;
@@ -596,14 +639,12 @@
         } catch(e) {}
     }
 
-    // أضف صوت النقر لكل الأزرار تلقائياً
     document.addEventListener('click', function(e) {
         if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
             playClick();
         }
     }, true);
 
-    // ===== Gate animation =====
     function animateFirstGateOpen() {
         bgMusic.volume = 0.4;
         bgMusic.play().catch(() => {});
@@ -631,7 +672,6 @@
         }, 350);
     }
 
-    // ===== Smooth slide transition =====
     function changeSlide(direction) {
         if (isAnimating) return;
         isAnimating = true;
@@ -640,19 +680,15 @@
         const nextIndex = currentSlide + direction;
         const next = slides[nextIndex];
 
-        // اتجاه الخروج
         const exitClass = direction > 0 ? 'exit-left' : 'exit-right';
 
-        // الشريحة الحالية تخرج
         current.classList.remove('active');
         current.classList.add(exitClass);
 
-        // الشريحة الجديدة تدخل من الاتجاه الصحيح
         next.style.transform = direction > 0 ? 'translateX(40px)' : 'translateX(-40px)';
         next.style.opacity = '0';
         next.classList.add('active');
 
-        // force reflow
         void next.offsetWidth;
 
         next.style.transform = '';
@@ -698,7 +734,6 @@
         progressTxt.innerHTML = `${currentSlide} / ${slides.length - 1}`;
     }
 
-    // ===== Gift reveal =====
     let giftOpened = false;
     function revealSurprise() {
         if (giftOpened) return;
@@ -735,7 +770,6 @@
         }, 500);
     }
 
-    // ===== Blow candle =====
     function blowOutCandle() {
         const flame = document.getElementById('cakeFlame');
         const smoke = document.getElementById('cakeSmoke');
@@ -753,7 +787,6 @@
         }, 1000);
     }
 
-    // ===== Massive blast =====
     function triggerMassiveBlast() {
         const btn = document.getElementById('celebrateBtn');
         btn.innerText = "Take care of yourself and have the best day! ✨";
@@ -762,7 +795,6 @@
         spawnParticles(['❤️', '✨', '🎈', '🎉', '💜', '🎂', '💖', '🌸'], 60, '50%', '50%', 320);
     }
 
-    // ===== Particle helper =====
     function spawnParticles(emojiArr, count, startX, startY, maxDist, fixedPos = false) {
         for (let i = 0; i < count; i++) {
             const p = document.createElement('div');
@@ -780,7 +812,6 @@
         }
     }
 
-    // ===== Compliments =====
     const compliments = [
         "certified cutie 😌", "too pretty to be real ✨", "main character energy 🎬",
         "illegal amount of charm detected 🚨", "actually unfair how cute you are 😭",
