@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>A little surprise 🎁👀 </title>
     <meta property="og:title" content="A little surprise 🎁👀 ">
     <meta property="og:description" content="ㅤ">
@@ -19,492 +19,194 @@
             --muted-text: #bfaec9;
             --premium-gradient: linear-gradient(135deg, #9d4edd, #ff7ebb);
         }
-        
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            overflow: hidden; 
-            padding: 20px;
-            position: relative;
-        }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; min-height: 100dvh; overflow: hidden; padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); position: relative; }
 
-        /* ===== LOADING SCREEN ===== */
-        #loadingScreen {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            gap: 20px;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
-        }
-        #loadingScreen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        .loader-emoji {
-            font-size: 52px;
-            animation: loaderBounce 0.8s ease-in-out infinite alternate;
-        }
-        @keyframes loaderBounce {
-            0%   { transform: scale(1) translateY(0); filter: drop-shadow(0 0 8px rgba(255, 126, 187, 0.4)); }
-            100% { transform: scale(1.1) translateY(-10px); filter: drop-shadow(0 0 18px rgba(255, 126, 187, 0.8)); }
-        }
-        .loader-text {
-            font-size: 14px;
-            color: var(--muted-text);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        .loader-bar-bg {
-            width: 180px;
-            height: 4px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .loader-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--premium-gradient);
-            border-radius: 10px;
-            animation: loaderFill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        @keyframes loaderFill {
-            0%   { width: 0%; }
-            60%  { width: 75%; }
-            100% { width: 100%; }
-        }
+        #loadingScreen { position: fixed; inset: 0; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; gap: 20px; transition: opacity 0.6s ease, visibility 0.6s ease; }
+        #loadingScreen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-emoji { font-size: 52px; animation: loaderBounce 0.8s ease-in-out infinite alternate; }
+        @keyframes loaderBounce { 0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 8px rgba(255,126,187,0.4)); } 100% { transform: scale(1.1) translateY(-10px); filter: drop-shadow(0 0 18px rgba(255,126,187,0.8)); } }
+        .loader-text { font-size: 14px; color: var(--muted-text); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+        .loader-bar-bg { width: 180px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+        .loader-bar-fill { height: 100%; width: 0%; background: var(--premium-gradient); border-radius: 10px; animation: loaderFill 1.8s cubic-bezier(0.4,0,0.2,1) forwards; }
+        @keyframes loaderFill { 0% { width: 0%; } 60% { width: 75%; } 100% { width: 100%; } }
 
         .falling-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; pointer-events: none; z-index: 1; overflow: hidden; }
         .falling-item { position: absolute; font-size: 18px; animation: floatUp 10s linear infinite; bottom: -50px; opacity: 0.25; }
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(-110vh) rotate(360deg); } }
 
-        .container { 
-            width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 28px; padding: 35px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow); border: 1px solid rgba(255, 126, 187, 0.15); 
-            position: relative; z-index: 2; min-height: 550px; display: flex; flex-direction: column; justify-content: space-between;
-            backdrop-filter: blur(10px);
-            overflow: hidden;
-        }
+        .container { width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 28px; padding: 28px; box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow); border: 1px solid rgba(255,126,187,0.15); position: relative; z-index: 2; min-height: min(550px, calc(100dvh - 40px)); max-height: calc(100dvh - 40px); display: flex; flex-direction: column; justify-content: space-between; backdrop-filter: blur(10px); overflow: hidden; }
+        .slide-wrapper { flex-grow: 1; position: relative; overflow: hidden; }
+        .slide { position: absolute; top: 0; left: 0; right: 0; display: flex; flex-direction: column; justify-content: center; height: 100%; opacity: 0; transform: translateX(40px); transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
+        .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+        .slide.exit-left { opacity: 0; transform: translateX(-40px); pointer-events: none; }
+        .slide.exit-right { opacity: 0; transform: translateX(40px); pointer-events: none; }
+        .slide.fade-out-blast { animation: slideBlastOut 0.6s cubic-bezier(0.6,-0.28,0.735,0.045) forwards; }
+        @keyframes slideBlastOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.85); } }
 
-        .slide-wrapper {
-            flex-grow: 1;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slide { 
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-            opacity: 0; 
-            transform: translateX(40px);
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-        }
-
-        .slide.active { 
-            opacity: 1; 
-            transform: translateX(0);
-            pointer-events: all;
-        }
-
-        .slide.exit-left {
-            opacity: 0;
-            transform: translateX(-40px);
-            pointer-events: none;
-        }
-
-        .slide.exit-right {
-            opacity: 0;
-            transform: translateX(40px);
-            pointer-events: none;
-        }
-
-        .slide.fade-out-blast { 
-            animation: slideBlastOut 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards; 
-        }
-        @keyframes slideBlastOut { 
-            0% { opacity: 1; transform: scale(1); } 
-            100% { opacity: 0; transform: scale(0.85); } 
-        }
-
-        h2 { font-size: 26px; color: var(--text-color); margin-bottom: 18px; font-weight: 700; text-shadow: 0 0 10px rgba(255, 126, 187, 0.2); }
-        p { font-size: 15px; color: var(--muted-text); line-height: 1.6; margin-bottom: 15px; }
-        .highlight { color: var(--neon-pink); font-weight: bold; text-shadow: 0 0 8px rgba(255, 126, 187, 0.3); }
-        
+        h2 { font-size: 24px; color: var(--text-color); margin-bottom: 14px; font-weight: 700; text-shadow: 0 0 10px rgba(255,126,187,0.2); }
+        p { font-size: 13.5px; color: var(--muted-text); line-height: 1.55; margin-bottom: 11px; }
+        .highlight { color: var(--neon-pink); font-weight: bold; text-shadow: 0 0 8px rgba(255,126,187,0.3); }
         .neon-name { font-size: 38px; font-weight: 800; color: #fff; text-align: center; margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-purple), 0 0 25px var(--neon-pink); animation: pulseGlow 2s infinite ease-in-out; }
-        @keyframes pulseGlow { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); text-shadow: 0 0 20px var(--neon-pink); } }
+        @keyframes pulseGlow { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); text-shadow: 0 0 20px var(--neon-pink); } }
+        .badge { background: rgba(255,126,187,0.1); color: var(--neon-pink); font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; margin: 0 auto 20px auto; border: 1px solid rgba(255,126,187,0.3); display: inline-block; letter-spacing: 1px; }
 
-        .badge { background: rgba(255, 126, 187, 0.1); color: var(--neon-pink); font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; margin: 0 auto 20px auto; border: 1px solid rgba(255, 126, 187, 0.3); display: inline-block; letter-spacing: 1px; }
-
-        .controls { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 126, 187, 0.08);
-            margin-top: 15px;
-            flex-shrink: 0;
-        }
+        .controls { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid rgba(255,126,187,0.08); margin-top: 15px; flex-shrink: 0; }
         button { background: var(--accent-color); color: white; border: none; padding: 12px 24px; border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; }
         button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px var(--accent-glow); background: var(--neon-pink); }
         button:disabled { background: #251b35; color: #524266; cursor: not-allowed; border: 1px solid transparent; }
-        
         .progress { font-size: 13px; color: var(--muted-text); font-weight: bold; }
 
-        .blast-btn { background: var(--premium-gradient); color: #fff; border: none; padding: 16px 30px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 5px 20px rgba(157, 78, 221, 0.4); transition: all 0.3s ease; }
-        .blast-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 126, 187, 0.5); }
-        .blast-btn-active { background: rgba(255, 126, 187, 0.1) !important; border: 1px solid var(--neon-pink) !important; color: #fff !important; cursor: default !important; box-shadow: none !important; transform: none !important; }
+        .blast-btn { background: var(--premium-gradient); color: #fff; border: none; padding: 16px 30px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 5px 20px rgba(157,78,221,0.4); transition: all 0.3s ease; }
+        .blast-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,126,187,0.5); }
+
+        /* نص الجملة الأخيرة بعد الضغط */
+        .blast-btn-active {
+            background: rgba(255,126,187,0.06) !important;
+            border: 1px solid rgba(255,126,187,0.25) !important;
+            color: #fff !important;
+            cursor: default !important;
+            box-shadow: none !important;
+            transform: none !important;
+            padding: 18px 20px !important;
+            line-height: 1 !important;
+            font-size: 14px !important;
+        }
+        .finale-msg { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .finale-line1 { font-size: 13px; color: var(--muted-text); font-weight: 400; letter-spacing: 0.3px; }
+        .finale-name  { font-size: 22px; font-weight: 800; color: #fff; text-shadow: 0 0 12px rgba(255,126,187,0.5); }
+        .finale-line2 { font-size: 12px; color: var(--muted-text); font-weight: 400; font-style: italic; }
 
         .signature { font-size: 13px; color: var(--muted-text); margin-top: 20px; font-style: italic; opacity: 0.8; }
         .lock-emoji { font-size: 65px; margin-bottom: 15px; animation: pulseLock 2s infinite ease-in-out; }
-        @keyframes pulseLock { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--accent-color)); } }
+        @keyframes pulseLock { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--accent-color)); } }
 
         .gift-box-container { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin: 20px 0; perspective: 800px; }
-        .gift-emoji { font-size: 95px; animation: giftFloat 2s infinite ease-in-out; filter: drop-shadow(0 0 15px rgba(255, 126, 187, 0.4)); }
-        @keyframes giftFloat { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(-3deg); } }
-        .gift-emoji.unwrap-blast { animation: giftUnwrap 0.6s cubic-bezier(0.1, 0.8, 0.3, 1) forwards !important; }
+        .gift-emoji { font-size: 95px; animation: giftFloat 2s infinite ease-in-out; filter: drop-shadow(0 0 15px rgba(255,126,187,0.4)); }
+        @keyframes giftFloat { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(-3deg); } }
+        .gift-emoji.unwrap-blast { animation: giftUnwrap 0.6s cubic-bezier(0.1,0.8,0.3,1) forwards !important; }
         @keyframes giftUnwrap { 0% { transform: scale(1) rotate(0); } 100% { transform: scale(0) rotate(360deg); opacity: 0; } }
-
         .gift-hint { font-size: 14px; color: var(--neon-pink); font-weight: bold; margin-top: 15px; animation: pulseText 1.5s infinite; }
-        @keyframes pulseText { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        @keyframes pulseText { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
 
         .hidden-content { display: none; }
-        .hidden-content.show { display: block; animation: textPopIn 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) forwards; }
+        .hidden-content.show { display: block; animation: textPopIn 0.7s cubic-bezier(0.34,1.4,0.64,1) forwards; }
         @keyframes textPopIn { 0% { opacity: 0; transform: translateY(30px) scale(0.92); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .blast-particle { position: fixed; font-size: 24px; pointer-events: none; z-index: 999; animation: particleBlast 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
-        @keyframes particleBlast { 100% { transform: translate(var(--x), var(--y)) rotate(var(--r)); opacity: 0; scale: 1.3; } }
-
-        .confetti { position: absolute; width: 7px; height: 7px; border-radius: 2px; animation: confettiFall 3.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite; pointer-events: none; z-index: 10; }
+        .blast-particle { position: fixed; font-size: 24px; pointer-events: none; z-index: 999; animation: particleBlast 2.5s cubic-bezier(0.1,0.8,0.3,1) forwards; }
+        @keyframes particleBlast { 100% { transform: translate(var(--x),var(--y)) rotate(var(--r)); opacity: 0; scale: 1.3; } }
+        .confetti { position: absolute; width: 7px; height: 7px; border-radius: 2px; animation: confettiFall 3.5s cubic-bezier(0.25,0.46,0.45,0.94) infinite; pointer-events: none; z-index: 10; }
         @keyframes confettiFall { 100% { transform: translateY(380px) translateX(80px) rotate(540deg); opacity: 0; } }
 
-        .vibe-card {
-            background: rgba(22, 15, 36, 0.6);
-            border: 1px solid rgba(255, 126, 187, 0.15);
-            border-radius: 16px;
-            padding: 14px 18px;
-            margin-bottom: 12px;
-            text-align: left;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .vibe-card-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-        }
-        .vibe-bar-bg {
-            background: #251b35;
-            height: 6px;
-            width: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .vibe-bar-fill {
-            background: var(--premium-gradient);
-            height: 100%;
-            border-radius: 10px;
-            width: 0%;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .vibe-card { background: rgba(22,15,36,0.6); border: 1px solid rgba(255,126,187,0.15); border-radius: 16px; padding: 14px 18px; margin-bottom: 12px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .vibe-card-title { font-size: 14px; font-weight: 600; color: #fff; display: flex; justify-content: space-between; margin-bottom: 6px; }
+        .vibe-bar-bg { background: #251b35; height: 6px; width: 100%; border-radius: 10px; overflow: hidden; }
+        .vibe-bar-fill { background: var(--premium-gradient); height: 100%; border-radius: 10px; width: 0%; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
 
-        .compliment-box {
-            background: rgba(157, 78, 221, 0.08);
-            border: 1px dashed rgba(255, 126, 187, 0.4);
-            padding: 25px;
-            border-radius: 20px;
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 500;
-            color: #fff;
-            margin-top: 15px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
-        }
-
-        .compliment-anim { animation: truthReveal 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .compliment-box { background: rgba(157,78,221,0.08); border: 1px dashed rgba(255,126,187,0.4); padding: 25px; border-radius: 20px; min-height: 120px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500; color: #fff; margin-top: 15px; text-align: center; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.4); }
+        .compliment-anim { animation: truthReveal 0.5s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
         @keyframes truthReveal { 0% { opacity: 0; filter: blur(10px); transform: scale(0.9); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
-
-        .magic-btn {
-            background: linear-gradient(45deg, #9d4edd, #bd4ca7);
-            border: none;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.2s ease;
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
-            font-size: 14px;
-        }
+        .magic-btn { background: linear-gradient(45deg,#9d4edd,#bd4ca7); border: none; color: white; padding: 15px 25px; border-radius: 15px; font-weight: 700; cursor: pointer; margin-top: 20px; transition: all 0.2s ease; width: 100%; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(157,78,221,0.3); font-size: 14px; }
         .magic-btn:active { transform: scale(0.95) !important; box-shadow: 0 0 20px var(--neon-pink) !important; }
         .magic-btn-pulse { animation: btnClickPulse 0.4s ease-out; }
-        @keyframes btnClickPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 126, 187, 0.7); } 100% { box-shadow: 0 0 0 20px rgba(255, 126, 187, 0); } }
+        @keyframes btnClickPulse { 0% { box-shadow: 0 0 0 0 rgba(255,126,187,0.7); } 100% { box-shadow: 0 0 0 20px rgba(255,126,187,0); } }
 
-        /* ===== CAKE SLIDE ===== */
-        #surpriseContent {
+        /* ===== Instagram Browser Banner ===== */
+        #igBanner {
             display: none;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 0;
-        }
-        #surpriseContent.show {
-            display: flex;
-            animation: textPopIn 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
-        }
-
-        .birthday-title {
-            font-size: 17px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 14px;
-            text-shadow: 0 0 10px rgba(255, 126, 187, 0.3);
-        }
-
-        .cake-scene {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 14px;
-            padding: 14px 20px;
-            background: rgba(255, 126, 187, 0.04);
-            border: 1px solid rgba(255, 126, 187, 0.1);
-            border-radius: 20px;
-            width: 100%;
-        }
-
-        .cake-wrapper {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .cake-candle-group {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2px;
-        }
-
-        .candle {
-            width: 9px;
-            height: 28px;
-            background: repeating-linear-gradient(
-                45deg,
-                #ff7ebb, #ff7ebb 4px,
-                #fff 4px, #fff 8px
-            );
-            border-radius: 4px 4px 2px 2px;
-            position: relative;
-            box-shadow: 1px 1px 4px rgba(0,0,0,0.25);
-        }
-
-        .flame {
-            width: 12px;
-            height: 18px;
-            background: radial-gradient(ellipse at 50% 80%, #fff 0%, #ffe066 30%, #ffaa00 65%, transparent 100%);
-            border-radius: 50% 50% 30% 30%;
-            position: absolute;
-            top: -20px;
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top));
             left: 50%;
             transform: translateX(-50%);
-            animation: flicker 0.1s ease-in-out infinite alternate;
-            box-shadow: 0 0 10px rgba(255, 180, 0, 0.8), 0 0 20px rgba(255, 120, 0, 0.4);
-        }
-        @keyframes flicker {
-            0% { transform: translateX(-50%) scaleX(1) scaleY(1); }
-            100% { transform: translateX(-50%) scaleX(1.08) scaleY(1.06) rotate(2deg); }
-        }
-        .flame.blown-out { display: none; }
-
-        .smoke {
-            position: absolute;
-            width: 3px; height: 0;
-            background: rgba(220,220,220,0.5);
-            top: -25px; left: 50%;
-            transform: translateX(-50%);
-            border-radius: 50%;
-            opacity: 0;
-        }
-        .smoke.active {
-            animation: smokeRise 2.5s ease-out forwards;
-        }
-        @keyframes smokeRise {
-            0%   { height: 0; opacity: 0.8; transform: translateX(-50%) translateY(0); filter: blur(1px); }
-            50%  { width: 10px; height: 22px; opacity: 0.5; transform: translateX(-40%) translateY(-18px); filter: blur(3px); }
-            100% { width: 18px; height: 45px; opacity: 0; transform: translateX(-60%) translateY(-40px); filter: blur(6px); }
-        }
-
-        .cake-body {
-            width: 120px;
-            position: relative;
-        }
-
-        .cake-top {
-            height: 18px;
-            background: #fff;
-            border-radius: 10px 10px 0 0;
-            position: relative;
-            overflow: visible;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        .cake-top::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0; right: 0;
-            height: 12px;
-            background: radial-gradient(ellipse 14px 12px at 12px 0, #fff 70%, transparent 71%),
-                        radial-gradient(ellipse 14px 12px at 36px 0, #fff 70%, transparent 71%),
-                        radial-gradient(ellipse 14px 12px at 60px 0, #fff 70%, transparent 71%),
-                        radial-gradient(ellipse 14px 12px at 84px 0, #fff 70%, transparent 71%),
-                        radial-gradient(ellipse 14px 12px at 108px 0, #fff 70%, transparent 71%);
-        }
-
-        .cake-middle {
-            height: 30px;
-            background: linear-gradient(180deg, #f9b8f8 0%, #f07cee 100%);
-            position: relative;
-            margin-top: 4px;
-        }
-        .cake-middle::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0; right: 0;
-            height: 5px;
-            transform: translateY(-50%);
-            background: linear-gradient(90deg, #bd4ca7, #9d4edd);
-            opacity: 0.6;
-        }
-
-        .cake-bottom {
-            height: 18px;
-            background: linear-gradient(180deg, #f07cee 0%, #d966cc 100%);
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.35);
-        }
-
-        .cake-plate {
-            width: 140px;
-            height: 7px;
-            background: linear-gradient(180deg, #3a2556, #251840);
-            border-radius: 50%;
-            margin-top: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-
-        .blow-btn {
-            background: rgba(255, 126, 187, 0.12);
+            z-index: 99999;
+            width: calc(100% - 32px);
+            max-width: 400px;
+            background: rgba(22, 15, 36, 0.97);
             border: 1px solid rgba(255, 126, 187, 0.35);
-            color: var(--neon-pink);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
+            border-radius: 16px;
+            padding: 12px 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            animation: bannerDrop 0.4s cubic-bezier(0.34,1.4,0.64,1) forwards;
         }
-        .blow-btn:hover:not(:disabled) {
-            background: rgba(255, 126, 187, 0.2);
-            box-shadow: 0 4px 14px rgba(255, 126, 187, 0.25);
-            transform: translateY(-1px);
+        @keyframes bannerDrop {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
-        .blow-btn:disabled {
-            background: transparent;
-            border-color: rgba(255,255,255,0.1);
-            color: var(--muted-text);
-            cursor: default;
-        }
-
-        .cake-message {
-            font-size: 12px;
-            color: var(--muted-text);
-            line-height: 1.6;
-            font-style: italic;
-            margin: 0;
-            padding: 0 4px;
-        }
-        .cake-greeting {
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--neon-pink);
-            margin: 10px 0 4px;
-            text-shadow: 0 0 8px rgba(255,126,187,0.3);
-        }
-        .cake-sub {
-            font-size: 12px;
-            color: var(--muted-text);
-            margin: 0;
-        }
+        .ig-banner-inner { display: flex; align-items: center; gap: 10px; }
+        .ig-banner-icon { font-size: 22px; flex-shrink: 0; }
+        .ig-banner-text { flex: 1; }
+        .ig-banner-text strong { display: block; font-size: 12px; color: #fff; font-weight: 700; margin-bottom: 2px; }
+        .ig-banner-text span { font-size: 11px; color: var(--muted-text); line-height: 1.4; }
+        .ig-banner-close { background: none; border: none; color: var(--muted-text); font-size: 18px; cursor: pointer; padding: 0 0 0 6px; flex-shrink: 0; line-height: 1; }
+        .ig-banner-close:hover { color: #fff; transform: none; box-shadow: none; background: none; }
+        #surpriseContent { display: none; flex-direction: column; align-items: center; text-align: center; gap: 0; }
+        #surpriseContent.show { display: flex; animation: textPopIn 0.7s cubic-bezier(0.34,1.4,0.64,1) forwards; }
+        .birthday-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 14px; text-shadow: 0 0 10px rgba(255,126,187,0.3); }
+        .cake-scene { position: relative; display: flex; flex-direction: column; align-items: center; margin-bottom: 14px; padding: 14px 20px; background: rgba(255,126,187,0.04); border: 1px solid rgba(255,126,187,0.1); border-radius: 20px; width: 100%; }
+        .cake-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; margin-bottom: 12px; }
+        .cake-candle-group { position: relative; display: flex; justify-content: center; margin-bottom: 2px; }
+        .candle { width: 9px; height: 28px; background: repeating-linear-gradient(45deg,#ff7ebb,#ff7ebb 4px,#fff 4px,#fff 8px); border-radius: 4px 4px 2px 2px; position: relative; box-shadow: 1px 1px 4px rgba(0,0,0,0.25); }
+        .flame { width: 12px; height: 18px; background: radial-gradient(ellipse at 50% 80%,#fff 0%,#ffe066 30%,#ffaa00 65%,transparent 100%); border-radius: 50% 50% 30% 30%; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); animation: flicker 0.1s ease-in-out infinite alternate; box-shadow: 0 0 10px rgba(255,180,0,0.8),0 0 20px rgba(255,120,0,0.4); }
+        @keyframes flicker { 0% { transform: translateX(-50%) scaleX(1) scaleY(1); } 100% { transform: translateX(-50%) scaleX(1.08) scaleY(1.06) rotate(2deg); } }
+        .flame.blown-out { display: none; }
+        .smoke { position: absolute; width: 3px; height: 0; background: rgba(220,220,220,0.5); top: -25px; left: 50%; transform: translateX(-50%); border-radius: 50%; opacity: 0; }
+        .smoke.active { animation: smokeRise 2.5s ease-out forwards; }
+        @keyframes smokeRise { 0% { height: 0; opacity: 0.8; transform: translateX(-50%) translateY(0); filter: blur(1px); } 50% { width: 10px; height: 22px; opacity: 0.5; transform: translateX(-40%) translateY(-18px); filter: blur(3px); } 100% { width: 18px; height: 45px; opacity: 0; transform: translateX(-60%) translateY(-40px); filter: blur(6px); } }
+        .cake-body { width: 120px; position: relative; }
+        .cake-top { height: 18px; background: #fff; border-radius: 10px 10px 0 0; position: relative; overflow: visible; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .cake-top::after { content: ''; position: absolute; bottom: -8px; left: 0; right: 0; height: 12px; background: radial-gradient(ellipse 14px 12px at 12px 0,#fff 70%,transparent 71%),radial-gradient(ellipse 14px 12px at 36px 0,#fff 70%,transparent 71%),radial-gradient(ellipse 14px 12px at 60px 0,#fff 70%,transparent 71%),radial-gradient(ellipse 14px 12px at 84px 0,#fff 70%,transparent 71%),radial-gradient(ellipse 14px 12px at 108px 0,#fff 70%,transparent 71%); }
+        .cake-middle { height: 30px; background: linear-gradient(180deg,#f9b8f8 0%,#f07cee 100%); position: relative; margin-top: 4px; }
+        .cake-middle::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 5px; transform: translateY(-50%); background: linear-gradient(90deg,#bd4ca7,#9d4edd); opacity: 0.6; }
+        .cake-bottom { height: 18px; background: linear-gradient(180deg,#f07cee 0%,#d966cc 100%); border-radius: 0 0 8px 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.35); }
+        .cake-plate { width: 140px; height: 7px; background: linear-gradient(180deg,#3a2556,#251840); border-radius: 50%; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        .blow-btn { background: rgba(255,126,187,0.12); border: 1px solid rgba(255,126,187,0.35); color: var(--neon-pink); padding: 8px 20px; border-radius: 30px; font-size: 12px; font-weight: 600; cursor: pointer; letter-spacing: 0.5px; transition: all 0.3s ease; }
+        .blow-btn:hover:not(:disabled) { background: rgba(255,126,187,0.2); box-shadow: 0 4px 14px rgba(255,126,187,0.25); transform: translateY(-1px); }
+        .blow-btn:disabled { background: transparent; border-color: rgba(255,255,255,0.1); color: var(--muted-text); cursor: default; }
+        .cake-message { font-size: 12px; color: var(--muted-text); line-height: 1.6; font-style: italic; margin: 0; padding: 0 4px; }
+        .cake-greeting { font-size: 17px; font-weight: 700; color: var(--neon-pink); margin: 10px 0 4px; text-shadow: 0 0 8px rgba(255,126,187,0.3); }
+        .cake-sub { font-size: 12px; color: var(--muted-text); margin: 0; }
     </style>
 </head>
 <body>
 
-<!-- ===== LOADING SCREEN ===== -->
 <div id="loadingScreen">
     <div class="loader-emoji">🎁</div>
     <div class="loader-text">Loading your surprise...</div>
-    <div class="loader-bar-bg">
-        <div class="loader-bar-fill"></div>
-    </div>
+    <div class="loader-bar-bg"><div class="loader-bar-fill"></div></div>
 </div>
 
-
+<!-- Instagram browser banner -->
+<div id="igBanner">
+    <div class="ig-banner-inner">
+        <div class="ig-banner-icon">🌸</div>
+        <div class="ig-banner-text">
+            <strong>For the best experience</strong>
+            <span>Tap the <strong style="color:var(--neon-pink);">⋯</strong> menu → "Open in Browser" to enjoy this fully ✨</span>
+        </div>
+        <button class="ig-banner-close" onclick="document.getElementById('igBanner').style.display='none'">✕</button>
+    </div>
+</div>
 
 <div class="falling-container" id="fallingContainer"></div>
 
 <div class="container" id="mainCardContainer">
-
     <div class="slide-wrapper" id="slideWrapper">
 
-        <!-- Slide 0: Gate -->
-        <div class="slide active" id="firstGateSlide" style="text-align: center;">
+        <!-- Slide 0 -->
+        <div class="slide active" id="firstGateSlide" style="text-align:center;">
             <div class="badge">Strictly Confidential</div>
             <div class="lock-emoji" id="gateLock">🔒✨</div>
-            <p style="margin-top: 15px; font-size: 15px;">Du hast heute Geburtstag, also wartet hier eine ganz exklusive digitale Überraschung auf dich.</p>
-            <p class="highlight" style="font-size: 14px; margin-bottom: 5px;">Bist du bereit zu sehen, was drin ist? 😉</p>
-            <button class="blast-btn" id="openGateBtn" onclick="animateFirstGateOpen()" style="margin-top: 15px; padding: 14px 20px; font-size: 15px;">Überraschung öffnen 🎁</button>
+            <p style="margin-top:15px;font-size:15px;">Du hast heute Geburtstag, also wartet hier eine ganz exklusive digitale Überraschung auf dich.</p>
+            <p class="highlight" style="font-size:14px;margin-bottom:5px;">Bist du bereit zu sehen, was drin ist? 😉</p>
+            <button class="blast-btn" id="openGateBtn" onclick="animateFirstGateOpen()" style="margin-top:15px;padding:14px 20px;font-size:15px;">Überraschung öffnen 🎁</button>
         </div>
 
         <!-- Slide 1 -->
-        <div class="slide" style="text-align: center;">
+        <div class="slide" style="text-align:center;">
             <div class="badge">Specially Crafted</div>
             <div class="neon-name">Hai Thu ♡</div>
-            <p style="margin-top: 15px;">Weil eine normale Nachricht zu deinem Geburtstag irgendwie zu langweilig wäre...</p>
+            <p style="margin-top:15px;">Weil eine normale Nachricht zu deinem Geburtstag irgendwie zu langweilig wäre...</p>
             <p>Dachte ich mir, ich muss dieses Jahr mal was Besonderes machen.<br><span class="highlight">Klick mal auf Weiter 😉</span></p>
         </div>
 
@@ -517,10 +219,10 @@
             <p>Und vielleicht war genau das der Grund, warum ich mich nach all den Jahren irgendwann wieder bei dir gemeldet habe 😉</p>
         </div>
 
-        <!-- Slide 3: Vibe Check -->
+        <!-- Slide 3 -->
         <div class="slide" id="vibeCheckSlide">
             <h2>Ehrlicher Vibe Check ⚡</h2>
-            <p style="margin-bottom: 20px;">Ich habe kurz nachgerechnet und die Daten lügen nicht:</p>
+            <p style="margin-bottom:20px;">Ich habe kurz nachgerechnet und die Daten lügen nicht:</p>
             <div class="vibe-card">
                 <div class="vibe-card-title"><span>Ausstrahlung & Schönheit</span><span class="highlight">Einfach elegant ✨</span></div>
                 <div class="vibe-bar-bg"><div class="vibe-bar-fill" data-width="100%"></div></div>
@@ -535,13 +237,12 @@
             </div>
         </div>
 
-        <!-- Slide 4: Gift + Cake -->
+        <!-- Slide 4 -->
         <div class="slide" id="giftSlide">
             <div class="gift-box-container" id="giftBoxContainer" onclick="revealSurprise()">
                 <div class="gift-emoji" id="giftEmoji">🎁</div>
                 <div class="gift-hint" id="giftHint">Klick mich an!</div>
             </div>
-
             <div class="hidden-content" id="surpriseContent">
                 <p class="birthday-title">Happiest of birthdays! 🎂</p>
                 <div class="cake-scene">
@@ -559,21 +260,16 @@
                         </div>
                         <div class="cake-plate"></div>
                     </div>
-                    <button class="blow-btn" id="blowCandleBtn" onclick="blowOutCandle()">
-                        Kerze auspusten 💨
-                    </button>
+                    <button class="blow-btn" id="blowCandleBtn" onclick="blowOutCandle()">Kerze auspusten 💨</button>
                 </div>
-
-                <p class="cake-message">
-                    Auch wenn Kilometer uns trennen und ich dir heute nichts persönlich überreichen kann… wollte ich dir etwas schenken, das nur für dich gemacht ist. ❤️
-                </p>
+                <p class="cake-message">Auch wenn Kilometer uns trennen und ich dir heute nichts persönlich überreichen kann… wollte ich dir etwas schenken, das nur für dich gemacht ist. ❤️</p>
                 <p class="cake-greeting">Alles Gute, Cutieee! 😘</p>
                 <p class="cake-sub">Bleib genau so echt und besonders, wie du bist.</p>
             </div>
         </div>
 
-        <!-- Slide 5: Truth Machine -->
-        <div class="slide" id="complimentSlide" style="text-align: center;">
+        <!-- Slide 5 -->
+        <div class="slide" id="complimentSlide" style="text-align:center;">
             <div class="badge">Experimental Tool</div>
             <h2>Truth Machine 👀</h2>
             <p>Warning: This machine only speaks facts about you.</p>
@@ -581,17 +277,17 @@
             <button class="magic-btn" id="truthBtn" onclick="generateCompliment()">Generate Compliment ✨</button>
         </div>
 
-        <!-- Slide 6: Finale -->
-        <div class="slide" style="text-align: center;">
+        <!-- Slide 6 -->
+        <div class="slide" style="text-align:center;">
             <h2>Genieße deinen Tag! 🎉</h2>
             <p>Das war mein kleiner Geburtstagsbericht für dich. Ich hoffe, es hat dir ein Lächeln ins Gesicht gezaubert.</p>
             <button class="blast-btn" id="celebrateBtn" onclick="triggerMassiveBlast()">before you go...</button>
-            <div class="signature">Mit Liebe gemacht von <span style="color: var(--neon-pink); font-weight: 600;">Anas</span> 🫰🏻</div>
+            <div class="signature">Mit Liebe gemacht von <span style="color:var(--neon-pink);font-weight:600;">Anas</span> 🫰🏻</div>
         </div>
 
     </div>
 
-    <div class="controls" id="controlsContainer" style="display: none;">
+    <div class="controls" id="controlsContainer" style="display:none;">
         <button id="prevBtn" onclick="changeSlide(-1)" disabled>Zurück</button>
         <div class="progress" id="progressTxt">1 / 6</div>
         <button id="nextBtn" onclick="changeSlide(1)">Weiter</button>
@@ -599,16 +295,28 @@
 </div>
 
 <script>
-    // ===== Loading screen =====
+    // Instagram browser detection
+    (function() {
+        const ua = navigator.userAgent || '';
+        const isInstagram = ua.indexOf('Instagram') > -1;
+        const isFacebook = ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
+        if (isInstagram || isFacebook) {
+            setTimeout(function() {
+                document.getElementById('igBanner').style.display = 'block';
+            }, 2200); // يظهر بعد الـ loading screen
+        }
+    })();
+
+    // Loading
     window.addEventListener('load', function() {
         setTimeout(function() {
             document.getElementById('loadingScreen').classList.add('hidden');
         }, 2000);
     });
 
-    // ===== Falling items =====
+    // Falling items
     const fallingContainer = document.getElementById('fallingContainer');
-    const symbols = ['❤️', '✨', '🎈', '🎉', '💜', '🌟', '💖', '🌸'];
+    const symbols = ['❤️','✨','🎈','🎉','💜','🌟','💖','🌸'];
     for (let i = 0; i < 20; i++) {
         const item = document.createElement('div');
         item.classList.add('falling-item');
@@ -621,7 +329,7 @@
 
     // ===== Web Audio Engine =====
     let audioCtx = null;
-    let musicStarted = false;
+    let _buses = {};
 
     function getCtx() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -629,41 +337,55 @@
         return audioCtx;
     }
 
-    // --- بناء reverb جميل ---
-    function makeReverb(ctx, duration, decay) {
-        const convolver = ctx.createConvolver();
+    function buildReverb(ctx, duration, decay) {
+        const conv = ctx.createConvolver();
         const len = ctx.sampleRate * duration;
         const buf = ctx.createBuffer(2, len, ctx.sampleRate);
         for (let ch = 0; ch < 2; ch++) {
             const d = buf.getChannelData(ch);
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < len; i++)
                 d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
-            }
         }
-        convolver.buffer = buf;
-        return convolver;
+        conv.buffer = buf;
+        return conv;
     }
 
-    // --- Magic Chime ✨ ---
+    // Wet bus لكل نوع reverb — يُبنى مرة وحدة ويبقى متصل بالـ destination
+    function getWetBus(type) {
+        const ctx = getCtx();
+        if (_buses[type]) return _buses[type];
+        const specs = { short: [0.7, 3.2], mid: [1.4, 2.4], long: [2.2, 1.9] };
+        const [dur, dec] = specs[type];
+        const rev = buildReverb(ctx, dur, dec);
+        const wetG = ctx.createGain();
+        wetG.gain.value = 0.28; // مستوى ثابت ومضبوط للـ reverb
+        rev.connect(wetG);
+        wetG.connect(ctx.destination);
+        _buses[type] = { input: rev }; // الصوت يتصل بـ input
+        return _buses[type];
+    }
+
+    // إرسال صوت للـ reverb bus
+    function sendToReverb(sourceNode, type, sendLevel) {
+        const ctx = getCtx();
+        const bus = getWetBus(type);
+        const sendG = ctx.createGain();
+        sendG.gain.value = sendLevel;
+        sourceNode.connect(sendG);
+        sendG.connect(bus.input);
+    }
+
+    // --- Magic Chime ---
     function playClick() {
         try {
             const ctx = getCtx();
             const now = ctx.currentTime;
-
-            const rev = makeReverb(ctx, 1.2, 2.8);
-            const revGain = ctx.createGain();
-            revGain.gain.value = 0.5;
-            rev.connect(revGain);
-            revGain.connect(ctx.destination);
-
-            // نغمات صاعدة بسرعة — تحاكي عصا سحرية
             const notes = [
-                [523.25, 0.000, 0.28], // C5
-                [659.25, 0.055, 0.22], // E5
-                [783.99, 0.110, 0.18], // G5
-                [1046.5, 0.165, 0.15], // C6
+                [523.25, 0.000, 0.28],
+                [659.25, 0.055, 0.22],
+                [783.99, 0.110, 0.18],
+                [1046.5, 0.165, 0.15],
             ];
-
             notes.forEach(([freq, offset, vol]) => {
                 const osc = ctx.createOscillator();
                 const g = ctx.createGain();
@@ -675,12 +397,9 @@
                 g.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
                 osc.connect(g);
                 g.connect(ctx.destination);
-                g.connect(rev);
-                osc.start(t);
-                osc.stop(t + 0.6);
+                sendToReverb(g, 'short', 0.45);
+                osc.start(t); osc.stop(t + 0.6);
             });
-
-            // بريق فوقي خفيف — الـ "magic dust"
             [2093.0, 2637.0].forEach((freq, i) => {
                 const osc = ctx.createOscillator();
                 const g = ctx.createGain();
@@ -691,40 +410,30 @@
                 g.gain.linearRampToValueAtTime(0.07 - i * 0.02, t + 0.008);
                 g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
                 osc.connect(g);
-                g.connect(rev);
-                osc.start(t);
-                osc.stop(t + 0.32);
+                sendToReverb(g, 'short', 0.3);
+                osc.start(t); osc.stop(t + 0.32);
             });
-
         } catch(e) {}
     }
 
-    // --- Gift Burst 🎁 — pop + confetti whoosh + sparkle cascade ---
+    // --- Gift Burst ---
     function playGiftBurst() {
         try {
             const ctx = getCtx();
             const now = ctx.currentTime;
 
-            const rev = makeReverb(ctx, 1.5, 2.2);
-            const revGain = ctx.createGain();
-            revGain.gain.value = 0.45;
-            rev.connect(revGain);
-            revGain.connect(ctx.destination);
-
-            // 1. POP — ضربة عميقة مثل مسدس confetti
+            // POP
             const pop = ctx.createOscillator();
-            const popGain = ctx.createGain();
+            const popG = ctx.createGain();
             pop.type = 'sine';
             pop.frequency.setValueAtTime(220, now);
             pop.frequency.exponentialRampToValueAtTime(35, now + 0.09);
-            popGain.gain.setValueAtTime(0.85, now);
-            popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
-            pop.connect(popGain);
-            popGain.connect(ctx.destination);
-            pop.start(now);
-            pop.stop(now + 0.14);
+            popG.gain.setValueAtTime(0.85, now);
+            popG.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+            pop.connect(popG); popG.connect(ctx.destination);
+            pop.start(now); pop.stop(now + 0.14);
 
-            // noise قصير — هسهسة الـ confetti اللحظية
+            // noise
             const nLen = ctx.sampleRate * 0.12;
             const nBuf = ctx.createBuffer(1, nLen, ctx.sampleRate);
             const nd = nBuf.getChannelData(0);
@@ -732,74 +441,57 @@
             const nSrc = ctx.createBufferSource();
             nSrc.buffer = nBuf;
             const nFilt = ctx.createBiquadFilter();
-            nFilt.type = 'highpass';
-            nFilt.frequency.value = 2500;
-            const nGain = ctx.createGain();
-            nGain.gain.setValueAtTime(0.3, now);
-            nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-            nSrc.connect(nFilt); nFilt.connect(nGain);
-            nGain.connect(ctx.destination); nGain.connect(rev);
+            nFilt.type = 'highpass'; nFilt.frequency.value = 2500;
+            const nG = ctx.createGain();
+            nG.gain.setValueAtTime(0.3, now);
+            nG.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            nSrc.connect(nFilt); nFilt.connect(nG);
+            nG.connect(ctx.destination);
+            sendToReverb(nG, 'mid', 0.4);
             nSrc.start(now);
 
-            // 2. WHOOSH — صعود سريع يحاكي طيران الـ confetti
+            // WHOOSH
             const whoosh = ctx.createOscillator();
-            const wGain = ctx.createGain();
+            const wG = ctx.createGain();
+            const wFilt = ctx.createBiquadFilter();
             whoosh.type = 'sawtooth';
             whoosh.frequency.setValueAtTime(180, now + 0.06);
             whoosh.frequency.exponentialRampToValueAtTime(1800, now + 0.42);
-            // filter على الـ sawtooth يخليه ناعم مش حاد
-            const wFilt = ctx.createBiquadFilter();
             wFilt.type = 'lowpass';
             wFilt.frequency.setValueAtTime(600, now + 0.06);
             wFilt.frequency.exponentialRampToValueAtTime(2200, now + 0.42);
-            wGain.gain.setValueAtTime(0, now + 0.06);
-            wGain.gain.linearRampToValueAtTime(0.15, now + 0.14);
-            wGain.gain.exponentialRampToValueAtTime(0.001, now + 0.44);
-            whoosh.connect(wFilt); wFilt.connect(wGain);
-            wGain.connect(ctx.destination); wGain.connect(rev);
-            whoosh.start(now + 0.06);
-            whoosh.stop(now + 0.46);
+            wG.gain.setValueAtTime(0, now + 0.06);
+            wG.gain.linearRampToValueAtTime(0.15, now + 0.14);
+            wG.gain.exponentialRampToValueAtTime(0.001, now + 0.44);
+            whoosh.connect(wFilt); wFilt.connect(wG);
+            wG.connect(ctx.destination);
+            sendToReverb(wG, 'mid', 0.35);
+            whoosh.start(now + 0.06); whoosh.stop(now + 0.46);
 
-            // 3. SPARKLE CASCADE — نغمات جرس تنهمر مثل النجوم
-            const sparkles = [
-                [1046.5, 0.18, 0.22], // C6
-                [1318.5, 0.26, 0.20], // E6
-                [1567.98,0.34, 0.18], // G6
-                [2093.0, 0.41, 0.15], // C7
-                [2637.0, 0.48, 0.13], // E7
-                [1318.5, 0.55, 0.12], // E6
-                [1046.5, 0.62, 0.10], // C6
-            ];
-            sparkles.forEach(([freq, offset, vol]) => {
+            // SPARKLE CASCADE
+            [[1046.5,0.18,0.22],[1318.5,0.26,0.20],[1567.98,0.34,0.18],[2093.0,0.41,0.15],[2637.0,0.48,0.13],[1318.5,0.55,0.12],[1046.5,0.62,0.10]]
+            .forEach(([freq, offset, vol]) => {
                 const osc = ctx.createOscillator();
                 const g = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
+                osc.type = 'sine'; osc.frequency.value = freq;
                 const t = now + offset;
                 g.gain.setValueAtTime(0, t);
                 g.gain.linearRampToValueAtTime(vol, t + 0.008);
                 g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
-                osc.connect(g);
-                g.connect(rev); g.connect(ctx.destination);
+                osc.connect(g); g.connect(ctx.destination);
+                sendToReverb(g, 'mid', 0.4);
                 osc.start(t); osc.stop(t + 0.4);
             });
-
         } catch(e) {}
     }
 
-    // --- Candle Blow 💨 — نفخة هواء + فرقعة اللهب + نغمة تلاشي ---
+    // --- Candle Blow ---
     function playCandleBlow() {
         try {
             const ctx = getCtx();
             const now = ctx.currentTime;
 
-            const rev = makeReverb(ctx, 1.0, 3);
-            const revGain = ctx.createGain();
-            revGain.gain.value = 0.35;
-            rev.connect(revGain);
-            revGain.connect(ctx.destination);
-
-            // 1. WHOOSH — صوت النفخة (white noise مفلتر)
+            // WHOOSH noise
             const wLen = ctx.sampleRate * 0.55;
             const wBuf = ctx.createBuffer(1, wLen, ctx.sampleRate);
             const wd = wBuf.getChannelData(0);
@@ -807,65 +499,141 @@
             const wSrc = ctx.createBufferSource();
             wSrc.buffer = wBuf;
             const wFilt = ctx.createBiquadFilter();
-            wFilt.type = 'bandpass';
-            wFilt.frequency.value = 800;
-            wFilt.Q.value = 0.6;
-            const wGain = ctx.createGain();
-            wGain.gain.setValueAtTime(0, now);
-            wGain.gain.linearRampToValueAtTime(0.28, now + 0.04);
-            wGain.gain.setValueAtTime(0.28, now + 0.18);
-            wGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-            wSrc.connect(wFilt); wFilt.connect(wGain);
-            wGain.connect(ctx.destination); wGain.connect(rev);
+            wFilt.type = 'bandpass'; wFilt.frequency.value = 800; wFilt.Q.value = 0.6;
+            const wG = ctx.createGain();
+            wG.gain.setValueAtTime(0, now);
+            wG.gain.linearRampToValueAtTime(0.28, now + 0.04);
+            wG.gain.setValueAtTime(0.28, now + 0.18);
+            wG.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+            wSrc.connect(wFilt); wFilt.connect(wG);
+            wG.connect(ctx.destination);
+            sendToReverb(wG, 'short', 0.3);
             wSrc.start(now);
 
-            // 2. FLAME FLICKER SNAP — فرقعة صغيرة عند انطفاء اللهب
+            // SNAP
             const snap = ctx.createOscillator();
-            const snapGain = ctx.createGain();
+            const snapG = ctx.createGain();
             snap.type = 'sine';
             snap.frequency.setValueAtTime(320, now + 0.12);
             snap.frequency.exponentialRampToValueAtTime(80, now + 0.19);
-            snapGain.gain.setValueAtTime(0.35, now + 0.12);
-            snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-            snap.connect(snapGain);
-            snapGain.connect(ctx.destination);
-            snap.start(now + 0.12);
-            snap.stop(now + 0.23);
+            snapG.gain.setValueAtTime(0.35, now + 0.12);
+            snapG.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+            snap.connect(snapG); snapG.connect(ctx.destination);
+            snap.start(now + 0.12); snap.stop(now + 0.23);
 
-            // 3. WISH CHIME — نغمة حلم بعد إطفاء الشمعة، تحاكي "تمنّيت أمنية"
-            const wishNotes = [
-                [523.25, 0.28, 0.18], // C5
-                [659.25, 0.42, 0.15], // E5
-                [783.99, 0.56, 0.13], // G5
-                [1046.5, 0.70, 0.10], // C6 — تصعد للأعلى وتتلاشى
-            ];
-            wishNotes.forEach(([freq, offset, vol]) => {
+            // WISH CHIME
+            [[523.25,0.28,0.18],[659.25,0.42,0.15],[783.99,0.56,0.13],[1046.5,0.70,0.10]]
+            .forEach(([freq, offset, vol]) => {
                 const osc = ctx.createOscillator();
                 const g = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
+                osc.type = 'sine'; osc.frequency.value = freq;
                 const t = now + offset;
                 g.gain.setValueAtTime(0, t);
                 g.gain.linearRampToValueAtTime(vol, t + 0.025);
                 g.gain.exponentialRampToValueAtTime(0.001, t + 0.65);
-                osc.connect(g);
-                g.connect(rev); g.connect(ctx.destination);
+                osc.connect(g); g.connect(ctx.destination);
+                sendToReverb(g, 'short', 0.35);
                 osc.start(t); osc.stop(t + 0.7);
             });
-
         } catch(e) {}
     }
 
-    // --- أحداث الكليك ---
+    // --- Massive Blast ---
+    function playMassiveBlast() {
+        try {
+            const ctx = getCtx();
+            const now = ctx.currentTime;
+
+            // BIG POP
+            const pop = ctx.createOscillator();
+            const popG = ctx.createGain();
+            pop.type = 'sine';
+            pop.frequency.setValueAtTime(280, now);
+            pop.frequency.exponentialRampToValueAtTime(30, now + 0.11);
+            popG.gain.setValueAtTime(1.0, now);
+            popG.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            pop.connect(popG); popG.connect(ctx.destination);
+            pop.start(now); pop.stop(now + 0.16);
+
+            // noise
+            const nLen = ctx.sampleRate * 0.22;
+            const nBuf = ctx.createBuffer(1, nLen, ctx.sampleRate);
+            const nd = nBuf.getChannelData(0);
+            for (let i = 0; i < nLen; i++) nd[i] = (Math.random() * 2 - 1);
+            const nSrc = ctx.createBufferSource();
+            nSrc.buffer = nBuf;
+            const nFilt = ctx.createBiquadFilter();
+            nFilt.type = 'highpass'; nFilt.frequency.value = 2000;
+            const nG = ctx.createGain();
+            nG.gain.setValueAtTime(0.4, now);
+            nG.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+            nSrc.connect(nFilt); nFilt.connect(nG);
+            nG.connect(ctx.destination);
+            sendToReverb(nG, 'long', 0.5);
+            nSrc.start(now);
+
+            // DOUBLE WHOOSH
+            [0.05, 0.09].forEach((delay, i) => {
+                const w = ctx.createOscillator();
+                const wf = ctx.createBiquadFilter();
+                const wg = ctx.createGain();
+                w.type = 'sawtooth';
+                w.frequency.setValueAtTime(150 + i*60, now+delay);
+                w.frequency.exponentialRampToValueAtTime(2200 + i*400, now+delay+0.45);
+                wf.type = 'lowpass';
+                wf.frequency.setValueAtTime(500, now+delay);
+                wf.frequency.exponentialRampToValueAtTime(2800, now+delay+0.45);
+                wg.gain.setValueAtTime(0, now+delay);
+                wg.gain.linearRampToValueAtTime(0.12, now+delay+0.06);
+                wg.gain.exponentialRampToValueAtTime(0.001, now+delay+0.48);
+                w.connect(wf); wf.connect(wg);
+                wg.connect(ctx.destination);
+                sendToReverb(wg, 'long', 0.4);
+                w.start(now+delay); w.stop(now+delay+0.5);
+            });
+
+            // FANFARE
+            [[523.25,0.15,0.30],[659.25,0.22,0.26],[783.99,0.29,0.22],[1046.5,0.36,0.18],[1318.5,0.43,0.14],[1567.98,0.50,0.11]]
+            .forEach(([freq,offset,vol]) => {
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'triangle'; osc.frequency.value = freq;
+                const t = now + offset;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(vol, t+0.015);
+                g.gain.exponentialRampToValueAtTime(0.001, t+0.7);
+                osc.connect(g); g.connect(ctx.destination);
+                sendToReverb(g, 'long', 0.45);
+                osc.start(t); osc.stop(t+0.75);
+            });
+
+            // SPARKLE RAIN
+            const pool = [1046.5,1318.5,1567.98,2093.0,2637.0,1760.0,2349.3];
+            for (let i = 0; i < 10; i++) {
+                const freq = pool[Math.floor(Math.random()*pool.length)];
+                const offset = 0.3 + Math.random()*0.9;
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'sine'; osc.frequency.value = freq;
+                const t = now + offset;
+                const vol = 0.06 + Math.random()*0.08;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(vol, t+0.008);
+                g.gain.exponentialRampToValueAtTime(0.001, t+0.4);
+                osc.connect(g);
+                sendToReverb(g, 'long', 0.5);
+                osc.start(t); osc.stop(t+0.42);
+            }
+        } catch(e) {}
+    }
+
+    // Click listener
     document.addEventListener('click', function(e) {
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-            playClick();
-        }
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) playClick();
     }, true);
 
     // ===== State =====
-    let currentSlide = 0;
-    let isAnimating = false;
+    let currentSlide = 0, isAnimating = false;
     const slides = document.querySelectorAll('.slide');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -876,19 +644,16 @@
         const lock = document.getElementById('gateLock');
         const btn = document.getElementById('openGateBtn');
         const firstSlide = document.getElementById('firstGateSlide');
-
         lock.innerText = "🔓✨";
         lock.style.transition = "transform 0.3s ease";
         lock.style.transform = "scale(1.3) rotate(-10deg)";
         btn.innerText = "Öffnen... ⏳";
         btn.disabled = true;
-
-        spawnParticles(['🎈', '✨', '🎉', '🔓', '💖', '🌸'], 25, '50%', '40%', 200);
-
+        spawnParticles(['🎈','✨','🎉','🔓','💖','🌸'], 25, '50%', '40%', 200);
         setTimeout(() => {
             firstSlide.classList.add('fade-out-blast');
             setTimeout(() => {
-                firstSlide.classList.remove('active', 'fade-out-blast');
+                firstSlide.classList.remove('active','fade-out-blast');
                 currentSlide = 1;
                 slides[currentSlide].classList.add('active');
                 updateUI();
@@ -899,62 +664,35 @@
     function changeSlide(direction) {
         if (isAnimating) return;
         isAnimating = true;
-
         const current = slides[currentSlide];
         const nextIndex = currentSlide + direction;
         const next = slides[nextIndex];
-
         const exitClass = direction > 0 ? 'exit-left' : 'exit-right';
-
         current.classList.remove('active');
         current.classList.add(exitClass);
-
         next.style.transform = direction > 0 ? 'translateX(40px)' : 'translateX(-40px)';
         next.style.opacity = '0';
         next.classList.add('active');
-
         void next.offsetWidth;
-
         next.style.transform = '';
         next.style.opacity = '';
-
         currentSlide = nextIndex;
-
-        setTimeout(() => {
-            current.classList.remove(exitClass);
-            isAnimating = false;
-        }, 650);
-
+        setTimeout(() => { current.classList.remove(exitClass); isAnimating = false; }, 650);
         updateUI();
-
-        if (slides[currentSlide].id === 'vibeCheckSlide') {
-            setTimeout(animateVibeBars, 400);
-        }
+        if (slides[currentSlide].id === 'vibeCheckSlide') setTimeout(animateVibeBars, 400);
     }
 
     function animateVibeBars() {
-        document.querySelectorAll('.vibe-bar-fill').forEach(fill => {
-            fill.style.width = fill.getAttribute('data-width');
-        });
+        document.querySelectorAll('.vibe-bar-fill').forEach(f => f.style.width = f.getAttribute('data-width'));
     }
 
     function updateUI() {
         controlsContainer.style.display = currentSlide === 0 ? 'none' : 'flex';
         prevBtn.disabled = currentSlide === 1;
-
-        if (currentSlide === 4 && !giftOpened) {
-            nextBtn.style.visibility = 'hidden';
-        } else {
-            nextBtn.style.visibility = 'visible';
-        }
-
-        if (currentSlide === slides.length - 1) {
-            nextBtn.style.display = 'none';
-        } else {
-            nextBtn.style.display = 'block';
-            nextBtn.innerHTML = "Weiter";
-        }
-
+        if (currentSlide === 4 && !giftOpened) nextBtn.style.visibility = 'hidden';
+        else nextBtn.style.visibility = 'visible';
+        if (currentSlide === slides.length - 1) nextBtn.style.display = 'none';
+        else { nextBtn.style.display = 'block'; nextBtn.innerHTML = "Weiter"; }
         progressTxt.innerHTML = `${currentSlide} / ${slides.length - 1}`;
     }
 
@@ -963,30 +701,25 @@
         if (giftOpened) return;
         giftOpened = true;
         playGiftBurst();
-
         const giftEmoji = document.getElementById('giftEmoji');
         const giftHint = document.getElementById('giftHint');
         const surpriseContent = document.getElementById('surpriseContent');
         const giftContainer = document.getElementById('giftBoxContainer');
-
         giftHint.style.opacity = '0';
         giftEmoji.classList.add('unwrap-blast');
-
         const rect = giftEmoji.getBoundingClientRect();
-        spawnParticles(['✨', '💖', '🎉', '🌟', '🌸'], 35, rect.left + rect.width/2 + 'px', rect.top + rect.height/2 + 'px', 200, true);
-
-        const colors = ['#ff7ebb', '#9d4edd', '#bd4ca7', '#ffcc00', '#ff5e7e'];
+        spawnParticles(['✨','💖','🎉','🌟','🌸'], 35, rect.left+rect.width/2+'px', rect.top+rect.height/2+'px', 200, true);
+        const colors = ['#ff7ebb','#9d4edd','#bd4ca7','#ffcc00','#ff5e7e'];
         for (let i = 0; i < 30; i++) {
             const c = document.createElement('div');
             c.classList.add('confetti');
-            c.style.left = Math.random() * 100 + '%';
-            c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            c.style.animationDelay = Math.random() * 0.4 + 's';
-            c.style.width = c.style.height = Math.random() * 5 + 6 + 'px';
+            c.style.left = Math.random()*100+'%';
+            c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+            c.style.animationDelay = Math.random()*0.4+'s';
+            c.style.width = c.style.height = Math.random()*5+6+'px';
             document.getElementById('mainCardContainer').appendChild(c);
             setTimeout(() => c.remove(), 3500);
         }
-
         setTimeout(() => {
             giftContainer.style.display = 'none';
             surpriseContent.classList.add('show');
@@ -998,157 +731,56 @@
         const flame = document.getElementById('cakeFlame');
         const smoke = document.getElementById('cakeSmoke');
         const btn = document.getElementById('blowCandleBtn');
-
         playCandleBlow();
         flame.classList.add('blown-out');
         smoke.classList.add('active');
         btn.innerText = "Ausgepustet! 💨❤️";
         btn.disabled = true;
-
-        spawnParticles(['✨', '🎉', '💖', '🧁'], 18, '50%', '45%', 130);
-
-        setTimeout(() => {
-            nextBtn.style.visibility = 'visible';
-        }, 1000);
-    }
-
-    function playMassiveBlast() {
-        try {
-            const ctx = getCtx();
-            const now = ctx.currentTime;
-
-            const rev = makeReverb(ctx, 2.5, 1.8);
-            const revGain = ctx.createGain();
-            revGain.gain.value = 0.55;
-            rev.connect(revGain);
-            revGain.connect(ctx.destination);
-
-            // 1. BIG POP — انفجار أكبر من الهدية
-            const pop = ctx.createOscillator();
-            const popGain = ctx.createGain();
-            pop.type = 'sine';
-            pop.frequency.setValueAtTime(280, now);
-            pop.frequency.exponentialRampToValueAtTime(30, now + 0.11);
-            popGain.gain.setValueAtTime(1.0, now);
-            popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-            pop.connect(popGain); popGain.connect(ctx.destination);
-            pop.start(now); pop.stop(now + 0.16);
-
-            // noise burst طويل — confetti أكثر
-            const nLen = ctx.sampleRate * 0.22;
-            const nBuf = ctx.createBuffer(1, nLen, ctx.sampleRate);
-            const nd = nBuf.getChannelData(0);
-            for (let i = 0; i < nLen; i++) nd[i] = (Math.random() * 2 - 1);
-            const nSrc = ctx.createBufferSource();
-            nSrc.buffer = nBuf;
-            const nFilt = ctx.createBiquadFilter();
-            nFilt.type = 'highpass'; nFilt.frequency.value = 2000;
-            const nGain = ctx.createGain();
-            nGain.gain.setValueAtTime(0.4, now);
-            nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-            nSrc.connect(nFilt); nFilt.connect(nGain);
-            nGain.connect(ctx.destination); nGain.connect(rev);
-            nSrc.start(now);
-
-            // 2. WHOOSH مزدوج — يمين ويسار يحاكي confetti يتطاير لكل اتجاه
-            [0.05, 0.09].forEach((delay, i) => {
-                const w = ctx.createOscillator();
-                const wf = ctx.createBiquadFilter();
-                const wg = ctx.createGain();
-                w.type = 'sawtooth';
-                w.frequency.setValueAtTime(150 + i * 60, now + delay);
-                w.frequency.exponentialRampToValueAtTime(2200 + i * 400, now + delay + 0.45);
-                wf.type = 'lowpass';
-                wf.frequency.setValueAtTime(500, now + delay);
-                wf.frequency.exponentialRampToValueAtTime(2800, now + delay + 0.45);
-                wg.gain.setValueAtTime(0, now + delay);
-                wg.gain.linearRampToValueAtTime(0.12, now + delay + 0.06);
-                wg.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.48);
-                w.connect(wf); wf.connect(wg);
-                wg.connect(ctx.destination); wg.connect(rev);
-                w.start(now + delay); w.stop(now + delay + 0.5);
-            });
-
-            // 3. FANFARE — أوتار احتفالية صاعدة (C major chord arpeggio)
-            const fanfare = [
-                [523.25, 0.15, 0.30], // C5
-                [659.25, 0.22, 0.26], // E5
-                [783.99, 0.29, 0.22], // G5
-                [1046.5, 0.36, 0.18], // C6
-                [1318.5, 0.43, 0.14], // E6
-                [1567.98,0.50, 0.11], // G6
-            ];
-            fanfare.forEach(([freq, offset, vol]) => {
-                const osc = ctx.createOscillator();
-                const g = ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.value = freq;
-                const t = now + offset;
-                g.gain.setValueAtTime(0, t);
-                g.gain.linearRampToValueAtTime(vol, t + 0.015);
-                g.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
-                osc.connect(g);
-                g.connect(ctx.destination); g.connect(rev);
-                osc.start(t); osc.stop(t + 0.75);
-            });
-
-            // 4. SPARKLE RAIN — نغمات عشوائية تتساقط مثل المطر اللامع
-            const sparklePool = [1046.5, 1318.5, 1567.98, 2093.0, 2637.0, 1760.0, 2349.3];
-            for (let i = 0; i < 10; i++) {
-                const freq = sparklePool[Math.floor(Math.random() * sparklePool.length)];
-                const offset = 0.3 + Math.random() * 0.9;
-                const osc = ctx.createOscillator();
-                const g = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                const t = now + offset;
-                const vol = 0.06 + Math.random() * 0.08;
-                g.gain.setValueAtTime(0, t);
-                g.gain.linearRampToValueAtTime(vol, t + 0.008);
-                g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
-                osc.connect(g); g.connect(rev);
-                osc.start(t); osc.stop(t + 0.42);
-            }
-
-        } catch(e) {}
+        spawnParticles(['✨','🎉','💖','🧁'], 18, '50%', '45%', 130);
+        setTimeout(() => { nextBtn.style.visibility = 'visible'; }, 1000);
     }
 
     function triggerMassiveBlast() {
         const btn = document.getElementById('celebrateBtn');
-        btn.innerHTML = "Take care of yourself, <br>Hai Thu ❤️<br>Enjoy every minute of your day ✨😉";
         btn.classList.add('blast-btn-active');
         btn.disabled = true;
+        btn.innerHTML = `
+            <div class="finale-msg">
+                <span class="finale-line1">Take care of yourself,</span>
+                <span class="finale-name">Hai Thu ❤️</span>
+                <span class="finale-line2">enjoy every minute of your day ✨</span>
+
+            </div>`;
         playMassiveBlast();
-        spawnParticles(['❤️', '✨', '🎈', '🎉', '💜', '🎂', '💖', '🌸'], 60, '50%', '50%', 320);
+        spawnParticles(['❤️','✨','🎈','🎉','💜','🎂','💖','🌸'], 60, '50%', '50%', 320);
     }
 
-    function spawnParticles(emojiArr, count, startX, startY, maxDist, fixedPos = false) {
+    function spawnParticles(emojiArr, count, startX, startY, maxDist, fixedPos=false) {
         for (let i = 0; i < count; i++) {
             const p = document.createElement('div');
             p.classList.add('blast-particle');
-            p.innerText = emojiArr[Math.floor(Math.random() * emojiArr.length)];
-            p.style.left = startX;
-            p.style.top = startY;
-            const angle = Math.random() * Math.PI * 2;
-            const dist = Math.random() * maxDist + 60;
-            p.style.setProperty('--x', Math.cos(angle) * dist + 'px');
-            p.style.setProperty('--y', Math.sin(angle) * dist + 'px');
-            p.style.setProperty('--r', Math.random() * 360 + 'deg');
+            p.innerText = emojiArr[Math.floor(Math.random()*emojiArr.length)];
+            p.style.left = startX; p.style.top = startY;
+            const angle = Math.random()*Math.PI*2;
+            const dist = Math.random()*maxDist+60;
+            p.style.setProperty('--x', Math.cos(angle)*dist+'px');
+            p.style.setProperty('--y', Math.sin(angle)*dist+'px');
+            p.style.setProperty('--r', Math.random()*360+'deg');
             document.body.appendChild(p);
             setTimeout(() => p.remove(), 2500);
         }
     }
 
     const compliments = [
-        "certified cutie 😌", "too pretty to be real ✨", "main character energy 🎬",
-        "illegal amount of charm detected 🚨", "actually unfair how cute you are 😭",
-        "professionally adorable 🫶", "dangerously pretty 😵‍💫", "straight out of pinterest ✨",
-        "your vibe is literally unmatched 😌", "the definition of pretty fr", "cute level: impossible 📈",
-        "you make aesthetic look easy 🌤️", "lowkey mesmerizing 👀",
+        "certified cutie 😌","too pretty to be real ✨","main character energy 🎬",
+        "illegal amount of charm detected 🚨","actually unfair how cute you are 😭",
+        "professionally adorable 🫶","dangerously pretty 😵‍💫","straight out of pinterest ✨",
+        "your vibe is literally unmatched 😌","the definition of pretty fr","cute level: impossible 📈",
+        "you make aesthetic look easy 🌤️","lowkey mesmerizing 👀",
         "you were definitely someone's favorite person in every class 😌",
-        "your smile probably causes traffic accidents 🚗", "too much aura for one person ✨",
-        "human sunshine fr 🌤️", "built different honestly 😌", "your existence is kinda unfair 😂",
-        "0 flaws detected ✅", "you look like a happy song 🎶", "you have that calm pretty vibe 😮‍💨"
+        "your smile probably causes traffic accidents 🚗","too much aura for one person ✨",
+        "human sunshine fr 🌤️","built different honestly 😌","your existence is kinda unfair 😂",
+        "0 flaws detected ✅","you look like a happy song 🎶","you have that calm pretty vibe 😮‍💨"
     ];
     let lastIndex = -1;
 
@@ -1162,7 +794,7 @@
         box.classList.remove('compliment-anim');
         void box.offsetWidth;
         let newIdx;
-        do { newIdx = Math.floor(Math.random() * compliments.length); } while (newIdx === lastIndex);
+        do { newIdx = Math.floor(Math.random()*compliments.length); } while (newIdx === lastIndex);
         lastIndex = newIdx;
         box.innerHTML = compliments[newIdx];
         box.classList.add('compliment-anim');
