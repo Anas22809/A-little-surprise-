@@ -483,8 +483,7 @@
     </div>
 </div>
 
-<audio id="bgMusic" src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" loop preload="auto"></audio> 
-<audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" preload="auto"></audio>
+
 
 <div class="falling-container" id="fallingContainer"></div>
 
@@ -620,6 +619,250 @@
         fallingContainer.appendChild(item);
     }
 
+    // ===== Web Audio Engine =====
+    let audioCtx = null;
+    let musicStarted = false;
+
+    function getCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+    }
+
+    // --- بناء reverb جميل ---
+    function makeReverb(ctx, duration, decay) {
+        const convolver = ctx.createConvolver();
+        const len = ctx.sampleRate * duration;
+        const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+        for (let ch = 0; ch < 2; ch++) {
+            const d = buf.getChannelData(ch);
+            for (let i = 0; i < len; i++) {
+                d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+            }
+        }
+        convolver.buffer = buf;
+        return convolver;
+    }
+
+    // --- Magic Chime ✨ ---
+    function playClick() {
+        try {
+            const ctx = getCtx();
+            const now = ctx.currentTime;
+
+            const rev = makeReverb(ctx, 1.2, 2.8);
+            const revGain = ctx.createGain();
+            revGain.gain.value = 0.5;
+            rev.connect(revGain);
+            revGain.connect(ctx.destination);
+
+            // نغمات صاعدة بسرعة — تحاكي عصا سحرية
+            const notes = [
+                [523.25, 0.000, 0.28], // C5
+                [659.25, 0.055, 0.22], // E5
+                [783.99, 0.110, 0.18], // G5
+                [1046.5, 0.165, 0.15], // C6
+            ];
+
+            notes.forEach(([freq, offset, vol]) => {
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                const t = now + offset;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(vol, t + 0.012);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+                osc.connect(g);
+                g.connect(ctx.destination);
+                g.connect(rev);
+                osc.start(t);
+                osc.stop(t + 0.6);
+            });
+
+            // بريق فوقي خفيف — الـ "magic dust"
+            [2093.0, 2637.0].forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                const t = now + 0.18 + i * 0.06;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(0.07 - i * 0.02, t + 0.008);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+                osc.connect(g);
+                g.connect(rev);
+                osc.start(t);
+                osc.stop(t + 0.32);
+            });
+
+        } catch(e) {}
+    }
+
+    // --- Gift Burst 🎁 — pop + confetti whoosh + sparkle cascade ---
+    function playGiftBurst() {
+        try {
+            const ctx = getCtx();
+            const now = ctx.currentTime;
+
+            const rev = makeReverb(ctx, 1.5, 2.2);
+            const revGain = ctx.createGain();
+            revGain.gain.value = 0.45;
+            rev.connect(revGain);
+            revGain.connect(ctx.destination);
+
+            // 1. POP — ضربة عميقة مثل مسدس confetti
+            const pop = ctx.createOscillator();
+            const popGain = ctx.createGain();
+            pop.type = 'sine';
+            pop.frequency.setValueAtTime(220, now);
+            pop.frequency.exponentialRampToValueAtTime(35, now + 0.09);
+            popGain.gain.setValueAtTime(0.85, now);
+            popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+            pop.connect(popGain);
+            popGain.connect(ctx.destination);
+            pop.start(now);
+            pop.stop(now + 0.14);
+
+            // noise قصير — هسهسة الـ confetti اللحظية
+            const nLen = ctx.sampleRate * 0.12;
+            const nBuf = ctx.createBuffer(1, nLen, ctx.sampleRate);
+            const nd = nBuf.getChannelData(0);
+            for (let i = 0; i < nLen; i++) nd[i] = (Math.random() * 2 - 1);
+            const nSrc = ctx.createBufferSource();
+            nSrc.buffer = nBuf;
+            const nFilt = ctx.createBiquadFilter();
+            nFilt.type = 'highpass';
+            nFilt.frequency.value = 2500;
+            const nGain = ctx.createGain();
+            nGain.gain.setValueAtTime(0.3, now);
+            nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            nSrc.connect(nFilt); nFilt.connect(nGain);
+            nGain.connect(ctx.destination); nGain.connect(rev);
+            nSrc.start(now);
+
+            // 2. WHOOSH — صعود سريع يحاكي طيران الـ confetti
+            const whoosh = ctx.createOscillator();
+            const wGain = ctx.createGain();
+            whoosh.type = 'sawtooth';
+            whoosh.frequency.setValueAtTime(180, now + 0.06);
+            whoosh.frequency.exponentialRampToValueAtTime(1800, now + 0.42);
+            // filter على الـ sawtooth يخليه ناعم مش حاد
+            const wFilt = ctx.createBiquadFilter();
+            wFilt.type = 'lowpass';
+            wFilt.frequency.setValueAtTime(600, now + 0.06);
+            wFilt.frequency.exponentialRampToValueAtTime(2200, now + 0.42);
+            wGain.gain.setValueAtTime(0, now + 0.06);
+            wGain.gain.linearRampToValueAtTime(0.15, now + 0.14);
+            wGain.gain.exponentialRampToValueAtTime(0.001, now + 0.44);
+            whoosh.connect(wFilt); wFilt.connect(wGain);
+            wGain.connect(ctx.destination); wGain.connect(rev);
+            whoosh.start(now + 0.06);
+            whoosh.stop(now + 0.46);
+
+            // 3. SPARKLE CASCADE — نغمات جرس تنهمر مثل النجوم
+            const sparkles = [
+                [1046.5, 0.18, 0.22], // C6
+                [1318.5, 0.26, 0.20], // E6
+                [1567.98,0.34, 0.18], // G6
+                [2093.0, 0.41, 0.15], // C7
+                [2637.0, 0.48, 0.13], // E7
+                [1318.5, 0.55, 0.12], // E6
+                [1046.5, 0.62, 0.10], // C6
+            ];
+            sparkles.forEach(([freq, offset, vol]) => {
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                const t = now + offset;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(vol, t + 0.008);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.38);
+                osc.connect(g);
+                g.connect(rev); g.connect(ctx.destination);
+                osc.start(t); osc.stop(t + 0.4);
+            });
+
+        } catch(e) {}
+    }
+
+    // --- Candle Blow 💨 — نفخة هواء + فرقعة اللهب + نغمة تلاشي ---
+    function playCandleBlow() {
+        try {
+            const ctx = getCtx();
+            const now = ctx.currentTime;
+
+            const rev = makeReverb(ctx, 1.0, 3);
+            const revGain = ctx.createGain();
+            revGain.gain.value = 0.35;
+            rev.connect(revGain);
+            revGain.connect(ctx.destination);
+
+            // 1. WHOOSH — صوت النفخة (white noise مفلتر)
+            const wLen = ctx.sampleRate * 0.55;
+            const wBuf = ctx.createBuffer(1, wLen, ctx.sampleRate);
+            const wd = wBuf.getChannelData(0);
+            for (let i = 0; i < wLen; i++) wd[i] = (Math.random() * 2 - 1);
+            const wSrc = ctx.createBufferSource();
+            wSrc.buffer = wBuf;
+            const wFilt = ctx.createBiquadFilter();
+            wFilt.type = 'bandpass';
+            wFilt.frequency.value = 800;
+            wFilt.Q.value = 0.6;
+            const wGain = ctx.createGain();
+            wGain.gain.setValueAtTime(0, now);
+            wGain.gain.linearRampToValueAtTime(0.28, now + 0.04);
+            wGain.gain.setValueAtTime(0.28, now + 0.18);
+            wGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+            wSrc.connect(wFilt); wFilt.connect(wGain);
+            wGain.connect(ctx.destination); wGain.connect(rev);
+            wSrc.start(now);
+
+            // 2. FLAME FLICKER SNAP — فرقعة صغيرة عند انطفاء اللهب
+            const snap = ctx.createOscillator();
+            const snapGain = ctx.createGain();
+            snap.type = 'sine';
+            snap.frequency.setValueAtTime(320, now + 0.12);
+            snap.frequency.exponentialRampToValueAtTime(80, now + 0.19);
+            snapGain.gain.setValueAtTime(0.35, now + 0.12);
+            snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+            snap.connect(snapGain);
+            snapGain.connect(ctx.destination);
+            snap.start(now + 0.12);
+            snap.stop(now + 0.23);
+
+            // 3. WISH CHIME — نغمة حلم بعد إطفاء الشمعة، تحاكي "تمنّيت أمنية"
+            const wishNotes = [
+                [523.25, 0.28, 0.18], // C5
+                [659.25, 0.42, 0.15], // E5
+                [783.99, 0.56, 0.13], // G5
+                [1046.5, 0.70, 0.10], // C6 — تصعد للأعلى وتتلاشى
+            ];
+            wishNotes.forEach(([freq, offset, vol]) => {
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                const t = now + offset;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(vol, t + 0.025);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.65);
+                osc.connect(g);
+                g.connect(rev); g.connect(ctx.destination);
+                osc.start(t); osc.stop(t + 0.7);
+            });
+
+        } catch(e) {}
+    }
+
+    // --- أحداث الكليك ---
+    document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+            playClick();
+        }
+    }, true);
+
     // ===== State =====
     let currentSlide = 0;
     let isAnimating = false;
@@ -628,27 +871,8 @@
     const nextBtn = document.getElementById('nextBtn');
     const progressTxt = document.getElementById('progressTxt');
     const controlsContainer = document.getElementById('controlsContainer');
-    const clickSound = document.getElementById('clickSound');
-    const bgMusic = document.getElementById('bgMusic');
-
-    function playClick() {
-        try {
-            clickSound.currentTime = 0;
-            clickSound.volume = 0.6;
-            clickSound.play().catch(() => {});
-        } catch(e) {}
-    }
-
-    document.addEventListener('click', function(e) {
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-            playClick();
-        }
-    }, true);
 
     function animateFirstGateOpen() {
-        bgMusic.volume = 0.4;
-        bgMusic.play().catch(() => {});
-
         const lock = document.getElementById('gateLock');
         const btn = document.getElementById('openGateBtn');
         const firstSlide = document.getElementById('firstGateSlide');
@@ -738,7 +962,7 @@
     function revealSurprise() {
         if (giftOpened) return;
         giftOpened = true;
-        playClick();
+        playGiftBurst();
 
         const giftEmoji = document.getElementById('giftEmoji');
         const giftHint = document.getElementById('giftHint');
@@ -775,6 +999,7 @@
         const smoke = document.getElementById('cakeSmoke');
         const btn = document.getElementById('blowCandleBtn');
 
+        playCandleBlow();
         flame.classList.add('blown-out');
         smoke.classList.add('active');
         btn.innerText = "Ausgepustet! 💨❤️";
@@ -787,11 +1012,113 @@
         }, 1000);
     }
 
+    function playMassiveBlast() {
+        try {
+            const ctx = getCtx();
+            const now = ctx.currentTime;
+
+            const rev = makeReverb(ctx, 2.5, 1.8);
+            const revGain = ctx.createGain();
+            revGain.gain.value = 0.55;
+            rev.connect(revGain);
+            revGain.connect(ctx.destination);
+
+            // 1. BIG POP — انفجار أكبر من الهدية
+            const pop = ctx.createOscillator();
+            const popGain = ctx.createGain();
+            pop.type = 'sine';
+            pop.frequency.setValueAtTime(280, now);
+            pop.frequency.exponentialRampToValueAtTime(30, now + 0.11);
+            popGain.gain.setValueAtTime(1.0, now);
+            popGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            pop.connect(popGain); popGain.connect(ctx.destination);
+            pop.start(now); pop.stop(now + 0.16);
+
+            // noise burst طويل — confetti أكثر
+            const nLen = ctx.sampleRate * 0.22;
+            const nBuf = ctx.createBuffer(1, nLen, ctx.sampleRate);
+            const nd = nBuf.getChannelData(0);
+            for (let i = 0; i < nLen; i++) nd[i] = (Math.random() * 2 - 1);
+            const nSrc = ctx.createBufferSource();
+            nSrc.buffer = nBuf;
+            const nFilt = ctx.createBiquadFilter();
+            nFilt.type = 'highpass'; nFilt.frequency.value = 2000;
+            const nGain = ctx.createGain();
+            nGain.gain.setValueAtTime(0.4, now);
+            nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+            nSrc.connect(nFilt); nFilt.connect(nGain);
+            nGain.connect(ctx.destination); nGain.connect(rev);
+            nSrc.start(now);
+
+            // 2. WHOOSH مزدوج — يمين ويسار يحاكي confetti يتطاير لكل اتجاه
+            [0.05, 0.09].forEach((delay, i) => {
+                const w = ctx.createOscillator();
+                const wf = ctx.createBiquadFilter();
+                const wg = ctx.createGain();
+                w.type = 'sawtooth';
+                w.frequency.setValueAtTime(150 + i * 60, now + delay);
+                w.frequency.exponentialRampToValueAtTime(2200 + i * 400, now + delay + 0.45);
+                wf.type = 'lowpass';
+                wf.frequency.setValueAtTime(500, now + delay);
+                wf.frequency.exponentialRampToValueAtTime(2800, now + delay + 0.45);
+                wg.gain.setValueAtTime(0, now + delay);
+                wg.gain.linearRampToValueAtTime(0.12, now + delay + 0.06);
+                wg.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.48);
+                w.connect(wf); wf.connect(wg);
+                wg.connect(ctx.destination); wg.connect(rev);
+                w.start(now + delay); w.stop(now + delay + 0.5);
+            });
+
+            // 3. FANFARE — أوتار احتفالية صاعدة (C major chord arpeggio)
+            const fanfare = [
+                [523.25, 0.15, 0.30], // C5
+                [659.25, 0.22, 0.26], // E5
+                [783.99, 0.29, 0.22], // G5
+                [1046.5, 0.36, 0.18], // C6
+                [1318.5, 0.43, 0.14], // E6
+                [1567.98,0.50, 0.11], // G6
+            ];
+            fanfare.forEach(([freq, offset, vol]) => {
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                const t = now + offset;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(vol, t + 0.015);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
+                osc.connect(g);
+                g.connect(ctx.destination); g.connect(rev);
+                osc.start(t); osc.stop(t + 0.75);
+            });
+
+            // 4. SPARKLE RAIN — نغمات عشوائية تتساقط مثل المطر اللامع
+            const sparklePool = [1046.5, 1318.5, 1567.98, 2093.0, 2637.0, 1760.0, 2349.3];
+            for (let i = 0; i < 10; i++) {
+                const freq = sparklePool[Math.floor(Math.random() * sparklePool.length)];
+                const offset = 0.3 + Math.random() * 0.9;
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                const t = now + offset;
+                const vol = 0.06 + Math.random() * 0.08;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(vol, t + 0.008);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+                osc.connect(g); g.connect(rev);
+                osc.start(t); osc.stop(t + 0.42);
+            }
+
+        } catch(e) {}
+    }
+
     function triggerMassiveBlast() {
         const btn = document.getElementById('celebrateBtn');
         btn.innerText = "Take care of yourself and have the best day! ✨";
         btn.classList.add('blast-btn-active');
         btn.disabled = true;
+        playMassiveBlast();
         spawnParticles(['❤️', '✨', '🎈', '🎉', '💜', '🎂', '💖', '🌸'], 60, '50%', '50%', 320);
     }
 
