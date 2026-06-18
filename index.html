@@ -111,35 +111,30 @@
         .magic-btn-pulse { animation: btnClickPulse 0.4s ease-out; }
         @keyframes btnClickPulse { 0% { box-shadow: 0 0 0 0 rgba(255,126,187,0.7); } 100% { box-shadow: 0 0 0 20px rgba(255,126,187,0); } }
 
-        /* ===== Instagram Browser Banner ===== */
-        #igBanner {
+        /* ===== Instagram Gate Screen ===== */
+        #igGate {
             display: none;
             position: fixed;
-            top: max(12px, env(safe-area-inset-top));
-            left: 50%;
-            transform: translateX(-50%);
+            inset: 0;
+            background: var(--bg-color);
             z-index: 99999;
-            width: calc(100% - 32px);
-            max-width: 400px;
-            background: rgba(22, 15, 36, 0.97);
-            border: 1px solid rgba(255, 126, 187, 0.35);
-            border-radius: 16px;
-            padding: 12px 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            animation: bannerDrop 0.4s cubic-bezier(0.34,1.4,0.64,1) forwards;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px;
+            text-align: center;
         }
-        @keyframes bannerDrop {
-            0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-        .ig-banner-inner { display: flex; align-items: center; gap: 10px; }
-        .ig-banner-icon { font-size: 22px; flex-shrink: 0; }
-        .ig-banner-text { flex: 1; }
-        .ig-banner-text strong { display: block; font-size: 12px; color: #fff; font-weight: 700; margin-bottom: 2px; }
-        .ig-banner-text span { font-size: 11px; color: var(--muted-text); line-height: 1.4; }
-        .ig-banner-close { background: none; border: none; color: var(--muted-text); font-size: 18px; cursor: pointer; padding: 0 0 0 6px; flex-shrink: 0; line-height: 1; }
-        .ig-banner-close:hover { color: #fff; transform: none; box-shadow: none; background: none; }
+        #igGate.show { display: flex; }
+        .ig-gate-emoji { font-size: 62px; margin-bottom: 22px; animation: loaderBounce 1.8s ease-in-out infinite alternate; }
+        .ig-gate-title { font-size: 21px; font-weight: 800; color: #fff; margin-bottom: 10px; text-shadow: 0 0 15px rgba(255,126,187,0.4); }
+        .ig-gate-sub { font-size: 13.5px; color: var(--muted-text); line-height: 1.7; margin-bottom: 28px; max-width: 290px; }
+        .ig-gate-sub span { color: var(--neon-pink); font-weight: 700; }
+        .ig-gate-steps { background: rgba(255,126,187,0.06); border: 1px solid rgba(255,126,187,0.18); border-radius: 20px; padding: 18px 22px; width: 100%; max-width: 290px; margin-bottom: 24px; text-align: left; }
+        .ig-gate-step { display: flex; align-items: center; gap: 12px; font-size: 13px; color: #fff; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .ig-gate-step:last-child { border-bottom: none; }
+        .ig-step-num { width: 22px; height: 22px; background: var(--premium-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0; }
+        .ig-gate-note { font-size: 11px; color: var(--muted-text); font-style: italic; opacity: 0.6; }
+
         #surpriseContent { display: none; flex-direction: column; align-items: center; text-align: center; gap: 0; }
         #surpriseContent.show { display: flex; animation: textPopIn 0.7s cubic-bezier(0.34,1.4,0.64,1) forwards; }
         .birthday-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 14px; text-shadow: 0 0 10px rgba(255,126,187,0.3); }
@@ -176,16 +171,29 @@
     <div class="loader-bar-bg"><div class="loader-bar-fill"></div></div>
 </div>
 
-<!-- Instagram browser banner -->
-<div id="igBanner">
-    <div class="ig-banner-inner">
-        <div class="ig-banner-icon">🌸</div>
-        <div class="ig-banner-text">
-            <strong>For the best experience</strong>
-            <span>Tap the <strong style="color:var(--neon-pink);">⋯</strong> menu → "Open in Browser" to enjoy this fully ✨</span>
-        </div>
-        <button class="ig-banner-close" onclick="document.getElementById('igBanner').style.display='none'">✕</button>
+<!-- Instagram Gate Screen -->
+<div id="igGate">
+    <div class="ig-gate-emoji">🎁</div>
+    <div class="ig-gate-title">One small step first ✨</div>
+    <div class="ig-gate-sub">
+        A little surprise is waiting for you —<br>
+        but it needs a <span>real browser</span> to shine 🌸
     </div>
+    <div class="ig-gate-steps">
+        <div class="ig-gate-step">
+            <div class="ig-step-num">1</div>
+            <span>Tap the <strong style="color:var(--neon-pink);">⋯</strong> icon at the top right</span>
+        </div>
+        <div class="ig-gate-step">
+            <div class="ig-step-num">2</div>
+            <span>Choose <strong style="color:var(--neon-pink);">"Open in Browser"</strong></span>
+        </div>
+        <div class="ig-gate-step">
+            <div class="ig-step-num">3</div>
+            <span>Enjoy your surprise 🎉</span>
+        </div>
+    </div>
+    <div class="ig-gate-note">works with Safari, Chrome, or any browser ✓</div>
 </div>
 
 <div class="falling-container" id="fallingContainer"></div>
@@ -295,15 +303,19 @@
 </div>
 
 <script>
-    // Instagram browser detection
+    // Instagram browser detection — يخفي كل شيء ويعرض شاشة الـ gate
     (function() {
         const ua = navigator.userAgent || '';
-        const isInstagram = ua.indexOf('Instagram') > -1;
-        const isFacebook = ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
-        if (isInstagram || isFacebook) {
-            setTimeout(function() {
-                document.getElementById('igBanner').style.display = 'block';
-            }, 2200); // يظهر بعد الـ loading screen
+        const isIG = ua.indexOf('Instagram') > -1;
+        const isFB = ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
+        if (isIG || isFB) {
+            // أخفي الـ loading screen والـ container فوراً
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.querySelector('.falling-container').style.display = 'none';
+            // أظهر شاشة الـ gate
+            document.getElementById('igGate').classList.add('show');
+            // وقف أي JS غير ضروري
+            window._isIGBrowser = true;
         }
     })();
 
