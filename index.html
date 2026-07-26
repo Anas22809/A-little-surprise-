@@ -49,7 +49,13 @@
         .highlight { color: var(--neon-pink); font-weight: bold; text-shadow: 0 0 8px rgba(255,126,187,0.3); }
         .neon-name { font-size: 38px; font-weight: 800; color: #fff; text-align: center; margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-purple), 0 0 25px var(--neon-pink); animation: pulseGlow 2s infinite ease-in-out; }
         @keyframes pulseGlow { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); text-shadow: 0 0 20px var(--neon-pink); } }
-        .badge { background: rgba(255,126,187,0.1); color: var(--neon-pink); font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; text-transform: uppercase; margin: 0 auto 20px auto; border: 1px solid rgba(255,126,187,0.3); display: inline-block; letter-spacing: 1px; }
+
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-12px); }
+            40%, 80% { transform: translateX(12px); }
+        }
+        .shake-anim { animation: shakeError 0.5s ease-in-out; }
 
         .controls { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; border-top: 1px solid rgba(255,126,187,0.08); margin-top: 15px; flex-shrink: 0; }
         button { background: var(--accent-color); color: white; border: none; padding: 12px 24px; border-radius: 14px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; }
@@ -60,7 +66,6 @@
         .blast-btn { background: var(--premium-gradient); color: #fff; border: none; padding: 16px 30px; border-radius: 16px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 5px 20px rgba(157,78,221,0.4); transition: all 0.3s ease; }
         .blast-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255,126,187,0.5); }
 
-        /* نص الجملة الأخيرة بعد الضغط */
         .blast-btn-active {
             background: rgba(255,126,187,0.06) !important;
             border: 1px solid rgba(255,126,187,0.25) !important;
@@ -95,8 +100,6 @@
 
         .blast-particle { position: fixed; font-size: 24px; pointer-events: none; z-index: 999; animation: particleBlast 2.5s cubic-bezier(0.1,0.8,0.3,1) forwards; }
         @keyframes particleBlast { 100% { transform: translate(var(--x),var(--y)) rotate(var(--r)); opacity: 0; scale: 1.3; } }
-        .confetti { position: absolute; width: 7px; height: 7px; border-radius: 2px; animation: confettiFall 3.5s cubic-bezier(0.25,0.46,0.45,0.94) infinite; pointer-events: none; z-index: 10; }
-        @keyframes confettiFall { 100% { transform: translateY(380px) translateX(80px) rotate(540deg); opacity: 0; } }
 
         .vibe-card { background: rgba(22,15,36,0.6); border: 1px solid rgba(255,126,187,0.15); border-radius: 16px; padding: 14px 18px; margin-bottom: 12px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .vibe-card-title { font-size: 14px; font-weight: 600; color: #fff; display: flex; justify-content: space-between; margin-bottom: 6px; }
@@ -111,19 +114,7 @@
         .magic-btn-pulse { animation: btnClickPulse 0.4s ease-out; }
         @keyframes btnClickPulse { 0% { box-shadow: 0 0 0 0 rgba(255,126,187,0.7); } 100% { box-shadow: 0 0 0 20px rgba(255,126,187,0); } }
 
-        /* ===== Instagram Gate Screen ===== */
-        #igGate {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: var(--bg-color);
-            z-index: 99999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 30px;
-            text-align: center;
-        }
+        #igGate { display: none; position: fixed; inset: 0; background: var(--bg-color); z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 40px 30px; text-align: center; }
         #igGate.show { display: flex; }
         .ig-gate-emoji { font-size: 62px; margin-bottom: 22px; animation: loaderBounce 1.8s ease-in-out infinite alternate; }
         .ig-gate-title { font-size: 21px; font-weight: 800; color: #fff; margin-bottom: 10px; text-shadow: 0 0 15px rgba(255,126,187,0.4); }
@@ -171,7 +162,6 @@
     <div class="loader-bar-bg"><div class="loader-bar-fill"></div></div>
 </div>
 
-<!-- Instagram Gate Screen -->
 <div id="igGate">
     <div class="ig-gate-emoji">🎁</div>
     <div class="ig-gate-title">One small step first ✨</div>
@@ -201,7 +191,7 @@
 <div class="container" id="mainCardContainer">
     <div class="slide-wrapper" id="slideWrapper">
 
-        <!-- Slide 0 -->
+        <!-- Slide 0: Gate -->
         <div class="slide active" id="firstGateSlide" style="text-align:center;">
             <div class="lock-emoji" id="gateLock">🔒✨</div>
             <p style="margin-top:15px;font-size:15px;">Du hast heute Geburtstag, also wartet hier eine ganz exklusive digitale Überraschung auf dich.</p>
@@ -209,14 +199,28 @@
             <button class="blast-btn" id="openGateBtn" onclick="animateFirstGateOpen()" style="margin-top:15px;padding:14px 20px;font-size:15px;">Überraschung öffnen 🎁</button>
         </div>
 
-        <!-- Slide 1 -->
+        <!-- Slide 1: Shawarma Test -->
+        <div class="slide" id="shawarmaTestSlide" style="text-align:center;">
+            <div style="font-size:55px; margin-bottom:15px; animation: pulseGlow 2s infinite ease-in-out;">🤔</div>
+            <p style="font-size:18px; font-weight:700; color:#fff; margin-bottom:10px;">Bevor du die Überraschung siehst, noch ein kleiner Test:</p>
+            <p class="highlight" style="font-size:17px; margin-bottom:30px;">Was magst du lieber, Shawarma oder Döner?</p>
+            <div style="display:flex; flex-direction:column; gap:15px; align-items:center; width: 100%;">
+                <button class="blast-btn" onclick="chooseDoner(this)" style="margin-top:0; background:rgba(255,126,187,0.06); border:1px solid rgba(255,126,187,0.3); color:#fff; width:90%;">Döner 🥙</button>
+                <button class="blast-btn" onclick="chooseShawarma(this)" style="margin-top:0; background:rgba(255,126,187,0.06); border:1px solid rgba(255,126,187,0.3); color:#fff; width:90%;">Shawarma 🌯</button>
+            </div>
+            <p id="shawarmaError" style="color:var(--neon-pink); font-size:15px; margin-top:20px; font-weight:bold; opacity:0; transition:opacity 0.3s; text-shadow: 0 0 8px rgba(255,126,187,0.4);">
+                Falsch! Denk nochmal nach... Shawarma ist viel besser 😂
+            </p>
+        </div>
+
+        <!-- Slide 2: Intro -->
         <div class="slide" style="text-align:center;">
             <div class="neon-name">Hai Thu ♡</div>
             <p style="margin-top:15px;">Weil eine normale Nachricht zu deinem Geburtstag irgendwie zu langweilig wäre...</p>
             <p>Dachte ich mir, ich muss dieses Jahr mal was Besonderes machen.<br><span class="highlight">Klick mal auf Weiter 😉</span></p>
         </div>
 
-        <!-- Slide 2 -->
+        <!-- Slide 3: Real Talk -->
         <div class="slide" id="realTalkSlide">
             <h2>Real Talk... 👀</h2>
             <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in der Klasse, bevor ich wieder nach Syrien zurückgegangen bin.</p>
@@ -225,7 +229,7 @@
             <p>Und vielleicht war genau das der Grund, warum ich mich nach all den Jahren irgendwann wieder bei dir gemeldet habe 😌</p>
         </div>
 
-        <!-- Slide 3 -->
+        <!-- Slide 4: Vibe Check -->
         <div class="slide" id="vibeCheckSlide">
             <h2>Ehrlicher Vibe Check ⚡</h2>
             <p style="margin-bottom:20px;">Ich habe kurz nachgerechnet und die Daten lügen nicht:</p>
@@ -243,7 +247,7 @@
             </div>
         </div>
 
-        <!-- Slide 4 -->
+        <!-- Slide 5: Gift -->
         <div class="slide" id="giftSlide">
             <div class="gift-box-container" id="giftBoxContainer" onclick="revealSurprise()">
                 <div class="gift-emoji" id="giftEmoji">🎁</div>
@@ -274,7 +278,7 @@
             </div>
         </div>
 
-        <!-- Slide 5 -->
+        <!-- Slide 6: Truth Machine -->
         <div class="slide" id="complimentSlide" style="text-align:center;">
             <h2>Truth Machine 👀</h2>
             <p>Warning: This machine only speaks facts about you.</p>
@@ -282,7 +286,7 @@
             <button class="magic-btn" id="truthBtn" onclick="generateCompliment()">Generate Compliment ✨</button>
         </div>
 
-        <!-- Slide 6 -->
+        <!-- Slide 7: Outro -->
         <div class="slide" style="text-align:center;">
             <h2>Genieße deinen Tag! 🎉</h2>
             <p>Das war mein kleiner Geburtstagsbericht für dich. Ich hoffe, es hat dir ein Lächeln ins Gesicht gezaubert.</p>
@@ -300,30 +304,24 @@
 </div>
 
 <script>
-    // Instagram browser detection — يخفي كل شيء ويعرض شاشة الـ gate
     (function() {
         const ua = navigator.userAgent || '';
         const isIG = ua.indexOf('Instagram') > -1;
         const isFB = ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1;
         if (isIG || isFB) {
-            // أخفي الـ loading screen والـ container فوراً
             document.getElementById('loadingScreen').style.display = 'none';
             document.querySelector('.falling-container').style.display = 'none';
-            // أظهر شاشة الـ gate
             document.getElementById('igGate').classList.add('show');
-            // وقف أي JS غير ضروري
             window._isIGBrowser = true;
         }
     })();
 
-    // Loading
     window.addEventListener('load', function() {
         setTimeout(function() {
             document.getElementById('loadingScreen').classList.add('hidden');
         }, 2000);
     });
 
-    // Falling items
     const fallingContainer = document.getElementById('fallingContainer');
     const symbols = ['❤️','✨','🎈','🎉','💜','🌟','💖','🌸'];
     for (let i = 0; i < 20; i++) {
@@ -336,13 +334,16 @@
         fallingContainer.appendChild(item);
     }
 
-    // ===== Web Audio Engine =====
     let audioCtx = null;
     let _buses = {};
 
     function getCtx() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
         return audioCtx;
     }
 
@@ -359,7 +360,6 @@
         return conv;
     }
 
-    // Wet bus لكل نوع reverb — يُبنى مرة وحدة ويبقى متصل بالـ destination
     function getWetBus(type) {
         const ctx = getCtx();
         if (_buses[type]) return _buses[type];
@@ -367,14 +367,13 @@
         const [dur, dec] = specs[type];
         const rev = buildReverb(ctx, dur, dec);
         const wetG = ctx.createGain();
-        wetG.gain.value = 0.28; // مستوى ثابت ومضبوط للـ reverb
+        wetG.gain.value = 0.28; 
         rev.connect(wetG);
         wetG.connect(ctx.destination);
-        _buses[type] = { input: rev }; // الصوت يتصل بـ input
+        _buses[type] = { input: rev }; 
         return _buses[type];
     }
 
-    // إرسال صوت للـ reverb bus
     function sendToReverb(sourceNode, type, sendLevel) {
         const ctx = getCtx();
         const bus = getWetBus(type);
@@ -384,7 +383,6 @@
         sendG.connect(bus.input);
     }
 
-    // --- Magic Chime ---
     function playClick() {
         try {
             const ctx = getCtx();
@@ -409,29 +407,34 @@
                 sendToReverb(g, 'short', 0.45);
                 osc.start(t); osc.stop(t + 0.6);
             });
-            [2093.0, 2637.0].forEach((freq, i) => {
+        } catch(e) {}
+    }
+
+    function playErrorSound() {
+        try {
+            const ctx = getCtx();
+            const now = ctx.currentTime;
+            [150, 110].forEach((freq, index) => {
                 const osc = ctx.createOscillator();
                 const g = ctx.createGain();
-                osc.type = 'sine';
+                osc.type = 'sawtooth';
                 osc.frequency.value = freq;
-                const t = now + 0.18 + i * 0.06;
+                const t = now + (index * 0.12);
                 g.gain.setValueAtTime(0, t);
-                g.gain.linearRampToValueAtTime(0.07 - i * 0.02, t + 0.008);
-                g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+                g.gain.linearRampToValueAtTime(0.3, t + 0.01);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
                 osc.connect(g);
-                sendToReverb(g, 'short', 0.3);
-                osc.start(t); osc.stop(t + 0.32);
+                g.connect(ctx.destination);
+                osc.start(t);
+                osc.stop(t + 0.25);
             });
         } catch(e) {}
     }
 
-    // --- Gift Burst ---
     function playGiftBurst() {
         try {
             const ctx = getCtx();
             const now = ctx.currentTime;
-
-            // POP
             const pop = ctx.createOscillator();
             const popG = ctx.createGain();
             pop.type = 'sine';
@@ -442,42 +445,6 @@
             pop.connect(popG); popG.connect(ctx.destination);
             pop.start(now); pop.stop(now + 0.14);
 
-            // noise
-            const nLen = ctx.sampleRate * 0.12;
-            const nBuf = ctx.createBuffer(1, nLen, ctx.sampleRate);
-            const nd = nBuf.getChannelData(0);
-            for (let i = 0; i < nLen; i++) nd[i] = (Math.random() * 2 - 1);
-            const nSrc = ctx.createBufferSource();
-            nSrc.buffer = nBuf;
-            const nFilt = ctx.createBiquadFilter();
-            nFilt.type = 'highpass'; nFilt.frequency.value = 2500;
-            const nG = ctx.createGain();
-            nG.gain.setValueAtTime(0.3, now);
-            nG.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-            nSrc.connect(nFilt); nFilt.connect(nG);
-            nG.connect(ctx.destination);
-            sendToReverb(nG, 'mid', 0.4);
-            nSrc.start(now);
-
-            // WHOOSH
-            const whoosh = ctx.createOscillator();
-            const wG = ctx.createGain();
-            const wFilt = ctx.createBiquadFilter();
-            whoosh.type = 'sawtooth';
-            whoosh.frequency.setValueAtTime(180, now + 0.06);
-            whoosh.frequency.exponentialRampToValueAtTime(1800, now + 0.42);
-            wFilt.type = 'lowpass';
-            wFilt.frequency.setValueAtTime(600, now + 0.06);
-            wFilt.frequency.exponentialRampToValueAtTime(2200, now + 0.42);
-            wG.gain.setValueAtTime(0, now + 0.06);
-            wG.gain.linearRampToValueAtTime(0.15, now + 0.14);
-            wG.gain.exponentialRampToValueAtTime(0.001, now + 0.44);
-            whoosh.connect(wFilt); wFilt.connect(wG);
-            wG.connect(ctx.destination);
-            sendToReverb(wG, 'mid', 0.35);
-            whoosh.start(now + 0.06); whoosh.stop(now + 0.46);
-
-            // SPARKLE CASCADE
             [[1046.5,0.18,0.22],[1318.5,0.26,0.20],[1567.98,0.34,0.18],[2093.0,0.41,0.15],[2637.0,0.48,0.13],[1318.5,0.55,0.12],[1046.5,0.62,0.10]]
             .forEach(([freq, offset, vol]) => {
                 const osc = ctx.createOscillator();
@@ -494,66 +461,50 @@
         } catch(e) {}
     }
 
-    // --- Candle Blow ---
+    // صوت نفخة الهواء وانطفاء الشمعة المعدل ليعمل بضمان تام
     function playCandleBlow() {
         try {
             const ctx = getCtx();
+            if (ctx.state === 'suspended') {
+                ctx.resume();
+            }
             const now = ctx.currentTime;
-
-            // WHOOSH noise
-            const wLen = ctx.sampleRate * 0.55;
-            const wBuf = ctx.createBuffer(1, wLen, ctx.sampleRate);
-            const wd = wBuf.getChannelData(0);
-            for (let i = 0; i < wLen; i++) wd[i] = (Math.random() * 2 - 1);
-            const wSrc = ctx.createBufferSource();
-            wSrc.buffer = wBuf;
-            const wFilt = ctx.createBiquadFilter();
-            wFilt.type = 'bandpass'; wFilt.frequency.value = 800; wFilt.Q.value = 0.6;
-            const wG = ctx.createGain();
-            wG.gain.setValueAtTime(0, now);
-            wG.gain.linearRampToValueAtTime(0.28, now + 0.04);
-            wG.gain.setValueAtTime(0.28, now + 0.18);
-            wG.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-            wSrc.connect(wFilt); wFilt.connect(wG);
-            wG.connect(ctx.destination);
-            sendToReverb(wG, 'short', 0.3);
-            wSrc.start(now);
-
-            // SNAP
-            const snap = ctx.createOscillator();
-            const snapG = ctx.createGain();
-            snap.type = 'sine';
-            snap.frequency.setValueAtTime(320, now + 0.12);
-            snap.frequency.exponentialRampToValueAtTime(80, now + 0.19);
-            snapG.gain.setValueAtTime(0.35, now + 0.12);
-            snapG.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-            snap.connect(snapG); snapG.connect(ctx.destination);
-            snap.start(now + 0.12); snap.stop(now + 0.23);
-
-            // WISH CHIME
-            [[523.25,0.28,0.18],[659.25,0.42,0.15],[783.99,0.56,0.13],[1046.5,0.70,0.10]]
-            .forEach(([freq, offset, vol]) => {
-                const osc = ctx.createOscillator();
-                const g = ctx.createGain();
-                osc.type = 'sine'; osc.frequency.value = freq;
-                const t = now + offset;
-                g.gain.setValueAtTime(0, t);
-                g.gain.linearRampToValueAtTime(vol, t + 0.025);
-                g.gain.exponentialRampToValueAtTime(0.001, t + 0.65);
-                osc.connect(g); g.connect(ctx.destination);
-                sendToReverb(g, 'short', 0.35);
-                osc.start(t); osc.stop(t + 0.7);
-            });
+            
+            // ضوضاء بيضاء للنفخة
+            const bufferSize = ctx.sampleRate * 0.7;
+            const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+            
+            const noise = ctx.createBufferSource();
+            noise.buffer = buffer;
+            
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.setValueAtTime(500, now);
+            filter.frequency.exponentialRampToValueAtTime(100, now + 0.6);
+            filter.Q.value = 1.0;
+            
+            const gain = ctx.createGain();
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.6, now + 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+            
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+            
+            noise.start(now);
+            noise.stop(now + 0.7);
         } catch(e) {}
     }
 
-    // --- Massive Blast ---
     function playMassiveBlast() {
         try {
             const ctx = getCtx();
             const now = ctx.currentTime;
-
-            // BIG POP
             const pop = ctx.createOscillator();
             const popG = ctx.createGain();
             pop.type = 'sine';
@@ -564,44 +515,6 @@
             pop.connect(popG); popG.connect(ctx.destination);
             pop.start(now); pop.stop(now + 0.16);
 
-            // noise
-            const nLen = ctx.sampleRate * 0.22;
-            const nBuf = ctx.createBuffer(1, nLen, ctx.sampleRate);
-            const nd = nBuf.getChannelData(0);
-            for (let i = 0; i < nLen; i++) nd[i] = (Math.random() * 2 - 1);
-            const nSrc = ctx.createBufferSource();
-            nSrc.buffer = nBuf;
-            const nFilt = ctx.createBiquadFilter();
-            nFilt.type = 'highpass'; nFilt.frequency.value = 2000;
-            const nG = ctx.createGain();
-            nG.gain.setValueAtTime(0.4, now);
-            nG.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-            nSrc.connect(nFilt); nFilt.connect(nG);
-            nG.connect(ctx.destination);
-            sendToReverb(nG, 'long', 0.5);
-            nSrc.start(now);
-
-            // DOUBLE WHOOSH
-            [0.05, 0.09].forEach((delay, i) => {
-                const w = ctx.createOscillator();
-                const wf = ctx.createBiquadFilter();
-                const wg = ctx.createGain();
-                w.type = 'sawtooth';
-                w.frequency.setValueAtTime(150 + i*60, now+delay);
-                w.frequency.exponentialRampToValueAtTime(2200 + i*400, now+delay+0.45);
-                wf.type = 'lowpass';
-                wf.frequency.setValueAtTime(500, now+delay);
-                wf.frequency.exponentialRampToValueAtTime(2800, now+delay+0.45);
-                wg.gain.setValueAtTime(0, now+delay);
-                wg.gain.linearRampToValueAtTime(0.12, now+delay+0.06);
-                wg.gain.exponentialRampToValueAtTime(0.001, now+delay+0.48);
-                w.connect(wf); wf.connect(wg);
-                wg.connect(ctx.destination);
-                sendToReverb(wg, 'long', 0.4);
-                w.start(now+delay); w.stop(now+delay+0.5);
-            });
-
-            // FANFARE
             [[523.25,0.15,0.30],[659.25,0.22,0.26],[783.99,0.29,0.22],[1046.5,0.36,0.18],[1318.5,0.43,0.14],[1567.98,0.50,0.11]]
             .forEach(([freq,offset,vol]) => {
                 const osc = ctx.createOscillator();
@@ -615,33 +528,16 @@
                 sendToReverb(g, 'long', 0.45);
                 osc.start(t); osc.stop(t+0.75);
             });
-
-            // SPARKLE RAIN
-            const pool = [1046.5,1318.5,1567.98,2093.0,2637.0,1760.0,2349.3];
-            for (let i = 0; i < 10; i++) {
-                const freq = pool[Math.floor(Math.random()*pool.length)];
-                const offset = 0.3 + Math.random()*0.9;
-                const osc = ctx.createOscillator();
-                const g = ctx.createGain();
-                osc.type = 'sine'; osc.frequency.value = freq;
-                const t = now + offset;
-                const vol = 0.06 + Math.random()*0.08;
-                g.gain.setValueAtTime(0, t);
-                g.gain.linearRampToValueAtTime(vol, t+0.008);
-                g.gain.exponentialRampToValueAtTime(0.001, t+0.4);
-                osc.connect(g);
-                sendToReverb(g, 'long', 0.5);
-                osc.start(t); osc.stop(t+0.42);
-            }
         } catch(e) {}
     }
 
-    // Click listener
     document.addEventListener('click', function(e) {
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) playClick();
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+            if(e.target.getAttribute('onclick') && e.target.getAttribute('onclick').includes('chooseDoner')) return;
+            playClick();
+        }
     }, true);
 
-    // ===== State =====
     let currentSlide = 0, isAnimating = false;
     const slides = document.querySelectorAll('.slide');
     const prevBtn = document.getElementById('prevBtn');
@@ -670,6 +566,37 @@
         }, 350);
     }
 
+    function chooseDoner(btn) {
+        playErrorSound();
+        const errorMsg = document.getElementById('shawarmaError');
+        const slide = document.getElementById('shawarmaTestSlide');
+        
+        slide.classList.remove('shake-anim');
+        void slide.offsetWidth; 
+        slide.classList.add('shake-anim');
+        
+        errorMsg.style.opacity = '1';
+    }
+
+    function chooseShawarma(btn) {
+        const errorMsg = document.getElementById('shawarmaError');
+        errorMsg.style.opacity = '0';
+        
+        playMassiveBlast();
+        spawnParticles(['🌯','✨','🎉','❤️','🔥','😍'], 35, '50%', '50%', 250);
+        
+        btn.innerText = "Richtig! 🎉";
+        btn.style.background = "#4CAF50";
+        btn.style.borderColor = "#4CAF50"; 
+        
+        btn.disabled = true;
+        btn.previousElementSibling.disabled = true;
+        
+        setTimeout(() => {
+            changeSlide(1); 
+        }, 1800);
+    }
+
     function changeSlide(direction) {
         if (isAnimating) return;
         isAnimating = true;
@@ -696,13 +623,20 @@
     }
 
     function updateUI() {
-        controlsContainer.style.display = currentSlide === 0 ? 'none' : 'flex';
-        prevBtn.disabled = currentSlide === 1;
-        if (currentSlide === 4 && !giftOpened) nextBtn.style.visibility = 'hidden';
+        controlsContainer.style.display = (currentSlide === 0 || currentSlide === 1) ? 'none' : 'flex';
+        prevBtn.disabled = currentSlide === 2; 
+        
+        if (currentSlide === 5 && !giftOpened) nextBtn.style.visibility = 'hidden';
         else nextBtn.style.visibility = 'visible';
+        
         if (currentSlide === slides.length - 1) nextBtn.style.display = 'none';
         else { nextBtn.style.display = 'block'; nextBtn.innerHTML = "Weiter"; }
-        progressTxt.innerHTML = `${currentSlide} / ${slides.length - 1}`;
+        
+        const realSlideNum = currentSlide - 1;
+        const totalRealSlides = slides.length - 2;
+        if(realSlideNum > 0) {
+            progressTxt.innerHTML = `${realSlideNum} / ${totalRealSlides}`;
+        }
     }
 
     let giftOpened = false;
@@ -718,17 +652,6 @@
         giftEmoji.classList.add('unwrap-blast');
         const rect = giftEmoji.getBoundingClientRect();
         spawnParticles(['✨','💖','🎉','🌟','🌸'], 35, rect.left+rect.width/2+'px', rect.top+rect.height/2+'px', 200, true);
-        const colors = ['#ff7ebb','#9d4edd','#bd4ca7','#ffcc00','#ff5e7e'];
-        for (let i = 0; i < 30; i++) {
-            const c = document.createElement('div');
-            c.classList.add('confetti');
-            c.style.left = Math.random()*100+'%';
-            c.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-            c.style.animationDelay = Math.random()*0.4+'s';
-            c.style.width = c.style.height = Math.random()*5+6+'px';
-            document.getElementById('mainCardContainer').appendChild(c);
-            setTimeout(() => c.remove(), 3500);
-        }
         setTimeout(() => {
             giftContainer.style.display = 'none';
             surpriseContent.classList.add('show');
@@ -740,7 +663,9 @@
         const flame = document.getElementById('cakeFlame');
         const smoke = document.getElementById('cakeSmoke');
         const btn = document.getElementById('blowCandleBtn');
-        playCandleBlow();
+        
+        playCandleBlow(); // تشغيل صوت النفخ وانطفاء الشمعة
+        
         flame.classList.add('blown-out');
         smoke.classList.add('active');
         btn.innerText = "Ausgepustet! 💨❤️";
