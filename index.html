@@ -28,7 +28,7 @@
         @keyframes loaderBounce { 0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 8px rgba(255,126,187,0.4)); } 100% { transform: scale(1.1) translateY(-10px); filter: drop-shadow(0 0 18px rgba(255,126,187,0.8)); } }
         .loader-text { font-size: 14px; color: var(--muted-text); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
         .loader-bar-bg { width: 180px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
-        .loader-bar-fill { height: 100%; width: 0%; background: var(--premium-gradient); border-radius: 10px; animation: loaderFill 1.8s cubic-bezier(0.4,0,0.2,1) forwards; }
+        .loader-bar-fill { height: 100%; width: 0%; background: var(--premium-gradient); border-radius: 10px; animation: loaderFill 4s cubic-bezier(0.4,0,0.2,1) forwards; }
         @keyframes loaderFill { 0% { width: 0%; } 60% { width: 75%; } 100% { width: 100%; } }
 
         .falling-container { position: fixed; width: 100vw; height: 100vh; top: 0; left: 0; pointer-events: none; z-index: 1; overflow: hidden; }
@@ -319,7 +319,7 @@
     window.addEventListener('load', function() {
         setTimeout(function() {
             document.getElementById('loadingScreen').classList.add('hidden');
-        }, 2000);
+        }, 4500);
     });
 
     const fallingContainer = document.getElementById('fallingContainer');
