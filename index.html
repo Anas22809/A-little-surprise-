@@ -386,29 +386,104 @@
         sendG.connect(bus.input);
     }
 
-    function playClick() {
+    // ---- Soft, gentle "bubble pop" for regular buttons (Weiter, Zurück, Nochmal ansehen, Kerze auspusten) ----
+    function playSoftClick() {
         try {
             const ctx = getCtx();
             const now = ctx.currentTime;
+
+            const osc = ctx.createOscillator();
+            const g = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 900;
+            filter.Q.value = 0.2;
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(560, now);
+            osc.frequency.exponentialRampToValueAtTime(250, now + 0.11);
+
+            g.gain.setValueAtTime(0, now);
+            g.gain.linearRampToValueAtTime(0.8, now + 0.01);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+
+            osc.connect(filter);
+            filter.connect(g);
+            g.connect(ctx.destination);
+            sendToReverb(g, 'short', 0.35);
+
+            osc.start(now);
+            osc.stop(now + 0.28);
+        } catch(e) {}
+    }
+
+    // ---- Longer, joyful sparkle for the big "Überraschung öffnen" moment ----
+    function playGateOpenSpecial() {
+        try {
+            const ctx = getCtx();
+            const now = ctx.currentTime;
+
             const notes = [
-                [523.25, 0.000, 0.28],
-                [659.25, 0.055, 0.22],
-                [783.99, 0.110, 0.18],
-                [1046.5, 0.165, 0.15],
+                [523.25, 0.000, 0.22],
+                [659.25, 0.090, 0.20],
+                [783.99, 0.180, 0.18],
+                [1046.5, 0.280, 0.17],
+                [1318.5, 0.400, 0.14],
             ];
             notes.forEach(([freq, offset, vol]) => {
                 const osc = ctx.createOscillator();
                 const g = ctx.createGain();
-                osc.type = 'sine';
+                osc.type = 'triangle';
                 osc.frequency.value = freq;
                 const t = now + offset;
                 g.gain.setValueAtTime(0, t);
-                g.gain.linearRampToValueAtTime(vol, t + 0.012);
+                g.gain.linearRampToValueAtTime(vol, t + 0.025);
                 g.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
                 osc.connect(g);
                 g.connect(ctx.destination);
-                sendToReverb(g, 'short', 0.45);
+                sendToReverb(g, 'mid', 0.4);
                 osc.start(t); osc.stop(t + 0.6);
+            });
+
+            // final sustained shimmer to round it off
+            const shimmer = ctx.createOscillator();
+            const shimmerG = ctx.createGain();
+            shimmer.type = 'sine';
+            shimmer.frequency.value = 1568.0;
+            const st = now + 0.52;
+            shimmerG.gain.setValueAtTime(0, st);
+            shimmerG.gain.linearRampToValueAtTime(0.1, st + 0.05);
+            shimmerG.gain.exponentialRampToValueAtTime(0.001, st + 0.6);
+            shimmer.connect(shimmerG);
+            shimmerG.connect(ctx.destination);
+            sendToReverb(shimmerG, 'long', 0.5);
+            shimmer.start(st); shimmer.stop(st + 0.65);
+        } catch(e) {}
+    }
+
+    // ---- Distinct special sound for standout moments (opening the gate, generating a compliment) ----
+    function playSpecialClick() {
+        try {
+            const ctx = getCtx();
+            const now = ctx.currentTime;
+            const notes = [
+                [523.25, 0.000, 0.20],
+                [659.25, 0.065, 0.18],
+                [880.00, 0.130, 0.15],
+            ];
+            notes.forEach(([freq, offset, vol]) => {
+                const osc = ctx.createOscillator();
+                const g = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+                const t = now + offset;
+                g.gain.setValueAtTime(0, t);
+                g.gain.linearRampToValueAtTime(vol, t + 0.02);
+                g.gain.exponentialRampToValueAtTime(0.001, t + 0.42);
+                osc.connect(g);
+                g.connect(ctx.destination);
+                sendToReverb(g, 'mid', 0.35);
+                osc.start(t); osc.stop(t + 0.46);
             });
         } catch(e) {}
     }
@@ -533,10 +608,27 @@
         } catch(e) {}
     }
 
+    // Route button clicks to the right sound: buttons with their own dedicated
+    // sound effect (error, gift burst, candle blow, massive blast) are skipped
+    // here so they don't double up. Everything else gets either the soft warm
+    // click (regular navigation) or the special chime (standout moments).
     document.addEventListener('click', function(e) {
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-            if(e.target.getAttribute('onclick') && e.target.getAttribute('onclick').includes('chooseDoner')) return;
-            playClick();
+        const btn = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
+        if (!btn) return;
+
+        const onclickAttr = btn.getAttribute('onclick') || '';
+        const ownSoundIds = ['blowCandleBtn', 'celebrateBtn'];
+        const ownSoundOnclickSubstrings = ['chooseDoner', 'chooseShawarma'];
+
+        if (ownSoundIds.includes(btn.id)) return;
+        if (ownSoundOnclickSubstrings.some(s => onclickAttr.includes(s))) return;
+
+        if (btn.id === 'openGateBtn') {
+            playGateOpenSpecial();
+        } else if (btn.id === 'truthBtn') {
+            playSpecialClick();
+        } else {
+            playSoftClick();
         }
     }, true);
 
