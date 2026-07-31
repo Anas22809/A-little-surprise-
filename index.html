@@ -296,10 +296,13 @@
 
     </div>
 
+    <!-- Modified Controls with Replay Button -->
     <div class="controls" id="controlsContainer" style="display:none;">
         <button id="prevBtn" onclick="changeSlide(-1)" disabled>Zurück</button>
         <div class="progress" id="progressTxt">1 / 6</div>
         <button id="nextBtn" onclick="changeSlide(1)">Weiter</button>
+   <button id="replayBtn" onclick="location.reload()" style="display:none;">Nochmal ansehen 🔄</button>
+
     </div>
 </div>
 
@@ -461,7 +464,6 @@
         } catch(e) {}
     }
 
-    // صوت نفخة الهواء وانطفاء الشمعة المعدل ليعمل بضمان تام
     function playCandleBlow() {
         try {
             const ctx = getCtx();
@@ -470,7 +472,6 @@
             }
             const now = ctx.currentTime;
             
-            // ضوضاء بيضاء للنفخة
             const bufferSize = ctx.sampleRate * 0.7;
             const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
             const data = buffer.getChannelData(0);
@@ -501,6 +502,7 @@
         } catch(e) {}
     }
 
+    // Modified Grammar Here
     function playMassiveBlast() {
         try {
             const ctx = getCtx();
@@ -544,6 +546,7 @@
     const nextBtn = document.getElementById('nextBtn');
     const progressTxt = document.getElementById('progressTxt');
     const controlsContainer = document.getElementById('controlsContainer');
+    const replayBtn = document.getElementById('replayBtn');
 
     function animateFirstGateOpen() {
         const lock = document.getElementById('gateLock');
@@ -622,6 +625,7 @@
         document.querySelectorAll('.vibe-bar-fill').forEach(f => f.style.width = f.getAttribute('data-width'));
     }
 
+    // Modified updateUI for Replay Button Support
     function updateUI() {
         controlsContainer.style.display = (currentSlide === 0 || currentSlide === 1) ? 'none' : 'flex';
         prevBtn.disabled = currentSlide === 2; 
@@ -629,8 +633,14 @@
         if (currentSlide === 5 && !giftOpened) nextBtn.style.visibility = 'hidden';
         else nextBtn.style.visibility = 'visible';
         
-        if (currentSlide === slides.length - 1) nextBtn.style.display = 'none';
-        else { nextBtn.style.display = 'block'; nextBtn.innerHTML = "Weiter"; }
+        if (currentSlide === slides.length - 1) {
+            nextBtn.style.display = 'none';
+            if (replayBtn) replayBtn.style.display = 'block';
+        } else {
+            nextBtn.style.display = 'block';
+            nextBtn.innerHTML = "Weiter";
+            if (replayBtn) replayBtn.style.display = 'none';
+        }
         
         const realSlideNum = currentSlide - 1;
         const totalRealSlides = slides.length - 2;
@@ -664,7 +674,7 @@
         const smoke = document.getElementById('cakeSmoke');
         const btn = document.getElementById('blowCandleBtn');
         
-        playCandleBlow(); // تشغيل صوت النفخ وانطفاء الشمعة
+        playCandleBlow(); 
         
         flame.classList.add('blown-out');
         smoke.classList.add('active');
@@ -674,6 +684,7 @@
         setTimeout(() => { nextBtn.style.visibility = 'visible'; }, 1000);
     }
 
+    // Modified Grammar inside triggerMassiveBlast
     function triggerMassiveBlast() {
         const btn = document.getElementById('celebrateBtn');
         btn.classList.add('blast-btn-active');
@@ -681,7 +692,7 @@
         btn.innerHTML = `
             <div class="finale-msg">
                 <span class="finale-line1">Take care of yourself —</span>
-                <span class="finale-line2">you deserved every second of this.</span>
+                <span class="finale-line2">you deserve every second of it.</span>
                 <span class="finale-name">❤️</span>
             </div>`;
         playMassiveBlast();
