@@ -105,6 +105,20 @@
         .blast-particle { position: fixed; font-size: 24px; pointer-events: none; z-index: 999; animation: particleBlast 2.5s cubic-bezier(0.1,0.8,0.3,1) forwards; }
         @keyframes particleBlast { 100% { transform: translate(var(--x),var(--y)) rotate(var(--r)); opacity: 0; scale: 1.3; } }
 
+        /* Confetti — used only for the gift-box reveal, distinct from the emoji particle blast */
+        .confetti-piece { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 999; opacity: 1; animation-name: confettiFall; animation-timing-function: cubic-bezier(0.15,0.6,0.35,1); animation-fill-mode: forwards; box-shadow: 0 0 3px rgba(0,0,0,0.15); }
+        @keyframes confettiFall {
+            0% { transform: translate(0,0) rotate(0deg); opacity: 1; }
+            75% { opacity: 1; }
+            100% { transform: translate(var(--cx), var(--cy)) rotate(var(--cr)); opacity: 0; }
+        }
+        .confetti-burst-piece { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 999; opacity: 1; animation-name: confettiBurst; animation-timing-function: cubic-bezier(0.15,0.7,0.3,1); animation-fill-mode: forwards; box-shadow: 0 0 3px rgba(0,0,0,0.15); }
+        @keyframes confettiBurst {
+            0%   { transform: translate(0,0) rotate(0deg); opacity: 1; }
+            35%  { transform: translate(var(--bx), var(--by)) rotate(var(--br)); opacity: 1; }
+            100% { transform: translate(var(--fx), var(--fy)) rotate(var(--fr)); opacity: 0; }
+        }
+
         .vibe-card { background: rgba(22,15,36,0.6); border: 1px solid rgba(255,126,187,0.15); border-radius: 16px; padding: 14px 18px; margin-bottom: 12px; text-align: left; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .vibe-card-title { font-size: 14px; font-weight: 600; color: #fff; display: flex; justify-content: space-between; margin-bottom: 6px; }
         .vibe-bar-bg { background: #251b35; height: 6px; width: 100%; border-radius: 10px; overflow: hidden; }
@@ -757,7 +771,8 @@
         giftHint.style.opacity = '0';
         giftEmoji.classList.add('unwrap-blast');
         const rect = giftEmoji.getBoundingClientRect();
-        spawnParticles(['✨','💖','🎉','🌟','🌸'], 35, rect.left+rect.width/2+'px', rect.top+rect.height/2+'px', 200, true);
+        spawnConfettiBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 40);
+        spawnConfettiFromTop(45);
         setTimeout(() => {
             giftContainer.style.display = 'none';
             surpriseContent.classList.add('show');
@@ -793,6 +808,106 @@
             </div>`;
         playMassiveBlast();
         spawnParticles(['❤️','✨','🎈','🎉','💜','🎂','💖','🌸'], 60, '50%', '50%', 320);
+    }
+
+    function spawnConfettiBurst(startX, startY, count) {
+        const colors = ['#ff7ebb','#9d4edd','#ffe066','#4CAF50','#4dd0e1','#ff8a65','#fff'];
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.classList.add('confetti-burst-piece');
+            const isSquare = Math.random() > 0.5;
+            p.style.width = isSquare ? '7px' : '5px';
+            p.style.height = isSquare ? '7px' : '13px';
+            p.style.borderRadius = '2px';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.left = startX + 'px';
+            p.style.top = startY + 'px';
+
+            // Phase 1: explode outward in all directions (angle biased slightly upward)
+            const angle = Math.random() * Math.PI * 2;
+            const burstDist = 55 + Math.random() * 90;
+            const bx = Math.cos(angle) * burstDist;
+            const by = Math.sin(angle) * burstDist - 30;
+            const br = (Math.random() * 300 - 150) + 'deg';
+
+            // Phase 2: gravity takes over, pieces drift a bit further and fall down
+            const fx = bx + (Math.random() - 0.5) * 70;
+            const fy = by + 180 + Math.random() * 160;
+            const fr = (Math.random() * 720 - 360) + 'deg';
+
+            const dur = 1.7 + Math.random() * 1.0;
+
+            p.style.setProperty('--bx', bx + 'px');
+            p.style.setProperty('--by', by + 'px');
+            p.style.setProperty('--br', br);
+            p.style.setProperty('--fx', fx + 'px');
+            p.style.setProperty('--fy', fy + 'px');
+            p.style.setProperty('--fr', fr);
+            p.style.animationDuration = dur + 's';
+
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), (dur + 0.2) * 1000);
+        }
+    }
+
+    function spawnConfettiFromTop(count) {
+        const colors = ['#ff7ebb','#9d4edd','#ffe066','#4CAF50','#4dd0e1','#ff8a65','#fff'];
+        const vw = window.innerWidth;
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.classList.add('confetti-piece');
+            const isSquare = Math.random() > 0.5;
+            p.style.width = isSquare ? '7px' : '5px';
+            p.style.height = isSquare ? '7px' : '13px';
+            p.style.borderRadius = '2px';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.left = (Math.random() * vw) + 'px';
+            p.style.top = '-20px';
+
+            const driftX = (Math.random() - 0.5) * 160;
+            const fallY = window.innerHeight + 60;
+            const rot = (Math.random() * 900 - 450) + 'deg';
+            const dur = (2.2 + Math.random() * 1.6);
+
+            p.style.setProperty('--cx', driftX + 'px');
+            p.style.setProperty('--cy', fallY + 'px');
+            p.style.setProperty('--cr', rot);
+            p.style.animationDuration = dur + 's';
+            p.style.animationDelay = (Math.random() * 0.5) + 's';
+            p.style.animationTimingFunction = 'ease-in';
+
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), (dur + 0.6) * 1000);
+        }
+    }
+
+    function spawnConfetti(startX, startY, count) {
+        const colors = ['#ff7ebb','#9d4edd','#ffe066','#4CAF50','#4dd0e1','#ff8a65','#fff'];
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.classList.add('confetti-piece');
+            const isSquare = Math.random() > 0.5;
+            p.style.width = isSquare ? '7px' : '5px';
+            p.style.height = isSquare ? '7px' : '13px';
+            p.style.borderRadius = isSquare ? '2px' : '2px';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.left = startX + 'px';
+            p.style.top = startY + 'px';
+
+            const driftX = (Math.random() - 0.5) * 260;
+            const fallY = 220 + Math.random() * 220;
+            const rot = (Math.random() * 900 - 450) + 'deg';
+            const dur = (1.4 + Math.random() * 1.1);
+
+            p.style.setProperty('--cx', driftX + 'px');
+            p.style.setProperty('--cy', fallY + 'px');
+            p.style.setProperty('--cr', rot);
+            p.style.animationDuration = dur + 's';
+            p.style.animationDelay = (Math.random() * 0.15) + 's';
+
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), (dur + 0.2) * 1000);
+        }
     }
 
     function spawnParticles(emojiArr, count, startX, startY, maxDist, fixedPos=false) {
