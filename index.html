@@ -241,7 +241,7 @@
         <!-- Slide 3: Real Talk -->
         <div class="slide" id="realTalkSlide">
             <h2>Real Talk... 👀</h2>
-            <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in der Klasse, bevor ich wieder nach Syrien zurückgegangen bin.</p>
+            <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in class, bevor ich wieder nach Syrien zurückgegangen bin.</p>
             <p>Und ehrlich gesagt waren wir damals nicht mal besonders eng oder beste Freunde 😄</p>
             <p>Mit der Zeit verliert man viele Menschen aus den Augen… aber irgendwie hatte ich bei dir nie das Gefühl, dich komplett vergessen zu haben</p>
             <p>Eigentlich habe ich stark versucht, die Vergangenheit hinter mir zu lassen und dich zu vergessen... aber ich habe es irgendwie nicht geschafft. Vielleicht findest du es komisch oder übertrieben, aber ich wollte einfach ehrlich zu dir sein 🤍</p>
@@ -319,8 +319,7 @@
         <button id="prevBtn" onclick="changeSlide(-1)" disabled>Zurück</button>
         <div class="progress" id="progressTxt">1 / 6</div>
         <button id="nextBtn" onclick="changeSlide(1)">Weiter</button>
-   <button id="replayBtn" onclick="location.reload()" style="display:none;">Nochmal ansehen 🔄</button>
-
+        <button id="replayBtn" onclick="location.reload()" style="display:none;">Nochmal ansehen 🔄</button>
     </div>
 </div>
 
@@ -404,7 +403,6 @@
         sendG.connect(bus.input);
     }
 
-    // ---- Soft, gentle "bubble pop" for regular buttons (Weiter, Zurück, Nochmal ansehen, Kerze auspusten) ----
     function playSoftClick() {
         try {
             const ctx = getCtx();
@@ -435,7 +433,6 @@
         } catch(e) {}
     }
 
-    // ---- Longer, joyful sparkle for the big "Überraschung öffnen" moment ----
     function playGateOpenSpecial() {
         try {
             const ctx = getCtx();
@@ -463,7 +460,6 @@
                 osc.start(t); osc.stop(t + 0.6);
             });
 
-            // final sustained shimmer to round it off
             const shimmer = ctx.createOscillator();
             const shimmerG = ctx.createGain();
             shimmer.type = 'sine';
@@ -479,7 +475,6 @@
         } catch(e) {}
     }
 
-    // ---- Distinct special sound for standout moments (opening the gate, generating a compliment) ----
     function playSpecialClick() {
         try {
             const ctx = getCtx();
@@ -595,7 +590,6 @@
         } catch(e) {}
     }
 
-    // Modified Grammar Here
     function playMassiveBlast() {
         try {
             const ctx = getCtx();
@@ -626,10 +620,6 @@
         } catch(e) {}
     }
 
-    // Route button clicks to the right sound: buttons with their own dedicated
-    // sound effect (error, gift burst, candle blow, massive blast) are skipped
-    // here so they don't double up. Everything else gets either the soft warm
-    // click (regular navigation) or the special chime (standout moments).
     document.addEventListener('click', function(e) {
         const btn = e.target.tagName === 'BUTTON' ? e.target : e.target.closest('button');
         if (!btn) return;
@@ -735,7 +725,6 @@
         document.querySelectorAll('.vibe-bar-fill').forEach(f => f.style.width = f.getAttribute('data-width'));
     }
 
-    // Modified updateUI for Replay Button Support
     function updateUI() {
         controlsContainer.style.display = (currentSlide === 0 || currentSlide === 1) ? 'none' : 'flex';
         prevBtn.disabled = currentSlide === 2; 
@@ -795,7 +784,6 @@
         setTimeout(() => { nextBtn.style.visibility = 'visible'; }, 1000);
     }
 
-    // Modified Grammar inside triggerMassiveBlast
     function triggerMassiveBlast() {
         const btn = document.getElementById('celebrateBtn');
         btn.classList.add('blast-btn-active');
@@ -823,14 +811,12 @@
             p.style.left = startX + 'px';
             p.style.top = startY + 'px';
 
-            // Phase 1: explode outward in all directions (angle biased slightly upward)
             const angle = Math.random() * Math.PI * 2;
             const burstDist = 55 + Math.random() * 90;
             const bx = Math.cos(angle) * burstDist;
             const by = Math.sin(angle) * burstDist - 30;
             const br = (Math.random() * 300 - 150) + 'deg';
 
-            // Phase 2: gravity takes over, pieces drift a bit further and fall down
             const fx = bx + (Math.random() - 0.5) * 70;
             const fy = by + 180 + Math.random() * 160;
             const fr = (Math.random() * 720 - 360) + 'deg';
@@ -881,35 +867,6 @@
         }
     }
 
-    function spawnConfetti(startX, startY, count) {
-        const colors = ['#ff7ebb','#9d4edd','#ffe066','#4CAF50','#4dd0e1','#ff8a65','#fff'];
-        for (let i = 0; i < count; i++) {
-            const p = document.createElement('div');
-            p.classList.add('confetti-piece');
-            const isSquare = Math.random() > 0.5;
-            p.style.width = isSquare ? '7px' : '5px';
-            p.style.height = isSquare ? '7px' : '13px';
-            p.style.borderRadius = isSquare ? '2px' : '2px';
-            p.style.background = colors[Math.floor(Math.random() * colors.length)];
-            p.style.left = startX + 'px';
-            p.style.top = startY + 'px';
-
-            const driftX = (Math.random() - 0.5) * 260;
-            const fallY = 220 + Math.random() * 220;
-            const rot = (Math.random() * 900 - 450) + 'deg';
-            const dur = (1.4 + Math.random() * 1.1);
-
-            p.style.setProperty('--cx', driftX + 'px');
-            p.style.setProperty('--cy', fallY + 'px');
-            p.style.setProperty('--cr', rot);
-            p.style.animationDuration = dur + 's';
-            p.style.animationDelay = (Math.random() * 0.15) + 's';
-
-            document.body.appendChild(p);
-            setTimeout(() => p.remove(), (dur + 0.2) * 1000);
-        }
-    }
-
     function spawnParticles(emojiArr, count, startX, startY, maxDist, fixedPos=false) {
         for (let i = 0; i < count; i++) {
             const p = document.createElement('div');
@@ -935,23 +892,47 @@
         "you were definitely someone's favorite person in every class 😌",
         "your smile probably causes traffic accidents 🚗","too much aura for one person ✨",
         "human sunshine fr 🌤️","built different honestly 😌","your existence is kinda unfair 😂",
-        "0 flaws detected ✅","you look like a happy song 🎶","you have that calm pretty vibe 😮‍💨"
+        "0 flaws detected ✅","you look like a happy song 🎶","you have that calm pretty vibe 😮‍💨",
+        
+        "effortlessly flawless 💅", "living art 🖼️", "your aesthetic is top tier 🤌",
+        "how is it possible to be this cute? ", "absolute perfection 💯",
+        "you glow differently 🌟", "a literal angel walking on earth 👼",
+        "living breathing Pinterest board 📌", "10/10 would recommend your vibe 👌",
+        "you make everything look better just by being there 🌺", "pure magic ✨", "a masterpiece in human form 🎨"
     ];
-    let lastIndex = -1;
+    
+    let availableCompliments = [];
+    let lastShownCompliment = "";
 
     function generateCompliment() {
         const box = document.getElementById('complimentText');
         const btn = document.getElementById('truthBtn');
+        
         if (btn.innerText !== "Another one 🪄") btn.innerText = "Another one 🪄";
+        
         btn.classList.remove('magic-btn-pulse');
         void btn.offsetWidth;
         btn.classList.add('magic-btn-pulse');
+        
         box.classList.remove('compliment-anim');
         void box.offsetWidth;
-        let newIdx;
-        do { newIdx = Math.floor(Math.random()*compliments.length); } while (newIdx === lastIndex);
-        lastIndex = newIdx;
-        box.innerHTML = compliments[newIdx];
+
+        if (availableCompliments.length === 0) {
+            availableCompliments = [...compliments];
+        }
+
+        let randomIndex;
+        let selectedCompliment;
+
+        do {
+            randomIndex = Math.floor(Math.random() * availableCompliments.length);
+            selectedCompliment = availableCompliments[randomIndex];
+        } while (selectedCompliment === lastShownCompliment && availableCompliments.length > 1);
+
+        availableCompliments.splice(randomIndex, 1);
+        lastShownCompliment = selectedCompliment;
+
+        box.innerHTML = selectedCompliment;
         box.classList.add('compliment-anim');
     }
 </script>
