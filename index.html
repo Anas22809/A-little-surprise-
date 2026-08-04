@@ -7,6 +7,9 @@
     <meta property="og:title" content="A little surprise 🎁👀 ">
     <meta property="og:description" content="ㅤ">
     <meta name="description" content="ㅤ">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0b0712;
@@ -37,22 +40,96 @@
 
         .container { width: 100%; max-width: 420px; background: var(--card-bg); border-radius: 28px; padding: 28px; box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 30px var(--accent-glow); border: 1px solid rgba(255,126,187,0.15); position: relative; z-index: 2; min-height: min(550px, calc(100dvh - 40px)); max-height: calc(100dvh - 40px); display: flex; flex-direction: column; justify-content: space-between; backdrop-filter: blur(10px); overflow: hidden; }
         .slide-wrapper { flex-grow: 1; position: relative; overflow: hidden; }
-        .slide { position: absolute; top: 0; left: 0; right: 0; display: flex; flex-direction: column; justify-content: center; height: 100%; opacity: 0; transform: translateX(40px); transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
+        .slide { position: absolute; top: 0; left: 0; right: 0; display: flex; flex-direction: column; justify-content: center; height: 100%; max-height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: thin; opacity: 0; transform: translateX(40px); transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
+        .slide::-webkit-scrollbar { width: 4px; }
+        .slide::-webkit-scrollbar-thumb { background: rgba(255,126,187,0.35); border-radius: 4px; }
+        .slide::-webkit-scrollbar-track { background: transparent; }
         .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
         .slide.exit-left { opacity: 0; transform: translateX(-40px); pointer-events: none; }
         .slide.exit-right { opacity: 0; transform: translateX(40px); pointer-events: none; }
         .slide.fade-out-blast { animation: slideBlastOut 0.6s cubic-bezier(0.6,-0.28,0.735,0.045) forwards; }
         @keyframes slideBlastOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.85); } }
 
-        h2 { font-size: 24px; color: var(--text-color); margin-bottom: 14px; font-weight: 700; text-shadow: 0 0 10px rgba(255,126,187,0.2); }
-        p { font-size: 13.5px; color: var(--muted-text); line-height: 1.55; margin-bottom: 11px; }
+        h2 { font-size: 24px; color: var(--text-color); margin-bottom: 14px; font-weight: 800; letter-spacing: 0.3px; text-shadow: 0 0 10px rgba(255,126,187,0.2); }
+        p { font-size: 14px; color: var(--muted-text); line-height: 1.6; margin-bottom: 11px; }
         .highlight { color: var(--neon-pink); font-weight: bold; text-shadow: 0 0 8px rgba(255,126,187,0.3); }
         .neon-name { font-size: 38px; font-weight: 800; color: #fff; text-align: center; margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-purple), 0 0 25px var(--neon-pink); animation: pulseGlow 2s infinite ease-in-out; }
         @keyframes pulseGlow { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); text-shadow: 0 0 20px var(--neon-pink); } }
 
         /* Slightly larger text just on the "Hai Thu" intro slide */
-        #introSlide .neon-name { font-size: 44px; }
-        #introSlide p { font-size: 15.5px; line-height: 1.6; }
+        #introSlide .neon-name {
+            font-size: clamp(46px, 14vw, 62px);
+            font-family: 'Great Vibes', cursive;
+            font-weight: 400;
+            position: relative;
+            letter-spacing: 1px;
+            margin-bottom: 26px;
+            padding-bottom: 18px;
+            animation: introNameGlow 2.4s ease-in-out infinite;
+        }
+        @keyframes introNameGlow {
+            0%, 100% { text-shadow: 0 0 12px var(--neon-purple), 0 0 20px var(--neon-pink); }
+            50% { text-shadow: 0 0 22px var(--neon-purple), 0 0 38px var(--neon-pink), 0 0 55px rgba(255,126,187,0.5); }
+        }
+        #introSlide .neon-name::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 220px;
+            height: 220px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255,126,187,0.16) 0%, rgba(157,78,221,0.08) 45%, transparent 72%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        #introSlide .neon-name::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 2.5px;
+            border-radius: 4px;
+            background: var(--premium-gradient);
+            box-shadow: 0 0 10px rgba(255,126,187,0.6);
+        }
+        #introSlide p { font-size: 14px; line-height: 1.7; }
+        #introSlide p + p { margin-top: 2px; }
+        .sparkle {
+            display: inline-block;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            color: var(--neon-pink);
+            opacity: 0.75;
+            vertical-align: middle;
+            animation: sparkleTwinkle 1.8s ease-in-out infinite;
+            text-shadow: 0 0 8px rgba(255,126,187,0.7);
+        }
+        .sparkle-left { margin-right: 10px; animation-delay: 0s; }
+        .sparkle-right { margin-left: 10px; animation-delay: 0.9s; }
+        @keyframes sparkleTwinkle {
+            0%, 100% { opacity: 0.35; transform: scale(0.85) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.15) rotate(15deg); }
+        }
+        .name-heart {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            display: inline-block;
+            font-size: 0.45em;
+            color: var(--neon-pink);
+            vertical-align: middle;
+            transform: translateY(-6px) rotate(-8deg);
+        }
+        #nameTapTarget { transition: transform 0.15s ease; }
+        #nameTapTarget.name-pulse-anim {
+            animation: namePulseBeat 0.5s ease-out;
+        }
+        @keyframes namePulseBeat {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.05); text-shadow: 0 0 20px var(--neon-pink), 0 0 30px var(--neon-purple); }
+            100% { transform: scale(1); }
+        }
 
         @keyframes shakeError {
             0%, 100% { transform: translateX(0); }
@@ -86,7 +163,15 @@
         .finale-name  { font-size: 18px; font-weight: 800; color: #fff; text-shadow: 0 0 12px rgba(255,126,187,0.5); }
         .finale-line2 { font-size: 13px; color: var(--muted-text); font-weight: 400; font-style: italic; }
 
-        .signature { font-size: 13px; color: var(--muted-text); margin-top: 20px; font-style: italic; opacity: 0.8; }
+        .signature {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--muted-text);
+            margin-top: 20px;
+            opacity: 0.85;
+            letter-spacing: 0.2px;
+        }
+        .signature .sig-prompt { color: var(--neon-pink); margin-right: 4px; }
         .lock-emoji { font-size: 65px; margin-bottom: 15px; animation: pulseLock 2s infinite ease-in-out; }
         @keyframes pulseLock { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--accent-color)); } }
 
@@ -233,7 +318,7 @@
 
         <!-- Slide 2: Intro -->
         <div class="slide" id="introSlide" style="text-align:center;">
-            <div class="neon-name">Hai Thu ♡</div>
+            <div class="neon-name" id="nameTapTarget" onclick="pulseName(this)" style="cursor:pointer;"><span class="sparkle sparkle-left">✦</span>Hai Thu <span class="name-heart">♡</span><span class="sparkle sparkle-right">✦</span></div>
             <p style="margin-top:15px;">Weil eine normale Nachricht zu deinem Geburtstag irgendwie zu langweilig wäre...</p>
             <p>Dachte ich mir, ich muss dieses Jahr mal was Besonderes machen.<br><span class="highlight">Klick mal auf Weiter 😉</span></p>
         </div>
@@ -309,7 +394,7 @@
             <h2>Genieße deinen Tag! 🎉</h2>
             <p>Das war meine kleine digitale Geburtstagsüberraschung für dich. Ich hoffe, sie hat dir ein Lächeln ins Gesicht gezaubert.</p>
             <button class="blast-btn" id="celebrateBtn" onclick="triggerMassiveBlast()">before you go...</button>
-            <div class="signature">Mit Liebe gemacht von <span style="color:var(--neon-pink);font-weight:600;">Anas</span> 🫰🏻</div>
+            <div class="signature"><span style="color:var(--neon-pink);">&lt;/&gt;</span> mit Liebe gecodet von <span style="color:var(--neon-pink);font-weight:700;">Anas</span> für <span style="color:var(--neon-pink);font-weight:700;">Hai Thu</span></div>
         </div>
 
     </div>
@@ -647,6 +732,15 @@
     const progressTxt = document.getElementById('progressTxt');
     const controlsContainer = document.getElementById('controlsContainer');
     const replayBtn = document.getElementById('replayBtn');
+
+    function pulseName(el) {
+        playSoftClick();
+        el.classList.remove('name-pulse-anim');
+        void el.offsetWidth;
+        el.classList.add('name-pulse-anim');
+        const rect = el.getBoundingClientRect();
+        spawnParticles(['✦','✨'], 6, (rect.left + rect.width / 2) + 'px', (rect.top + rect.height / 2) + 'px', 60);
+    }
 
     function animateFirstGateOpen() {
         const lock = document.getElementById('gateLock');
