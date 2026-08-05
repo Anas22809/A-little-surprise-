@@ -170,7 +170,18 @@
             margin-top: 20px;
             opacity: 0.85;
             letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
+        
+        /* New animations for signature */
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .blink { animation: blink 1s step-end infinite; color: var(--neon-pink); font-weight: bold; }
+        @keyframes heartPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .sig-heart { font-size: 14px; animation: heartPulse 1.5s infinite ease-in-out; margin: 0 2px; }
+
         .signature .sig-prompt { color: var(--neon-pink); margin-right: 4px; }
         .lock-emoji { font-size: 65px; margin-bottom: 15px; animation: pulseLock 2s infinite ease-in-out; }
         @keyframes pulseLock { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--accent-color)); } }
@@ -394,7 +405,12 @@
             <h2>Genieße deinen Tag! 🎉</h2>
             <p>Das war meine kleine digitale Geburtstagsüberraschung für dich. Ich hoffe, sie hat dir ein Lächeln ins Gesicht gezaubert.</p>
             <button class="blast-btn" id="celebrateBtn" onclick="triggerMassiveBlast()">before you go...</button>
-            <div class="signature"><span style="color:var(--neon-pink);">&lt;/&gt;</span> mit Liebe gecodet von <span style="color:var(--neon-pink);font-weight:700;">Anas</span> für <span style="color:var(--neon-pink);font-weight:700;">Hai Thu</span></div>
+            <div class="signature">
+                <span style="color:var(--neon-pink);">&lt;/&gt;</span> 
+                mit <span class="sig-heart">🤍</span> gecodet von 
+                <span style="color:var(--neon-pink);font-weight:700;">Anas</span> für 
+                <span style="color:var(--neon-pink);font-weight:700;">Hai Thu</span><span class="blink">_</span>
+            </div>
         </div>
 
     </div>
