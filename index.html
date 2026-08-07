@@ -170,6 +170,14 @@
         .lock-emoji { font-size: 65px; margin-bottom: 15px; animation: pulseLock 2s infinite ease-in-out; }
         @keyframes pulseLock { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--accent-color)); } }
 
+        /* Envelope / Closed Letter Styles */
+        .envelope-container { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin: 20px 0; perspective: 800px; }
+        .envelope-emoji { font-size: 80px; animation: giftFloat 2s infinite ease-in-out; filter: drop-shadow(0 0 15px rgba(255,126,187,0.4)); transition: transform 0.4s ease; }
+        .envelope-container:hover .envelope-emoji { transform: scale(1.08) rotate(3deg); }
+        .envelope-hint { font-size: 14px; color: var(--neon-pink); font-weight: bold; margin-top: 12px; animation: pulseText 1.5s infinite; }
+        .letter-content { display: none; }
+        .letter-content.show { display: block; animation: textPopIn 0.7s cubic-bezier(0.34,1.4,0.64,1) forwards; }
+
         .gift-box-container { display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; margin: 20px 0; perspective: 800px; }
         .gift-emoji { font-size: 95px; animation: giftFloat 2s infinite ease-in-out; filter: drop-shadow(0 0 15px rgba(255,126,187,0.4)); }
         @keyframes giftFloat { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-12px) rotate(-3deg); } }
@@ -291,8 +299,12 @@
         <!-- Slide 0: Gate -->
         <div class="slide active" id="firstGateSlide" style="text-align:center;">
             <div class="lock-emoji" id="gateLock">🔒✨</div>
-            <p style="margin-top:15px;font-size:15px;">Heute ist ein ganz besonderer Tag. 🥳 Deshalb habe ich eine kleine Überraschung für dich vorbereitet. Sie ist zwar klein... aber sie kommt von Herzen. 🤍</p>
-            <p class="highlight" style="font-size:14px;margin-bottom:5px;">Bist du bereit zu sehen, was drin ist? 😉</p>
+            <p style="margin-top:15px; font-size:15px; line-height: 1.8;">
+                Heute ist ein ganz besonderer Tag. 🥳<br>
+                Deshalb habe ich eine kleine Überraschung für dich vorbereitet.<br>
+                Sie ist zwar klein... aber sie kommt von Herzen. 🤍
+            </p>
+            <p class="highlight" style="font-size:14px; margin-bottom:5px;">Bist du bereit zu sehen, was drin ist? 😉</p>
             <button class="blast-btn" id="openGateBtn" onclick="animateFirstGateOpen()" style="margin-top:15px;padding:14px 20px;font-size:15px;">Überraschung öffnen 🎁</button>
         </div>
 
@@ -317,13 +329,21 @@
             <p>Dachte ich mir, ich muss dieses Jahr mal was Besonderes machen.<br><span class="highlight">Klick mal auf Weiter 😉</span></p>
         </div>
 
-        <!-- Slide 3: Real Talk -->
-        <div class="slide" id="realTalkSlide">
+        <!-- Slide 3: Real Talk (Closed Letter) -->
+        <div class="slide" id="realTalkSlide" style="text-align:center;">
             <h2>Real Talk... 👀</h2>
-            <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in der Klasse, bevor ich wieder nach Syrien zurückgegangen bin.</p>
-            <p>Und ehrlich gesagt waren wir damals nicht mal besonders eng oder beste Freunde. 😄</p>
-            <p>Mit der Zeit verliert man viele Menschen aus den Augen… aber irgendwie hatte ich bei dir nie das Gefühl, dich komplett vergessen zu haben.</p>
-            <p>Eigentlich habe ich stark versucht, die Vergangenheit hinter mir zu lassen und dich zu vergessen... aber ich habe es irgendwie nicht geschafft. Vielleicht findest du es komisch oder übertrieben, aber ich wollte einfach ehrlich zu dir sein 🤍</p>
+            
+            <div class="envelope-container" id="envelopeContainer" onclick="openEnvelope()">
+                <div class="envelope-emoji" id="envelopeEmoji">💌</div>
+                <div class="envelope-hint" id="envelopeHint">Tippe, um den Brief zu öffnen ✨</div>
+            </div>
+
+            <div class="letter-content" id="letterContent" style="text-align: left;">
+                <p>Damals in der 7. Klasse waren wir eigentlich nur ein Jahr zusammen in der Klasse, bevor ich wieder nach Syrien zurückgegangen bin.</p>
+                <p>Und ehrlich gesagt waren wir damals nicht mal besonders eng oder beste Freunde. 😄</p>
+                <p>Mit der Zeit verliert man viele Menschen aus den Augen… aber irgendwie hatte ich bei dir nie das Gefühl, dich komplett vergessen zu haben.</p>
+                <p>Eigentlich habe ich stark versucht, die Vergangenheit hinter mir zu lassen und dich zu vergessen... aber ich habe es irgendwie nicht geschafft. Vielleicht findest du es komisch oder übertrieben, aber ich wollte einfach ehrlich zu dir sein 🤍</p>
+            </div>
         </div>
 
         <!-- Slide 4: Vibe Check -->
@@ -344,7 +364,7 @@
             </div>
         </div>
 
-        <!-- Slide 5: Moon Phase Slide (Enhanced & Bigger Moons) -->
+        <!-- Slide 5: Moon Phase Slide -->
         <div class="slide" id="moonSlide" style="text-align:center;">
             <h2>Unter demselben Mond 🌙</h2>
             <p style="margin-bottom: 12px;">Vom ersten Mond bis heute... ✨</p>
@@ -775,6 +795,31 @@
         setTimeout(() => { changeSlide(1); }, 1800);
     }
 
+    let letterOpened = false;
+    function openEnvelope() {
+        if (letterOpened) return;
+        letterOpened = true;
+        playSoftClick();
+        const envelopeEmoji = document.getElementById('envelopeEmoji');
+        const envelopeHint = document.getElementById('envelopeHint');
+        const letterContent = document.getElementById('letterContent');
+        const envelopeContainer = document.getElementById('envelopeContainer');
+        
+        envelopeHint.style.opacity = '0';
+        envelopeEmoji.style.transform = 'scale(0.8) translateY(-20px)';
+        envelopeEmoji.style.opacity = '0';
+        envelopeEmoji.style.transition = 'all 0.4s ease';
+        
+        const rect = envelopeEmoji.getBoundingClientRect();
+        spawnParticles(['🤍', '✨', '🌸', '💫'], 14, rect.left + rect.width / 2 + 'px', rect.top + rect.height / 2 + 'px', 70);
+        
+        setTimeout(() => {
+            envelopeContainer.style.display = 'none';
+            letterContent.classList.add('show');
+            nextBtn.style.visibility = 'visible';
+        }, 350);
+    }
+
     function changeSlide(direction) {
         if (isAnimating) return;
         isAnimating = true;
@@ -804,7 +849,8 @@
         controlsContainer.style.display = (currentSlide === 0 || currentSlide === 1) ? 'none' : 'flex';
         prevBtn.disabled = currentSlide === 2; 
         
-        if (currentSlide === 6 && !giftOpened) nextBtn.style.visibility = 'hidden';
+        if (currentSlide === 3 && !letterOpened) nextBtn.style.visibility = 'hidden';
+        else if (currentSlide === 6 && !giftOpened) nextBtn.style.visibility = 'hidden';
         else nextBtn.style.visibility = 'visible';
         
         if (currentSlide === slides.length - 1) {
@@ -840,7 +886,7 @@
         setTimeout(() => {
             giftContainer.style.display = 'none';
             surpriseContent.classList.add('show');
-            nextBtn.style.visibility = 'hidden';
+            nextBtn.style.visibility = 'visible';
         }, 500);
     }
 
