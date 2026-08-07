@@ -27,7 +27,7 @@
 
         #loadingScreen { position: fixed; inset: 0; background: var(--bg-color); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.6s ease, visibility 0.6s ease; }
         #loadingScreen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        .loader-emoji { font-size: 52px; animation: loaderBounce 0.8s ease-in-out infinite alternate; }
+        .loader-emoji { font-size: 52px; margin-bottom: 15px; animation: loaderBounce 0.8s ease-in-out infinite alternate; }
         @keyframes loaderBounce { 0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 8px rgba(255,126,187,0.4)); } 100% { transform: scale(1.1) translateY(-10px); filter: drop-shadow(0 0 18px rgba(255,126,187,0.8)); } }
         .loader-text { font-size: 14px; color: var(--muted-text); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
         .loader-bar-bg { width: 180px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; margin-top: 15px; }
@@ -313,9 +313,9 @@
             <div style="font-size:55px; margin-bottom:15px; animation: pulseGlow 2s infinite ease-in-out;">🤔</div>
             <p style="font-size:18px; font-weight:700; color:#fff; margin-bottom:10px;">Bevor du die Überraschung siehst, noch ein kleiner Test:</p>
             <p class="highlight" style="font-size:17px; margin-bottom:30px;">Was magst du lieber, Shawarma oder Döner?</p>
-            <div style="display:flex; flex-direction:column; gap:15px; align-items:center; width: 100%;">
-                <button class="blast-btn" onclick="chooseDoner(this)" style="margin-top:0; background:rgba(255,126,187,0.06); border:1px solid rgba(255,126,187,0.3); color:#fff; width:90%;">Döner 🥙</button>
-                <button class="blast-btn" onclick="chooseShawarma(this)" style="margin-top:0; background:rgba(255,126,187,0.06); border:1px solid rgba(255,126,187,0.3); color:#fff; width:90%;">Shawarma 🌯</button>
+            <div style="display:flex; justify-content:center; gap:12px; width: 100%;">
+                <button class="blast-btn" onclick="chooseDoner(this)" style="margin-top:0; background:rgba(255,126,187,0.06); border:1px solid rgba(255,126,187,0.3); color:#fff; flex:1; padding:14px 10px;">Döner 🥙</button>
+                <button class="blast-btn" onclick="chooseShawarma(this)" style="margin-top:0; background:rgba(255,126,187,0.06); border:1px solid rgba(255,126,187,0.3); color:#fff; flex:1; padding:14px 10px;">Shawarma 🌯</button>
             </div>
             <p id="shawarmaError" style="color:var(--neon-pink); font-size:15px; margin-top:20px; font-weight:bold; opacity:0; transition:opacity 0.3s; text-shadow: 0 0 8px rgba(255,126,187,0.4);">
                 Falsch! Denk nochmal nach... Shawarma ist viel besser 😂
